@@ -18,6 +18,7 @@ struct AuthenticationView: View {
                 .frame(width: 90, height: 90)
                 .padding(.bottom, 50)
             
+
             
             SignInWithAppleButton { request in
                 viewModel.send(action: .appleLogin(request))

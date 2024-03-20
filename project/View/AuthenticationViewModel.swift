@@ -25,7 +25,8 @@ final class AuthenticationViewModel: ObservableObject {
     @Published var authenticationState: AuthenticationState = .unAuthenticated
     
     private var container: DIContainer
-    
+    private var currentNonce: String?
+    private var subscription = Set<AnyCancellable>()
     init(container: DIContainer) {
         self.container = container
     }
@@ -35,9 +36,23 @@ final class AuthenticationViewModel: ObservableObject {
         case .checkAuthenticationState:
             return
         case let .appleLogin(request):
-            return
+            let nonce = container.services.authService.handleSignInWithAppleRequest(request)
+            currentNonce = nonce    
         case let .appleLoginCompletion(result):
-            return
+            if case let .success(authorization) = result {
+                guard let nonce = currentNonce else { return }
+                container.services.authService.handleSignInWithAppleCompletion(authorization, none: nonce)
+//                    .flatMap { user in
+//                        
+//                    }
+//                    .sink { <#Subscribers.Completion<ServiceError>#> in
+//                        <#code#>
+//                    } receiveValue: { <#Publishers.FlatMap<(), AnyPublisher<User, ServiceError>>.Output#> in
+//                        
+//                    }.store(in: &subscription)
+            } else if case let .failure(failure) = result {
+                
+            }
         case .logout:
             return
         }

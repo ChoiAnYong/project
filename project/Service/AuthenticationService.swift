@@ -12,6 +12,7 @@ import AuthenticationServices
 enum AuthenticationError: Error {
     case clientIDError
     case tokenError
+    case authoCodeError
     case invalidated
 }
 
@@ -26,7 +27,9 @@ protocol AuthenticationServiceType {
 final class AuthenticationService: AuthenticationServiceType {
     func handleSignInWithAppleRequest(_ request: ASAuthorizationAppleIDRequest) -> String {
         request.requestedScopes = [.fullName, .email]
-        return ""
+        let nonce = randomNonceString()
+        request.nonce = sha256(nonce)
+        return nonce
     }
     
     func handleSignInWithAppleCompletion(
@@ -63,6 +66,24 @@ extension AuthenticationService {
             completion(.failure(AuthenticationError.tokenError))
             return
         }
+        
+        guard let authorizationCode = appleIDCredential.authorizationCode else {
+            completion(.failure(AuthenticationError.authoCodeError))
+            return
+        }
+        
+        guard let authCodeString = String(data: authorizationCode, encoding: .utf8) else {
+            completion(.failure(AuthenticationError.authoCodeError))
+            return
+        }
+        
+        //authenticateUserWithServer 호출
+    }
+    
+    private func authenticateUserWithServer(idToken: String,
+                                            authorizationCode: String,
+                                            completion: @escaping (Result<User,Error>) -> Void) {
+        //서버로 정보 보내서 인증하는 로직
     }
 }
 
@@ -71,7 +92,8 @@ final class StubAuthenticationService: AuthenticationServiceType {
         return ""
     }
     
-    func handleSignInWithAppleCompletion(_ authorization: ASAuthorization, none: String) -> AnyPublisher<User, ServiceError> {
+    func handleSignInWithAppleCompletion(_ authorization: ASAuthorization, 
+                                         none: String) -> AnyPublisher<User, ServiceError> {
         Empty().eraseToAnyPublisher()
     }
     
