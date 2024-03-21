@@ -1,15 +1,15 @@
 //
-//  AuthenticationView.swift
+//  LoginView.swift
 //  project
 //
-//  Created by 최안용 on 3/13/24.
+//  Created by 최안용 on 3/20/24.
 //
 
 import SwiftUI
 import AuthenticationServices
 
-struct AuthenticationView: View {
-    @StateObject var viewModel: AuthenticationViewModel
+struct LoginView: View {
+    @EnvironmentObject private var viewModel: AuthenticationViewModel
     
     var body: some View {
         VStack {
@@ -18,6 +18,11 @@ struct AuthenticationView: View {
                 .frame(width: 90, height: 90)
                 .padding(.bottom, 50)
             
+//            Button(action: {
+//                viewModel.send(action: .checkAuthenticationState)
+//            }, label: {
+//                Text("네트워크 테스트")
+//            })
 
             
             SignInWithAppleButton { request in
@@ -32,5 +37,5 @@ struct AuthenticationView: View {
 }
 
 #Preview {
-    AuthenticationView(viewModel: .init(container: .init(services: StubService())))
+    LoginView()
 }

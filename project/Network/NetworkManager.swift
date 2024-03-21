@@ -7,74 +7,46 @@
 
 import Foundation
 
-protocol NetworkManagerType {
-    
+enum NetworkError: Error {
+    case urlError
+    case responseError
+    case decodeError
+    case serverError(statusCode: Int)
+    case unknownError
 }
 
-import SwiftUI
-
-struct APIResponse: Codable {
-    // 이 구조체에는 API 응답에서 사용할 필요한 속성들을 추가할 수 있습니다.
-}
-
-class APIManager: ObservableObject {
-    enum HTTPMethod: String {
-        case GET, POST, PUT, DELETE
+class NetworkService {
+    static let shared: NetworkService = NetworkService()
+    
+    private let hostURL = "http://localhost:3000"
+    
+    private func createURL(withPath path: String) throws -> URL {
+        let urlString: String = "\(hostURL)\(path)"
+        guard let url = URL(string: urlString) else { throw NetworkError.urlError }
+        return url
     }
     
-    let baseURL: String
-    
-    init(baseURL: String) {
-        self.baseURL = baseURL
-    }
-    
-    func requestData<T: Codable>(endpoint: String, method: HTTPMethod = .GET, parameters: [String: Any]? = nil, completion: @escaping (Result<T, Error>) -> Void) {
-        guard let url = URL(string: "\(baseURL)/\(endpoint)") else {
-            completion(.failure(NSError(domain: "Invalid URL", code: 0, userInfo: nil)))
-            return
+    private func fetchData(from url: URL) async throws -> Data {
+        let (data, response) = try await URLSession.shared.data(from: url)
+        guard let httpResponse = response as? HTTPURLResponse else { throw NetworkError.responseError }
+        
+        switch httpResponse.statusCode {
+        case 200...299:
+            return data
+        default:
+            throw NetworkError.serverError(statusCode: httpResponse.statusCode)
         }
-        
-        var request = URLRequest(url: url)
-        request.httpMethod = method.rawValue
-        
-        if let params = parameters {
-            switch method {
-            case .GET:
-                let queryItems = params.map { URLQueryItem(name: $0.key, value: String(describing: $0.value)) }
-                if var urlComponents = URLComponents(url: url, resolvingAgainstBaseURL: false) {
-                    urlComponents.queryItems = queryItems
-                    request.url = urlComponents.url
-                }
-            default:
-                request.httpBody = try? JSONSerialization.data(withJSONObject: params)
-                request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-            }
-        }
-        
-        URLSession.shared.dataTask(with: request) { data, response, error in
-            DispatchQueue.main.async {
-                if let error = error {
-                    completion(.failure(error))
-                    return
-                }
-                
-                guard let data = data else {
-                    completion(.failure(NSError(domain: "No data received", code: 0, userInfo: nil)))
-                    return
-                }
-                
-                do {
-                    let decodedData = try JSONDecoder().decode(T.self, from: data)
-                    completion(.success(decodedData))
-                } catch {
-                    completion(.failure(error))
-                }
-            }
-        }.resume()
     }
-}
-
-
-final class StubNetworkManager: NetworkManagerType {
+    
+    func getUserInfo() async throws -> UserObject {
+        let url = try createURL(withPath: "/user_info")
+        let data = try await fetchData(from: url)
+        do {
+            let decodeData = try JSONDecoder().decode(UserObject.self, from: data)
+            return decodeData
+        } catch {
+            throw NetworkError.decodeError
+        }
+    }
     
 }

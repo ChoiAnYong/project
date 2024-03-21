@@ -8,6 +8,13 @@
 import Foundation
 
 struct UserObject: Codable {
+    var id: String
     var name: String
-    var phoneNumber: String
+    var age: Int
+}
+
+extension UserObject {
+    func toModel() -> User {
+        .init(id: id, name: name, age: age)
+    }
 }

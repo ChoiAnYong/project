@@ -70,7 +70,7 @@ extension AuthenticationService {
         guard let authorizationCode = appleIDCredential.authorizationCode else {
             completion(.failure(AuthenticationError.authoCodeError))
             return
-        }
+        }   
         
         guard let authCodeString = String(data: authorizationCode, encoding: .utf8) else {
             completion(.failure(AuthenticationError.authoCodeError))
