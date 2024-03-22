@@ -18,7 +18,7 @@ enum NetworkError: Error {
 class NetworkService {
     static let shared: NetworkService = NetworkService()
     
-    private let hostURL = "http://localhost:3000"
+    private let hostURL = "https://my-json-server.typicode.com/typicode/demo"
     
     private func createURL(withPath path: String) throws -> URL {
         let urlString: String = "\(hostURL)\(path)"
