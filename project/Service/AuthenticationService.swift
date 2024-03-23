@@ -17,27 +17,28 @@ enum AuthenticationError: Error {
 }
 
 protocol AuthenticationServiceType {
-    func handleSignInWithAppleRequest(_ request: ASAuthorizationAppleIDRequest) -> String
+    func handleSignInWithAppleRequest(_ request: ASAuthorizationAppleIDRequest)
     func handleSignInWithAppleCompletion(
-        _ authorization: ASAuthorization,
-        none: String
+        _ authorization: ASAuthorization
     ) -> AnyPublisher<User, ServiceError>
 }
 
 final class AuthenticationService: AuthenticationServiceType {
-    func handleSignInWithAppleRequest(_ request: ASAuthorizationAppleIDRequest) -> String {
+    private var network: NetworkManagerType
+    
+    init(network: NetworkManagerType) {
+        self.network = network
+    }
+    
+    func handleSignInWithAppleRequest(_ request: ASAuthorizationAppleIDRequest) {
         request.requestedScopes = [.fullName, .email]
-        let nonce = randomNonceString()
-        request.nonce = sha256(nonce)
-        return nonce
     }
     
     func handleSignInWithAppleCompletion(
-        _ authorization: ASAuthorization,
-        none: String
+        _ authorization: ASAuthorization
     ) -> AnyPublisher<User, ServiceError> {
         Future { [weak self] promise in
-            self?.handleSignInWithAppleCompletion(authorization, nonce: none) { result in
+            self?.handleSignInWithAppleCompletion(authorization) { result in
                 switch result {
                 case let .success(user):
                     promise(.success(user))
@@ -53,47 +54,59 @@ final class AuthenticationService: AuthenticationServiceType {
 extension AuthenticationService {
     private func handleSignInWithAppleCompletion(
         _ authorization: ASAuthorization,
-        nonce: String,
         completion: @escaping (Result<User, Error>) -> Void
-    ) {
-        guard let appleIDCredential = authorization.credential as? ASAuthorizationAppleIDCredential,
-              let appleIDToken = appleIDCredential.identityToken else {
-            completion(.failure(AuthenticationError.tokenError))
-            return
+    )  {
+        Task {
+            do {
+                guard let appleIDCredential = authorization.credential as? ASAuthorizationAppleIDCredential,
+                      let appleIDToken = appleIDCredential.identityToken else {
+                    completion(.failure(AuthenticationError.tokenError))
+                    return
+                }
+                
+                guard let idTokenString = String(data: appleIDToken, encoding: .utf8) else {
+                    completion(.failure(AuthenticationError.tokenError))
+                    return
+                }
+                print(idTokenString)
+                guard let authorizationCode = appleIDCredential.authorizationCode else {
+                    completion(.failure(AuthenticationError.authoCodeError))
+                    return
+                }
+                
+                guard let authCodeString = String(data: authorizationCode, encoding: .utf8) else {
+                    completion(.failure(AuthenticationError.authoCodeError))
+                    return
+                }
+                
+                
+                try await authenticateUserWithServer(idToken: idTokenString,
+                                                     authorizationCode: authCodeString)
+                completion(.success(.init(id: "", name: "", age: 1)))
+            }catch {
+                completion(.failure(AuthenticationError.invalidated))
+            }
+            
         }
         
-        guard let idTokenString = String(data: appleIDToken, encoding: .utf8) else {
-            completion(.failure(AuthenticationError.tokenError))
-            return
-        }
-        
-        guard let authorizationCode = appleIDCredential.authorizationCode else {
-            completion(.failure(AuthenticationError.authoCodeError))
-            return
-        }   
-        
-        guard let authCodeString = String(data: authorizationCode, encoding: .utf8) else {
-            completion(.failure(AuthenticationError.authoCodeError))
-            return
-        }
-        
-        //authenticateUserWithServer 호출
     }
     
     private func authenticateUserWithServer(idToken: String,
-                                            authorizationCode: String,
-                                            completion: @escaping (Result<User,Error>) -> Void) {
-        //서버로 정보 보내서 인증하는 로직
+                                            authorizationCode: String) async throws {
+        do {
+            try await self.network.requestPOSTWithURLSessionUploadTask(url: "/user",
+                                                                   parameters: ["id_token": idToken])
+        } catch {
+            print(error.localizedDescription)
+        }
     }
 }
 
 final class StubAuthenticationService: AuthenticationServiceType {
-    func handleSignInWithAppleRequest(_ request: ASAuthorizationAppleIDRequest) -> String {
-        return ""
+    func handleSignInWithAppleRequest(_ request: ASAuthorizationAppleIDRequest) {
     }
     
-    func handleSignInWithAppleCompletion(_ authorization: ASAuthorization, 
-                                         none: String) -> AnyPublisher<User, ServiceError> {
+    func handleSignInWithAppleCompletion(_ authorization: ASAuthorization) -> AnyPublisher<User, ServiceError> {
         Empty().eraseToAnyPublisher()
     }
     

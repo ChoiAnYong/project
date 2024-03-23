@@ -15,7 +15,7 @@ final class Services: ServiceType {
     var authService: AuthenticationServiceType
     
     init() {
-        self.authService = AuthenticationService()
+        self.authService = AuthenticationService(network: NetworkManager())
     }
 }
 

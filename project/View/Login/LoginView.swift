@@ -18,11 +18,11 @@ struct LoginView: View {
                 .frame(width: 90, height: 90)
                 .padding(.bottom, 50)
             
-//            Button(action: {
-//                viewModel.send(action: .checkAuthenticationState)
-//            }, label: {
-//                Text("네트워크 테스트")
-//            })
+            Button(action: {
+                viewModel.send(action: .checkAuthenticationState)
+            }, label: {
+                Text("네트워크 테스트")
+            })
 
             
             SignInWithAppleButton { request in

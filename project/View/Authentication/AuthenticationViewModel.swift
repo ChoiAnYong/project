@@ -27,7 +27,6 @@ final class AuthenticationViewModel: ObservableObject {
     private var loadDataTask: Task<Void, Never>?
     
     private var container: DIContainer
-    private var currentNonce: String?
     private var subscription = Set<AnyCancellable>()
     init(container: DIContainer) {
         self.container = container
@@ -36,21 +35,12 @@ final class AuthenticationViewModel: ObservableObject {
     func send(action: Action) {
         switch action {
         case .checkAuthenticationState:
-            loadDataTask = Task {
-                do {
-                    let response = try await NetworkService.shared.getUserInfo()
-                    print(response)
-                } catch {
-                    print(error.localizedDescription)
-                }
-            }
+            break
         case let .appleLogin(request):
-            let nonce = container.services.authService.handleSignInWithAppleRequest(request)
-            currentNonce = nonce    
+            container.services.authService.handleSignInWithAppleRequest(request)
         case let .appleLoginCompletion(result):
             if case let .success(authorization) = result {
-                guard let nonce = currentNonce else { return }
-                container.services.authService.handleSignInWithAppleCompletion(authorization, none: nonce)
+                container.services.authService.handleSignInWithAppleCompletion(authorization)
 //                    .flatMap { user in
 //                        
 //                    }
