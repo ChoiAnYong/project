@@ -26,6 +26,7 @@
 		ADC04B572BA8642800AD8A14 /* AuthenticationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADC04B562BA8642800AD8A14 /* AuthenticationViewModel.swift */; };
 		ADC04B5B2BA8697500AD8A14 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADC04B5A2BA8697500AD8A14 /* User.swift */; };
 		ADC04B5E2BA872A800AD8A14 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = ADC04B5D2BA872A800AD8A14 /* LaunchScreen.storyboard */; };
+		ADC832A52BB0301D00BBCF4F /* ServerAuthToken.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADC832A42BB0301D00BBCF4F /* ServerAuthToken.swift */; };
 		ADFB9C582BAAA86200DA0C01 /* SHA256.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADFB9C562BAAA86200DA0C01 /* SHA256.swift */; };
 		ADFB9C592BAAA86200DA0C01 /* RandomNonceString.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADFB9C572BAAA86200DA0C01 /* RandomNonceString.swift */; };
 /* End PBXBuildFile section */
@@ -72,6 +73,7 @@
 		ADC04B582BA867A100AD8A14 /* project.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = project.entitlements; sourceTree = "<group>"; };
 		ADC04B5A2BA8697500AD8A14 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		ADC04B5D2BA872A800AD8A14 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
+		ADC832A42BB0301D00BBCF4F /* ServerAuthToken.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerAuthToken.swift; sourceTree = "<group>"; };
 		ADFB9C562BAAA86200DA0C01 /* SHA256.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SHA256.swift; sourceTree = "<group>"; };
 		ADFB9C572BAAA86200DA0C01 /* RandomNonceString.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RandomNonceString.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -213,6 +215,7 @@
 			isa = PBXGroup;
 			children = (
 				AD9ED1312BA9BF7B005F89D1 /* UserObject.swift */,
+				ADC832A42BB0301D00BBCF4F /* ServerAuthToken.swift */,
 			);
 			path = DTO;
 			sourceTree = "<group>";
@@ -406,6 +409,7 @@
 				ADC04B552BA8638F00AD8A14 /* AuthenticationService.swift in Sources */,
 				AD9DC8042BAAF644006D422F /* LoginView.swift in Sources */,
 				AD9DC8072BAAF7EE006D422F /* MainTabView.swift in Sources */,
+				ADC832A52BB0301D00BBCF4F /* ServerAuthToken.swift in Sources */,
 				ADFB9C582BAAA86200DA0C01 /* SHA256.swift in Sources */,
 				ADC04B5B2BA8697500AD8A14 /* User.swift in Sources */,
 			);

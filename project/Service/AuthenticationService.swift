@@ -24,10 +24,12 @@ protocol AuthenticationServiceType {
 }
 
 final class AuthenticationService: AuthenticationServiceType {
-    private var network: NetworkManagerType
+    private var networkManager: NetworkManagerType
+    private var token: String?
+    private var subscriptions = Set<AnyCancellable>()
     
-    init(network: NetworkManagerType) {
-        self.network = network
+    init(networkManager: NetworkManagerType) {
+        self.networkManager = networkManager
     }
     
     func handleSignInWithAppleRequest(_ request: ASAuthorizationAppleIDRequest) {
@@ -56,50 +58,56 @@ extension AuthenticationService {
         _ authorization: ASAuthorization,
         completion: @escaping (Result<User, Error>) -> Void
     )  {
-        Task {
-            do {
-                guard let appleIDCredential = authorization.credential as? ASAuthorizationAppleIDCredential,
-                      let appleIDToken = appleIDCredential.identityToken else {
-                    completion(.failure(AuthenticationError.tokenError))
-                    return
-                }
-                
-                guard let idTokenString = String(data: appleIDToken, encoding: .utf8) else {
-                    completion(.failure(AuthenticationError.tokenError))
-                    return
-                }
-                print(idTokenString)
-                guard let authorizationCode = appleIDCredential.authorizationCode else {
-                    completion(.failure(AuthenticationError.authoCodeError))
-                    return
-                }
-                
-                guard let authCodeString = String(data: authorizationCode, encoding: .utf8) else {
-                    completion(.failure(AuthenticationError.authoCodeError))
-                    return
-                }
-                
-                
-                try await authenticateUserWithServer(idToken: idTokenString,
-                                                     authorizationCode: authCodeString)
-                completion(.success(.init(id: "", name: "", age: 1)))
-            }catch {
-                completion(.failure(AuthenticationError.invalidated))
+        do {
+            guard let appleIDCredential = authorization.credential as? ASAuthorizationAppleIDCredential,
+                  let appleIDToken = appleIDCredential.identityToken else {
+                completion(.failure(AuthenticationError.tokenError))
+                return
             }
             
+            guard let idTokenString = String(data: appleIDToken, encoding: .utf8) else {
+                completion(.failure(AuthenticationError.tokenError))
+                return
+            }
+            
+//            guard let authorizationCode = appleIDCredential.authorizationCode else {
+//                completion(.failure(AuthenticationError.authoCodeError))
+//                return
+//            }
+//            
+//            guard let authCodeString = String(data: authorizationCode, encoding: .utf8) else {
+//                completion(.failure(AuthenticationError.authoCodeError))
+//                return
+//            }
+            
+            
+            authenticateUserWithServer(idToken: idTokenString,
+                                       completion: authCodeString)
+            completion(.success(.init(id: "", name: "", age: 1)))
+        }catch {
+            completion(.failure(AuthenticationError.invalidated))
         }
+        
         
     }
     
     private func authenticateUserWithServer(idToken: String,
-                                            authorizationCode: String) async throws {
-        do {
-            try await self.network.requestPOSTWithURLSessionUploadTask(url: "/user",
-                                                                   parameters: ["id_token": idToken])
-        } catch {
-            print(error.localizedDescription)
-        }
+                                            completion: @escaping (Result<User, Error>) -> Void) {
+        networkManager.requestPOSTModel(url: "/user", parameters: ["id_token": idToken])
+            .sink { completion in
+                switch completion {
+                    
+                case .finished:
+                    <#code#>
+                case .failure(_):
+                    <#code#>
+                }
+            } receiveValue: { [weak self] value in
+                self?.token = value
+            }.store(in: &subscriptions)
+
     }
+    
 }
 
 final class StubAuthenticationService: AuthenticationServiceType {
@@ -109,6 +117,4 @@ final class StubAuthenticationService: AuthenticationServiceType {
     func handleSignInWithAppleCompletion(_ authorization: ASAuthorization) -> AnyPublisher<User, ServiceError> {
         Empty().eraseToAnyPublisher()
     }
-    
-    
 }

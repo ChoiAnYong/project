@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Combine
 
 enum NetworkError: Error {
     case urlError
@@ -16,8 +17,8 @@ enum NetworkError: Error {
 }
 
 protocol NetworkManagerType {
-    func requestGET<T: Decodable>(url: String) async throws -> T
-    func requestPOSTWithURLSessionUploadTask(url: String, parameters: [String : Any]) async throws
+    func requestGET<T: Codable>(url: String, decodeType: T) -> AnyPublisher<T,NetworkError>
+    func requestPOSTModel(url: String, parameters: [String: Any]) -> AnyPublisher<String, NetworkError>
 }
 
 final class NetworkManager: NetworkManagerType {
@@ -41,68 +42,75 @@ final class NetworkManager: NetworkManagerType {
         }
     }
     
-    func requestGET<T: Decodable>(url: String) async throws -> T {
-        let url = try createURL(withPath: url)
-        var request = URLRequest(url: url)
-        request.httpMethod = "GET"
-        
-        let defaultSession = URLSession(configuration: .default)
-        
-        let (data, response) = try await defaultSession.data(for: request)
-        
-        guard let httpResponse = response as? HTTPURLResponse, (200...299).contains(httpResponse.statusCode) else {
-            if let httpResponse = response as? HTTPURLResponse {
-                throw NetworkError.serverError(statusCode: httpResponse.statusCode)
-            } else {
-                throw NetworkError.responseError
-            }
-        }
-        
-        let decoder = JSONDecoder()
-        
+    func requestGET<T: Decodable>(url: String, decodeType: T) -> AnyPublisher<T,NetworkError> {
         do {
-            let decodedObject = try decoder.decode(T.self, from: data)
-            return decodedObject
+            let url = try createURL(withPath: url)
+            var request = URLRequest(url: url)
+            request.httpMethod = "GET"
+            
+            return URLSession.shared.dataTaskPublisher(for: request)
+                .tryMap { data, response in
+                    guard let httpResponse = response as? HTTPURLResponse else {
+                        throw NetworkError.responseError
+                    }
+                    guard (200...299).contains(httpResponse.statusCode) else {
+                        throw NetworkError.serverError(statusCode: httpResponse.statusCode)
+                    }
+                    return data
+                }
+                .decode(type: T.self, decoder: JSONDecoder())
+                .mapError { error in
+                    if let networkError = error as? NetworkError {
+                        return networkError
+                    } else {
+                        return NetworkError.unknownError
+                    }
+                }
+                .eraseToAnyPublisher()
         } catch {
-            throw NetworkError.decodeError
+            return Fail(error: NetworkError.urlError).eraseToAnyPublisher()
         }
     }
     
-    func requestPOSTWithURLSessionUploadTask(url: String, parameters: [String : Any]) async throws {
-        let uploadData = try! JSONSerialization.data(withJSONObject: parameters, options: [])
-        
-        let url = try createURL(withPath: url)
-        var request = URLRequest(url: url)
-        request.httpMethod = "POST"
-        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-
-        let defaultSession = URLSession(configuration: .default)
-        
-        let uploadTask = defaultSession.uploadTask(with: request, from: uploadData) { data, response, error in
-            // 업로드 완료 후 처리할 코드 작성
-            if let error = error {
-                // 오류 처리
-                print("Error uploading data: \(error)")
-                return
-            }
+    func requestPOSTModel(url: String, parameters: [String: Any]) -> AnyPublisher<String, NetworkError> {
+        do {
+            let uploadData = try JSONSerialization.data(withJSONObject: parameters, options: [])
             
-            // 업로드가 성공적으로 완료됐을 때 수행할 코드 작성
-            if let httpResponse = response as? HTTPURLResponse {
-                print("HTTP Status Code: \(httpResponse.statusCode)")
-                print("HTTP Status Code: \(httpResponse.allHeaderFields)")
-                // 서버 응답을 처리할 수 있습니다.
-            }
+            let url = try createURL(withPath: url)
+            var request = URLRequest(url: url)
+            request.httpMethod = "POST"
+            request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+            request.httpBody = uploadData
             
-            if let data = data {
-                // 업로드한 데이터를 처리할 수 있습니다.
-                print("Uploaded data: \(data)")
-            }
+            return URLSession.shared.dataTaskPublisher(for: request)
+                .tryMap { data, response in
+                    
+                    guard let httpResponse = response as? HTTPURLResponse else {
+                        throw NetworkError.responseError
+                    }
+                    
+                    guard (200...299).contains(httpResponse.statusCode) else {
+                        throw NetworkError.serverError(statusCode: httpResponse.statusCode)
+                    }
+                    
+                    do {
+                        let decodedObject = try JSONDecoder().decode(String.self, from: data)
+                        return decodedObject
+                    } catch {
+                        throw NetworkError.decodeError
+                    }
+                }
+                .mapError { error in
+                    // Swift의 type casting 문법을 사용하여 Error 타입을 NetworkError로 변환합니다.
+                    if let networkError = error as? NetworkError {
+                        return networkError
+                    } else {
+                        return NetworkError.unknownError
+                    }
+                }
+                .eraseToAnyPublisher()
+        } catch {
+            return Fail(error: NetworkError.urlError).eraseToAnyPublisher()
         }
-        
-        // 업로드 작업 시작
-        uploadTask.resume()
     }
-
-
-    
 }

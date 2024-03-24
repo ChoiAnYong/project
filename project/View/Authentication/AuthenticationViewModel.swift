@@ -36,11 +36,12 @@ final class AuthenticationViewModel: ObservableObject {
         switch action {
         case .checkAuthenticationState:
             break
-        case let .appleLogin(request):
+        case let .appleLogin(request): // case의 연관값에 접근하고 싶으면 let
             container.services.authService.handleSignInWithAppleRequest(request)
         case let .appleLoginCompletion(result):
             if case let .success(authorization) = result {
                 container.services.authService.handleSignInWithAppleCompletion(authorization)
+                    
 //                    .flatMap { user in
 //                        
 //                    }
