@@ -16,7 +16,7 @@ struct MainTabView: View {
                 Group {
                     switch tab {
                     case .home:
-                        Text("home")
+                        HomeView()
                     case .alarm:
                         Text("alarm")
                     case .setting:
@@ -25,7 +25,7 @@ struct MainTabView: View {
                 }
                 .tabItem {
                     Label( tab.title,
-                           image: "person")
+                           systemImage: "person")
                 }
                 .tag(tab)
             }

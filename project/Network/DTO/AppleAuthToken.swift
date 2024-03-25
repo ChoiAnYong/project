@@ -7,6 +7,9 @@
 
 import Foundation
 
-struct ServerAuthToken: Codable {
-    var token: String
+struct AppleLoginToken: Codable {
+    var id_token: String
+//    var nonce: String
 }
+
+

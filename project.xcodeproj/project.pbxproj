@@ -26,7 +26,10 @@
 		ADC04B572BA8642800AD8A14 /* AuthenticationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADC04B562BA8642800AD8A14 /* AuthenticationViewModel.swift */; };
 		ADC04B5B2BA8697500AD8A14 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADC04B5A2BA8697500AD8A14 /* User.swift */; };
 		ADC04B5E2BA872A800AD8A14 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = ADC04B5D2BA872A800AD8A14 /* LaunchScreen.storyboard */; };
-		ADC832A52BB0301D00BBCF4F /* ServerAuthToken.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADC832A42BB0301D00BBCF4F /* ServerAuthToken.swift */; };
+		ADC832A52BB0301D00BBCF4F /* AppleAuthToken.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADC832A42BB0301D00BBCF4F /* AppleAuthToken.swift */; };
+		ADE769502BB144EC004C9B43 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADE7694F2BB144EC004C9B43 /* HomeView.swift */; };
+		ADE769522BB144F9004C9B43 /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADE769512BB144F9004C9B43 /* HomeViewModel.swift */; };
+		ADE769542BB172F0004C9B43 /* ServerAuthResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADE769532BB172F0004C9B43 /* ServerAuthResponse.swift */; };
 		ADFB9C582BAAA86200DA0C01 /* SHA256.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADFB9C562BAAA86200DA0C01 /* SHA256.swift */; };
 		ADFB9C592BAAA86200DA0C01 /* RandomNonceString.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADFB9C572BAAA86200DA0C01 /* RandomNonceString.swift */; };
 /* End PBXBuildFile section */
@@ -73,7 +76,10 @@
 		ADC04B582BA867A100AD8A14 /* project.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = project.entitlements; sourceTree = "<group>"; };
 		ADC04B5A2BA8697500AD8A14 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		ADC04B5D2BA872A800AD8A14 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
-		ADC832A42BB0301D00BBCF4F /* ServerAuthToken.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerAuthToken.swift; sourceTree = "<group>"; };
+		ADC832A42BB0301D00BBCF4F /* AppleAuthToken.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleAuthToken.swift; sourceTree = "<group>"; };
+		ADE7694F2BB144EC004C9B43 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
+		ADE769512BB144F9004C9B43 /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
+		ADE769532BB172F0004C9B43 /* ServerAuthResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerAuthResponse.swift; sourceTree = "<group>"; };
 		ADFB9C562BAAA86200DA0C01 /* SHA256.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SHA256.swift; sourceTree = "<group>"; };
 		ADFB9C572BAAA86200DA0C01 /* RandomNonceString.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RandomNonceString.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -106,6 +112,7 @@
 		AD1E10EC2BA847F2002D85BF /* View */ = {
 			isa = PBXGroup;
 			children = (
+				ADE7694E2BB144E0004C9B43 /* Home */,
 				AD9DC8052BAAF7CE006D422F /* MainTab */,
 				AD9DC8022BAAF629006D422F /* Login */,
 				AD9DC8002BAAF603006D422F /* Authentication */,
@@ -215,7 +222,8 @@
 			isa = PBXGroup;
 			children = (
 				AD9ED1312BA9BF7B005F89D1 /* UserObject.swift */,
-				ADC832A42BB0301D00BBCF4F /* ServerAuthToken.swift */,
+				ADC832A42BB0301D00BBCF4F /* AppleAuthToken.swift */,
+				ADE769532BB172F0004C9B43 /* ServerAuthResponse.swift */,
 			);
 			path = DTO;
 			sourceTree = "<group>";
@@ -253,6 +261,15 @@
 				ADC04B5D2BA872A800AD8A14 /* LaunchScreen.storyboard */,
 			);
 			path = Resource;
+			sourceTree = "<group>";
+		};
+		ADE7694E2BB144E0004C9B43 /* Home */ = {
+			isa = PBXGroup;
+			children = (
+				ADE7694F2BB144EC004C9B43 /* HomeView.swift */,
+				ADE769512BB144F9004C9B43 /* HomeViewModel.swift */,
+			);
+			path = Home;
 			sourceTree = "<group>";
 		};
 		ADFB9C552BAAA84100DA0C01 /* Util */ = {
@@ -397,10 +414,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				AD9ED12E2BA9B1B3005F89D1 /* NetworkManager.swift in Sources */,
+				ADE769522BB144F9004C9B43 /* HomeViewModel.swift in Sources */,
 				AD9ED1102BA91E38005F89D1 /* ServiceError.swift in Sources */,
+				ADE769542BB172F0004C9B43 /* ServerAuthResponse.swift in Sources */,
 				AD1F9DA52BA16DF4005DD9D6 /* AuthenticationView.swift in Sources */,
 				AD9ED1322BA9BF7B005F89D1 /* UserObject.swift in Sources */,
 				ADC04B532BA8631E00AD8A14 /* Services.swift in Sources */,
+				ADE769502BB144EC004C9B43 /* HomeView.swift in Sources */,
 				ADFB9C592BAAA86200DA0C01 /* RandomNonceString.swift in Sources */,
 				ADC04B572BA8642800AD8A14 /* AuthenticationViewModel.swift in Sources */,
 				ADC04B4F2BA862C700AD8A14 /* DIContainer.swift in Sources */,
@@ -409,7 +429,7 @@
 				ADC04B552BA8638F00AD8A14 /* AuthenticationService.swift in Sources */,
 				AD9DC8042BAAF644006D422F /* LoginView.swift in Sources */,
 				AD9DC8072BAAF7EE006D422F /* MainTabView.swift in Sources */,
-				ADC832A52BB0301D00BBCF4F /* ServerAuthToken.swift in Sources */,
+				ADC832A52BB0301D00BBCF4F /* AppleAuthToken.swift in Sources */,
 				ADFB9C582BAAA86200DA0C01 /* SHA256.swift in Sources */,
 				ADC04B5B2BA8697500AD8A14 /* User.swift in Sources */,
 			);

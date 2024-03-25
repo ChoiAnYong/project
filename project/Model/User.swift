@@ -14,3 +14,6 @@ struct User {
     
 }
 
+extension User {
+    static var stub1: User = .init(id: "dskfsdif", name: "최안용", age: 23)
+}
