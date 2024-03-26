@@ -22,6 +22,7 @@ final class AuthenticationViewModel: ObservableObject {
         case logout
     }
     
+    @Published var isLoading: Bool = false
     @Published var authenticationState: AuthenticationState = .unAuthenticated
     
     private var loadDataTask: Task<Void, Never>?
@@ -29,6 +30,7 @@ final class AuthenticationViewModel: ObservableObject {
     private var container: DIContainer
     private var currentNonce: String?
     private var subscription = Set<AnyCancellable>()
+    
     init(container: DIContainer) {
         self.container = container
     }
@@ -39,23 +41,24 @@ final class AuthenticationViewModel: ObservableObject {
             break
         case let .appleLogin(request): // case의 연관값에 접근하고 싶으면 let
             let nonce = container.services.authService.handleSignInWithAppleRequest(request)
-            currentNonce = nonce
+            self.currentNonce = nonce
+            
         case let .appleLoginCompletion(result):
             if case let .success(authorization) = result {
                 guard let nonce = currentNonce else { return }
                 
                 container.services.authService.handleSignInWithAppleCompletion(authorization, nonce: nonce)
-                    .sink { completion in
-                        switch completion {
-                        case .finished:
-                            break
-                        case .failure(let error):
-                            print(error.localizedDescription)
+                    .sink { [weak self] completion in
+                        if case .failure = completion {
+                            self?.isLoading = false
                         }
-                    } receiveValue: { user in
+                    } receiveValue: { [weak self] user in
+                        self?.isLoading = false
+                        self?.authenticationState = .authenticated
                         print(user)
                     }.store(in: &subscription)
             } else if case let .failure(error) = result {
+                isLoading = false
                 print(error.localizedDescription)
             }
         case .logout:

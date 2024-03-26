@@ -17,12 +17,6 @@ struct LoginView: View {
                 .resizable()
                 .frame(width: 90, height: 90)
                 .padding(.bottom, 50)
-            
-            Button(action: {
-                viewModel.send(action: .checkAuthenticationState)
-            }, label: {
-                Text("네트워크 테스트")
-            })
 
             
             SignInWithAppleButton { request in
@@ -33,9 +27,15 @@ struct LoginView: View {
             .frame(width: 200, height: 38)
             .signInWithAppleButtonStyle(.whiteOutline)
         }
+        .overlay {
+            if viewModel.isLoading {
+                LoadingView()
+            }
+        }
     }
 }
 
 #Preview {
     LoginView()
+        .environmentObject(AuthenticationViewModel(container: .init(services: StubService())))
 }

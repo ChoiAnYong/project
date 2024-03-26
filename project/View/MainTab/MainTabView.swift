@@ -11,24 +11,47 @@ struct MainTabView: View {
     @State private var selectedTab: MainTabType = .home
     
     var body: some View {
-        TabView(selection: $selectedTab) {
-            ForEach(MainTabType.allCases, id: \.self) { tab in
-                Group {
-                    switch tab {
-                    case .home:
-                        HomeView()
-                    case .alarm:
-                        Text("alarm")
-                    case .setting:
-                        Text("settign")
+        ZStack {
+            TabView(selection: $selectedTab) {
+                ForEach(MainTabType.allCases, id: \.self) { tab in
+                    Group {
+                        switch tab {
+                        case .home:
+                            HomeView()
+                        case .alarm:
+                            Text("alarm")
+                        case .setting:
+                            Text("settign")
+                        }
                     }
+                    .tabItem {
+                        Label( tab.title,
+                               systemImage: "person")
+                    }
+                    .tag(tab)
                 }
-                .tabItem {
-                    Label( tab.title,
-                           systemImage: "person")
-                }
-                .tag(tab)
             }
+            
+            SeperatorLineView()
+        }
+    }
+}
+
+fileprivate struct SeperatorLineView: View {
+    var body: some View {
+        VStack {
+            Spacer()
+            
+            Rectangle()
+                .fill(
+                    LinearGradient(
+                        gradient: Gradient(colors: [Color.white, Color.grayLight]),
+                        startPoint: .top,
+                        endPoint: .bottom
+                    )
+                )
+                .frame(height: 5)
+                .padding(.bottom, 50)
         }
     }
 }

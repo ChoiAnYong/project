@@ -5,6 +5,8 @@
 //  Created by 최안용 on 3/18/24.
 //
 
+//v6BcIMyJ0FjoEsbnBz71nw_GkmKYjfNO
+
 import Foundation
 import Combine
 import AuthenticationServices
@@ -26,7 +28,6 @@ protocol AuthenticationServiceType {
 
 final class AuthenticationService: AuthenticationServiceType {
     private var networkManager: NetworkManagerType
-    private var token: String?
     private var subscriptions = Set<AnyCancellable>()
     
     init(networkManager: NetworkManagerType) {
@@ -36,6 +37,7 @@ final class AuthenticationService: AuthenticationServiceType {
     func handleSignInWithAppleRequest(_ request: ASAuthorizationAppleIDRequest) -> String {
         request.requestedScopes = [.fullName, .email]
         let nonce = randomNonceString()
+        print("\(nonce)\n")
         request.nonce = sha256(nonce)
         return nonce
     }
@@ -74,7 +76,10 @@ extension AuthenticationService {
             completion(.failure(AuthenticationError.tokenError))
             return
         }
-        let token = AppleLoginToken(id_token: idTokenString/*, nonce: nonce*/)
+        
+        print(idTokenString)
+        
+        let token = AppleLoginToken(id_token: idTokenString, nonce: nonce)
         
         authenticateUserWithServer(token: token) { result in
             switch result {
@@ -114,3 +119,5 @@ final class StubAuthenticationService: AuthenticationServiceType {
         Empty().eraseToAnyPublisher()
     }
 }
+
+

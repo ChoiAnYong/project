@@ -6,3 +6,10 @@
 //
 
 import Foundation
+
+final class HomeViewModel: ObservableObject {
+    
+    enum Action {
+        
+    }
+}

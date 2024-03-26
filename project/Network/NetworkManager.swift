@@ -22,8 +22,7 @@ protocol NetworkManagerType {
 }
 
 final class NetworkManager: NetworkManagerType {
-    private let hostURL = "http://43.203.54.29:8080/api/apple"
-//    private let testURL = "http://localhost:3000"
+    private let hostURL = "http:www.emgapp.shop/api/apple"
     
     private func createURL(withPath path: String)  -> URL? {
         let urlString: String = "\(hostURL)\(path)"
@@ -99,4 +98,16 @@ final class NetworkManager: NetworkManagerType {
             return Fail(error: NetworkError.urlError).eraseToAnyPublisher()
         }
     }
+}
+
+final class StubNetworkManager: NetworkManagerType {
+    func requestGET<T>(url: String, decodeType: T) -> AnyPublisher<T, NetworkError> where T : Decodable, T : Encodable {
+        Empty().eraseToAnyPublisher()
+    }
+    
+    func requestPOSTModel<T, U>(url: String, parameters: T) -> AnyPublisher<U, NetworkError> where T : Decodable, T : Encodable, U : Decodable, U : Encodable {
+        Empty().eraseToAnyPublisher()
+    }
+    
+    
 }
