@@ -36,8 +36,7 @@ final class AuthenticationService: AuthenticationServiceType {
     
     func handleSignInWithAppleRequest(_ request: ASAuthorizationAppleIDRequest) -> String {
         request.requestedScopes = [.fullName, .email]
-        let nonce = randomNonceString()
-        print("\(nonce)\n")
+        let nonce = "v6BcIMyJ0FjoEsbnBz71nw_GkmKYjfNO" // 초기
         request.nonce = sha256(nonce)
         return nonce
     }
@@ -77,8 +76,6 @@ extension AuthenticationService {
             return
         }
         
-        print(idTokenString)
-        
         let token = AppleLoginToken(id_token: idTokenString, nonce: nonce)
         
         authenticateUserWithServer(token: token) { result in
@@ -93,7 +90,7 @@ extension AuthenticationService {
     
     private func authenticateUserWithServer(token: AppleLoginToken,
                                             completion: @escaping (Result<User, Error>) -> Void) {
-        networkManager.requestPOSTModel(url: "/user", parameters: token)
+        networkManager.requestPOSTModel(url: "/apple", parameters: token)
             .sink { result in
                 switch result {
                 case .finished:

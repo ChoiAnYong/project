@@ -22,7 +22,7 @@ protocol NetworkManagerType {
 }
 
 final class NetworkManager: NetworkManagerType {
-    private let hostURL = "http:www.emgapp.shop/api/apple"
+    private let hostURL = "https://emgapp.shop/login"
     
     private func createURL(withPath path: String)  -> URL? {
         let urlString: String = "\(hostURL)\(path)"

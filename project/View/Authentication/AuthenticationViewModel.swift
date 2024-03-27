@@ -25,8 +25,6 @@ final class AuthenticationViewModel: ObservableObject {
     @Published var isLoading: Bool = false
     @Published var authenticationState: AuthenticationState = .unAuthenticated
     
-    private var loadDataTask: Task<Void, Never>?
-    
     private var container: DIContainer
     private var currentNonce: String?
     private var subscription = Set<AnyCancellable>()
@@ -45,9 +43,11 @@ final class AuthenticationViewModel: ObservableObject {
             
         case let .appleLoginCompletion(result):
             if case let .success(authorization) = result {
+                isLoading = true
                 guard let nonce = currentNonce else { return }
                 
                 container.services.authService.handleSignInWithAppleCompletion(authorization, nonce: nonce)
+                    .receive(on: DispatchQueue.main)
                     .sink { [weak self] completion in
                         if case .failure = completion {
                             self?.isLoading = false
