@@ -12,4 +12,11 @@ final class HomeViewModel: ObservableObject {
     enum Action {
         
     }
+    
+    @Published var users: [User]
+    
+    init(users: [User] = []) {
+        self.users = users
+    }
+    
 }

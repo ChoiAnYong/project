@@ -21,6 +21,9 @@ struct AuthenticationView: View {
                 MainTabView()
             }
         }
+        .onAppear {
+            viewModel.send(action: .checkAuthenticationState)
+        }
     }
 }
 

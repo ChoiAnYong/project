@@ -16,6 +16,7 @@
 		AD1F9DB42BA16DF5005DD9D6 /* projectTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD1F9DB32BA16DF5005DD9D6 /* projectTests.swift */; };
 		AD1F9DBE2BA16DF5005DD9D6 /* projectUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD1F9DBD2BA16DF5005DD9D6 /* projectUITests.swift */; };
 		AD1F9DC02BA16DF5005DD9D6 /* projectUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD1F9DBF2BA16DF5005DD9D6 /* projectUITestsLaunchTests.swift */; };
+		AD5C648A2BB5962D006A7415 /* KeychainManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD5C64892BB5962D006A7415 /* KeychainManager.swift */; };
 		AD9DC8042BAAF644006D422F /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD9DC8032BAAF644006D422F /* LoginView.swift */; };
 		AD9DC8072BAAF7EE006D422F /* MainTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD9DC8062BAAF7EE006D422F /* MainTabView.swift */; };
 		AD9DC8092BAAF8DB006D422F /* MainTabType.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD9DC8082BAAF8DB006D422F /* MainTabType.swift */; };
@@ -76,6 +77,7 @@
 		AD1F9DB92BA16DF5005DD9D6 /* projectUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = projectUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		AD1F9DBD2BA16DF5005DD9D6 /* projectUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = projectUITests.swift; sourceTree = "<group>"; };
 		AD1F9DBF2BA16DF5005DD9D6 /* projectUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = projectUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		AD5C64892BB5962D006A7415 /* KeychainManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainManager.swift; sourceTree = "<group>"; };
 		AD9DC8032BAAF644006D422F /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		AD9DC8062BAAF7EE006D422F /* MainTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabView.swift; sourceTree = "<group>"; };
 		AD9DC8082BAAF8DB006D422F /* MainTabType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabType.swift; sourceTree = "<group>"; };
@@ -205,6 +207,7 @@
 				AD1E10EC2BA847F2002D85BF /* View */,
 				ADC04B592BA8696500AD8A14 /* Model */,
 				ADC04B512BA862FD00AD8A14 /* Service */,
+				AD5C64882BB595EA006A7415 /* Keychain */,
 				AD9ED1112BA97634005F89D1 /* Network */,
 				ADFB9C552BAAA84100DA0C01 /* Util */,
 				ADC04B5C2BA8727700AD8A14 /* Resource */,
@@ -236,6 +239,14 @@
 				AD1F9DBF2BA16DF5005DD9D6 /* projectUITestsLaunchTests.swift */,
 			);
 			path = projectUITests;
+			sourceTree = "<group>";
+		};
+		AD5C64882BB595EA006A7415 /* Keychain */ = {
+			isa = PBXGroup;
+			children = (
+				AD5C64892BB5962D006A7415 /* KeychainManager.swift */,
+			);
+			path = Keychain;
 			sourceTree = "<group>";
 		};
 		AD9DC8002BAAF603006D422F /* Authentication */ = {
@@ -604,6 +615,7 @@
 				ADDDF3A62BB2C81800923127 /* LoadingView.swift in Sources */,
 				ADC04B552BA8638F00AD8A14 /* AuthenticationService.swift in Sources */,
 				AD9DC8042BAAF644006D422F /* LoginView.swift in Sources */,
+				AD5C648A2BB5962D006A7415 /* KeychainManager.swift in Sources */,
 				AD9DC8072BAAF7EE006D422F /* MainTabView.swift in Sources */,
 				ADC832A52BB0301D00BBCF4F /* AppleAuthToken.swift in Sources */,
 				ADFB9C582BAAA86200DA0C01 /* SHA256.swift in Sources */,

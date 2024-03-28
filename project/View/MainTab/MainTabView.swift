@@ -17,9 +17,9 @@ struct MainTabView: View {
                     Group {
                         switch tab {
                         case .home:
-                            HomeView()
+                            HomeView(viewModel: HomeViewModel())
                         case .alarm:
-                            Text("alarm")
+                            MapView()
                         case .setting:
                             Text("settign")
                         }
@@ -51,7 +51,7 @@ fileprivate struct SeperatorLineView: View {
                     )
                 )
                 .frame(height: 5)
-                .padding(.bottom, 50)
+                .padding(.bottom, 49)
         }
     }
 }

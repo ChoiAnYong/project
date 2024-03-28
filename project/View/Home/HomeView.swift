@@ -8,11 +8,30 @@
 import SwiftUI
 
 struct HomeView: View {
+    @StateObject var viewModel: HomeViewModel
+    
     var body: some View {
         VStack {
             ProfileView()
                 .padding(.horizontal, 30)
+            
+            Spacer()
+            
+            if viewModel.users.isEmpty {
+                BeggingView()
+            } else {
+                
+            }
+            
+            Spacer()
+            
         }
+    }
+}
+
+fileprivate struct HeaderView: View {
+    var body: some View {
+        /*@START_MENU_TOKEN@*//*@PLACEHOLDER=Hello, world!@*/Text("Hello, world!")/*@END_MENU_TOKEN@*/
     }
 }
 
@@ -38,6 +57,14 @@ fileprivate struct ProfileView: View {
     }
 }
 
+fileprivate struct BeggingView: View {
+    var body: some View {
+        VStack {
+            Text("계정을 연동하세요!")
+        }
+    }
+}
+
 #Preview {
-    HomeView()
+    HomeView(viewModel: HomeViewModel())
 }

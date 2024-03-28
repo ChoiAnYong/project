@@ -70,6 +70,7 @@ final class NetworkManager: NetworkManagerType {
             request.addValue("application/json", forHTTPHeaderField: "Content-Type")
             request.httpBody = uploadData
             
+            
             return URLSession.shared.dataTaskPublisher(for: request)
                 .tryMap { data, response in
                     guard let httpResponse = response as? HTTPURLResponse else {
