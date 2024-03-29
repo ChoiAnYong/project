@@ -24,7 +24,9 @@ struct HomeView: View {
             }
             
             Spacer()
-            
+        }
+        .toolbar {
+            Image(systemName: "person")
         }
     }
 }

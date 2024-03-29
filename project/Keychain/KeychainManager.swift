@@ -10,9 +10,9 @@ import Security
 
 final class KeychainManager {
     
-    private func creat(token: String, forAccount account: String) -> Bool {
-        let keychainItem = [
-            kSecClass: kSecClassGenericPassword
-        ]
-    }
+//    private func creat(token: String, forAccount account: String) -> Bool {
+//        let keychainItem = [
+//            kSecClass: kSecClassGenericPassword
+//        ]
+//    }
 }

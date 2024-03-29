@@ -36,6 +36,7 @@ final class AuthenticationService: AuthenticationServiceType {
     
     func handleSignInWithAppleRequest(_ request: ASAuthorizationAppleIDRequest) -> String {
         request.requestedScopes = [.fullName, .email]
+        
         let nonce = "v6BcIMyJ0FjoEsbnBz71nw_GkmKYjfNO" // 초기
         request.nonce = sha256(nonce)
         return nonce
@@ -76,7 +77,11 @@ extension AuthenticationService {
             return
         }
         
-        let token = AppleLoginToken(id_token: idTokenString, nonce: nonce)
+        let name = [appleIDCredential.fullName?.familyName, appleIDCredential.fullName?.givenName]
+            .compactMap { $0 }
+            .joined(separator: "")
+        
+        let token = AppleLoginToken(id_token: idTokenString, name: name)
         
         authenticateUserWithServer(token: token) { result in
             switch result {

@@ -9,7 +9,7 @@ import Foundation
 
 struct AppleLoginToken: Codable {
     var id_token: String
-    var nonce: String
+    var name: String
 }
 
 
