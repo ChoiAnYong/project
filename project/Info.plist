@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>NMFClientId</key>
-	<string>xwx82dvqr2</string>
+	<string>$(NMFClientId)</string>
 	<key>NSAppTransportSecurity</key>
 	<dict>
 		<key>NSAllowsArbitraryLoads</key>
