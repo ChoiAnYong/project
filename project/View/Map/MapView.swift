@@ -9,12 +9,15 @@ import SwiftUI
 import NMapsMap
 
 struct MapView: View {
+    @StateObject var pathModel: PathModel
+    
     var body: some View {
-        ZStack {
-            UIMapView()
-                .edgesIgnoringSafeArea(.top)
-            
-            
+        NavigationStack(path: $pathModel.paths) {
+            ZStack {
+                UIMapView()
+                    .edgesIgnoringSafeArea(.top)
+                
+            }
         }
     }
 }
@@ -43,5 +46,5 @@ struct UIMapView: UIViewRepresentable {
 }
 
 #Preview {
-    MapView()
+    MapView(pathModel: PathModel())
 }

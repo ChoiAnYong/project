@@ -88,7 +88,7 @@ extension AuthenticationService {
             case let .success(user):
                 completion(.success(user))
             case let .failure(error):
-                completion(.failure(error))
+                completion(.failure(error)) 
             }
         }
     }
@@ -97,14 +97,10 @@ extension AuthenticationService {
                                             completion: @escaping (Result<User, Error>) -> Void) {
         networkManager.requestPOSTModel(url: "/apple", parameters: token)
             .sink { result in
-                switch result {
-                case .finished:
-                    break
-                case .failure(let error):
-                    completion(.failure(error))
+                if case .failure = result {
+                    completion(.failure(AuthenticationError.invalidated))
                 }
             } receiveValue: { (response: ServerAuthResponse) in
-                print(response)
                 let user = User(id: "", name: "", age: 1)
                 completion(.success(user))
             }.store(in: &subscriptions)

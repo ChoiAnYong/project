@@ -23,7 +23,7 @@ final class AuthenticationViewModel: ObservableObject {
     }
     
     @Published var isLoading: Bool = false
-    @Published var authenticationState: AuthenticationState = .unAuthenticated
+    @Published var authenticationState: AuthenticationState = .authenticated
     
     private var container: DIContainer
     private var currentNonce: String?
@@ -47,6 +47,7 @@ final class AuthenticationViewModel: ObservableObject {
                 guard let nonce = currentNonce else { return }
                 
                 container.services.authService.handleSignInWithAppleCompletion(authorization, nonce: nonce)
+//                    .subscribe(on: DispatchQueue.global())
                     .receive(on: DispatchQueue.main)
                     .sink { [weak self] completion in
                         if case .failure = completion {
@@ -55,7 +56,6 @@ final class AuthenticationViewModel: ObservableObject {
                     } receiveValue: { [weak self] user in
                         self?.isLoading = false
                         self?.authenticationState = .authenticated
-                        print(user)
                     }.store(in: &subscription)
             } else if case let .failure(error) = result {
                 isLoading = false

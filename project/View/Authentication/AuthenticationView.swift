@@ -18,7 +18,7 @@ struct AuthenticationView: View {
                 LoginView()
                     .environmentObject(viewModel)
             case .authenticated:
-                MainTabView()
+                MapView(pathModel: PathModel())
             }
         }
         .onAppear {
