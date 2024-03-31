@@ -9,22 +9,9 @@ import SwiftUI
 import NMapsMap
 
 struct MapView: View {
-    @StateObject var pathModel: PathModel
-    
     var body: some View {
-        NavigationStack(path: $pathModel.paths) {
-            ZStack {
-                UIMapView()
-                    .edgesIgnoringSafeArea(.top)
-                
-            }
-        }
-    }
-}
-
-fileprivate struct asd: View {
-    var body: some View {
-        Text("dsk")
+        UIMapView()
+            .edgesIgnoringSafeArea(.top)
     }
 }
 
@@ -46,5 +33,5 @@ struct UIMapView: UIViewRepresentable {
 }
 
 #Preview {
-    MapView(pathModel: PathModel())
+    MapView()
 }

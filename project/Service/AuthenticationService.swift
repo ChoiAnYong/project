@@ -76,6 +76,7 @@ extension AuthenticationService {
             completion(.failure(AuthenticationError.tokenError))
             return
         }
+        print(idTokenString)
         
         let name = [appleIDCredential.fullName?.familyName, appleIDCredential.fullName?.givenName]
             .compactMap { $0 }

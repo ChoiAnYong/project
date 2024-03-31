@@ -29,7 +29,7 @@ final class AuthenticationViewModel: ObservableObject {
     private var currentNonce: String?
     private var subscription = Set<AnyCancellable>()
     
-    init(container: DIContainer) {
+    init(container: DIContainer) {  
         self.container = container
     }
     
