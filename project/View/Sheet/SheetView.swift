@@ -7,46 +7,59 @@
 
 import SwiftUI
 
-struct ContentView: View {
-    @State private var offset = UIScreen.main.bounds.height / 4
-    @State private var isShowingDrawer = false
-    
+struct SheetView: View {
     var body: some View {
-        ZStack {
-            // Main content
-            Color.white.edgesIgnoringSafeArea(.all)
+        VStack {
+            Image("minusIcon")
+                .resizable()
+                .renderingMode(.template)
+                .foregroundColor(.grayLight)
+                .frame(width: 50, height: 40)
             
-            // Additional content (drawer)
-            DrawerView()
-                .offset(y: isShowingDrawer ? 0 : offset)
-                .animation(.easeInOut)
+            UserInfoView()
+            
+            OtherInfoView()
         }
-        .gesture(DragGesture()
-                    .onChanged({ value in
-                        if value.translation.height > 0 {
-                            isShowingDrawer = true
-                        }
-                    })
-                    .onEnded({ value in
-                        if value.translation.height < offset / 2 {
-                            isShowingDrawer = true
-                        } else {
-                            isShowingDrawer = false
-                        }
-                    }))
+        .background(Color.white)
+        .cornerRadius(15)
+        .shadow(radius: 6)
     }
 }
 
-struct DrawerView: View {
+fileprivate struct UserInfoView: View {
     var body: some View {
-        RoundedRectangle(cornerRadius: 20)
-            .foregroundColor(.gray)
-            .frame(height: 200)
+        HStack {
+            Image("personIcon")
+                .resizable()
+                .frame(width: 50, height: 50)
+            
+            VStack(alignment: .leading) {
+                Text("이름")
+                    .font(.system(size: 18, weight: .bold))
+                
+                Text("상태메시지")
+                    .font(.system(size: 18, weight: .regular))
+            }
+            Spacer()
+        }
+        .padding(.horizontal, 30)
     }
 }
 
-struct ContentView_Previews: PreviewProvider {
-    static var previews: some View {
-        ContentView()
+fileprivate struct OtherInfoView: View {
+    let ex: [Int] = [1,2,3,4,5,6,7,8,9,10]
+    var body: some View {
+        ScrollView {
+            LazyVStack {
+                ForEach(ex, id: \.self) { ex in
+                    Text("\(ex)")
+                }
+            }
+        }
     }
+}
+
+
+#Preview {
+    SheetView()
 }

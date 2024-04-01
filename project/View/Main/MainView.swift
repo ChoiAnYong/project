@@ -9,6 +9,9 @@ import SwiftUI
 
 struct MainView: View {
     @StateObject var pathModel: PathModel
+    @State private var startingOffsetY: CGFloat = UIScreen.main.bounds.height * 0.8
+    @State private var currentDragOffsetY: CGFloat = 0
+    @State private var endingOffsetY: CGFloat = 0
     
     var body: some View {
         NavigationStack(path: $pathModel.paths) {
@@ -16,7 +19,33 @@ struct MainView: View {
                 MapView()
                 
                 toolbarView(pathModel: pathModel)
-                                
+                
+                
+                SheetView()
+                    .offset(y: startingOffsetY)
+                    .offset(y: currentDragOffsetY)
+                    .offset(y: endingOffsetY)
+                    .gesture(
+                        DragGesture()
+                            .onChanged({ value in
+                                withAnimation(.spring()) {
+                                    currentDragOffsetY = value.translation.height
+                                }
+                            })
+                            .onEnded({ value in
+                                withAnimation(.spring()) {
+                                    if currentDragOffsetY < -150 {
+                                        endingOffsetY = -startingOffsetY
+                                        currentDragOffsetY = .zero
+                                    } else if endingOffsetY != 0 && currentDragOffsetY > 150 {
+                                        endingOffsetY = .zero
+                                        currentDragOffsetY = .zero
+                                    } else {
+                                        currentDragOffsetY = .zero
+                                    }
+                                }
+                            })
+                    )
             }
             .navigationDestination(for: PathType.self) { pathType in
                 switch pathType {
@@ -28,7 +57,6 @@ struct MainView: View {
                     SettingView()
                 }
             }
-
         }
     }
 }
@@ -65,16 +93,6 @@ fileprivate struct toolbarView: View {
     }
 }
 
-fileprivate struct UserInfoView: View {
-    var body: some View {
-        VStack {
-            Text("이름")
-            Text("상태 메시지")
-            Spacer()
-        }
-        .background(Color.red)
-    }
-}
 
 #Preview {
     MainView(pathModel: PathModel())
