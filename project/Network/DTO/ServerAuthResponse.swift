@@ -8,8 +8,8 @@
 import Foundation
 
 struct ServerAuthResponse: Codable {
+    var grantType: String
     var accessToken: String
-    var refreshToken: String
-    var email: String
-    var isRegistered: Bool
+    var refreshToken: String    
+    var accessTokenExpiresIn: Int64
 }

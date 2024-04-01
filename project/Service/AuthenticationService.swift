@@ -23,7 +23,7 @@ protocol AuthenticationServiceType {
     func handleSignInWithAppleCompletion(
         _ authorization: ASAuthorization,
         nonce: String
-    ) -> AnyPublisher<User, ServiceError>
+    ) -> AnyPublisher<ServerAuthResponse, ServiceError>
 }
 
 final class AuthenticationService: AuthenticationServiceType {
@@ -45,12 +45,12 @@ final class AuthenticationService: AuthenticationServiceType {
     func handleSignInWithAppleCompletion(
         _ authorization: ASAuthorization,
         nonce: String
-    ) -> AnyPublisher<User, ServiceError> {
+    ) -> AnyPublisher<ServerAuthResponse, ServiceError> {
         Future { [weak self] promise in
             self?.handleSignInWithAppleCompletion(authorization, nonce: nonce) { result in
                 switch result {
-                case let .success(user):
-                    promise(.success(user))
+                case let .success(response):
+                    promise(.success(response))
                 case let .failure(error):
                     promise(.failure(.error(error)))
                 }
@@ -64,7 +64,7 @@ extension AuthenticationService {
     private func handleSignInWithAppleCompletion(
         _ authorization: ASAuthorization,
         nonce: String,
-        completion: @escaping (Result<User, Error>) -> Void
+        completion: @escaping (Result<ServerAuthResponse, Error>) -> Void
     )  {
         guard let appleIDCredential = authorization.credential as? ASAuthorizationAppleIDCredential,
               let appleIDToken = appleIDCredential.identityToken else {
@@ -76,7 +76,6 @@ extension AuthenticationService {
             completion(.failure(AuthenticationError.tokenError))
             return
         }
-        print(idTokenString)
         
         let name = [appleIDCredential.fullName?.familyName, appleIDCredential.fullName?.givenName]
             .compactMap { $0 }
@@ -86,8 +85,8 @@ extension AuthenticationService {
         
         authenticateUserWithServer(token: token) { result in
             switch result {
-            case let .success(user):
-                completion(.success(user))
+            case let .success(response):
+                completion(.success(response))
             case let .failure(error):
                 completion(.failure(error)) 
             }
@@ -95,15 +94,15 @@ extension AuthenticationService {
     }
     
     private func authenticateUserWithServer(token: AppleLoginToken,
-                                            completion: @escaping (Result<User, Error>) -> Void) {
+                                            completion: @escaping (Result<ServerAuthResponse, Error>) -> Void) {
         networkManager.requestPOSTModel(url: "/apple", parameters: token)
             .sink { result in
                 if case .failure = result {
                     completion(.failure(AuthenticationError.invalidated))
                 }
             } receiveValue: { (response: ServerAuthResponse) in
-                let user = User(id: "", name: "", age: 1)
-                completion(.success(user))
+                print(response)
+                completion(.success(response))
             }.store(in: &subscriptions)
     }
     
@@ -114,7 +113,7 @@ final class StubAuthenticationService: AuthenticationServiceType {
         return ""
     }
     
-    func handleSignInWithAppleCompletion( _ authorization: ASAuthorization, nonce: String) -> AnyPublisher<User, ServiceError> {
+    func handleSignInWithAppleCompletion( _ authorization: ASAuthorization, nonce: String) -> AnyPublisher<ServerAuthResponse, ServiceError> {
         Empty().eraseToAnyPublisher()
     }
 }

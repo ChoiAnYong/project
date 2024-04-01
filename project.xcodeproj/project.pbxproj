@@ -39,7 +39,6 @@
 		ADE769542BB172F0004C9B43 /* ServerAuthResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADE769532BB172F0004C9B43 /* ServerAuthResponse.swift */; };
 		ADF392072BB9A2F500E4FD78 /* SheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADF392062BB9A2F500E4FD78 /* SheetView.swift */; };
 		ADFB9C582BAAA86200DA0C01 /* SHA256.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADFB9C562BAAA86200DA0C01 /* SHA256.swift */; };
-		ADFB9C592BAAA86200DA0C01 /* RandomNonceString.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADFB9C572BAAA86200DA0C01 /* RandomNonceString.swift */; };
 		C318CF187E30ED5B6002EAC3 /* Pods_projectTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7319C6A88859E59BFC93EC21 /* Pods_projectTests.framework */; };
 		F0F60788C4DD2BBCEDD362A5 /* Pods_project.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BACFE50A3FC667F520174EBC /* Pods_project.framework */; };
 /* End PBXBuildFile section */
@@ -106,7 +105,6 @@
 		ADE769532BB172F0004C9B43 /* ServerAuthResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerAuthResponse.swift; sourceTree = "<group>"; };
 		ADF392062BB9A2F500E4FD78 /* SheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SheetView.swift; sourceTree = "<group>"; };
 		ADFB9C562BAAA86200DA0C01 /* SHA256.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SHA256.swift; sourceTree = "<group>"; };
-		ADFB9C572BAAA86200DA0C01 /* RandomNonceString.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RandomNonceString.swift; sourceTree = "<group>"; };
 		BACFE50A3FC667F520174EBC /* Pods_project.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_project.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E1296C2E35D01F6629BD4098 /* Pods-project.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-project.release.xcconfig"; path = "Target Support Files/Pods-project/Pods-project.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -394,7 +392,6 @@
 		ADFB9C552BAAA84100DA0C01 /* Util */ = {
 			isa = PBXGroup;
 			children = (
-				ADFB9C572BAAA86200DA0C01 /* RandomNonceString.swift */,
 				ADFB9C562BAAA86200DA0C01 /* SHA256.swift */,
 			);
 			path = Util;
@@ -652,7 +649,6 @@
 				ADC04B532BA8631E00AD8A14 /* Services.swift in Sources */,
 				AD5E489C2BB7F45D0035329E /* PathType.swift in Sources */,
 				AD0F52552BB41CAD00A9723A /* MapView.swift in Sources */,
-				ADFB9C592BAAA86200DA0C01 /* RandomNonceString.swift in Sources */,
 				ADF392072BB9A2F500E4FD78 /* SheetView.swift in Sources */,
 				ADC04B572BA8642800AD8A14 /* AuthenticationViewModel.swift in Sources */,
 				ADC04B4F2BA862C700AD8A14 /* DIContainer.swift in Sources */,

@@ -10,19 +10,50 @@ import SwiftUI
 struct SheetView: View {
     var body: some View {
         VStack {
+            topView()
+            
+            SheetScrollView()
+        }
+        .background(Color.grayCool)
+        .cornerRadius(15)
+        .shadow(radius: 6)
+        
+    }
+}
+
+fileprivate struct topView: View {
+    var body: some View {
+
             Image("minusIcon")
                 .resizable()
                 .renderingMode(.template)
                 .foregroundColor(.grayLight)
                 .frame(width: 50, height: 40)
-            
+
+        .background(Color.grayCool)
+    }
+}
+
+fileprivate struct SheetScrollView: View {
+    let ex: [Int] = [Int](0..<100)
+    
+    var body: some View {
+        ScrollView {
             UserInfoView()
             
-            OtherInfoView()
+            LazyVStack {
+                ForEach(ex, id: \.self) { ex in
+                    Text("\(ex)")
+                }
+            }
+            .padding(.all, 8)
+            .background(RoundedRectangle(cornerRadius: 18).foregroundColor(Color.white))
+            .padding(.horizontal, 20)
+            .padding(.bottom, 30)
         }
-        .background(Color.white)
-        .cornerRadius(15)
-        .shadow(radius: 6)
+        .scrollIndicators(.hidden)
+        .padding(.bottom, 50)
+        
     }
 }
 
@@ -42,22 +73,22 @@ fileprivate struct UserInfoView: View {
             }
             Spacer()
         }
-        .padding(.horizontal, 30)
+        .padding(.all, 8)
+        .background(RoundedRectangle(cornerRadius: 18).foregroundColor(Color.white))
+        .padding(.horizontal, 20)
+        .padding(.bottom, 30)
     }
 }
 
-fileprivate struct OtherInfoView: View {
-    let ex: [Int] = [1,2,3,4,5,6,7,8,9,10]
-    var body: some View {
-        ScrollView {
-            LazyVStack {
-                ForEach(ex, id: \.self) { ex in
-                    Text("\(ex)")
-                }
-            }
-        }
-    }
-}
+//fileprivate struct OtherInfoView: View {
+//    
+//    var body: some View {
+//        ScrollView {
+//            
+//        }
+//       
+//    }
+//}
 
 
 #Preview {

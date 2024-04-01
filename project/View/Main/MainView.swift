@@ -9,7 +9,7 @@ import SwiftUI
 
 struct MainView: View {
     @StateObject var pathModel: PathModel
-    @State private var startingOffsetY: CGFloat = UIScreen.main.bounds.height * 0.8
+    @State private var startingOffsetY: CGFloat = UIScreen.main.bounds.height * 0.75
     @State private var currentDragOffsetY: CGFloat = 0
     @State private var endingOffsetY: CGFloat = 0
     
@@ -19,7 +19,6 @@ struct MainView: View {
                 MapView()
                 
                 toolbarView(pathModel: pathModel)
-                
                 
                 SheetView()
                     .offset(y: startingOffsetY)
@@ -35,7 +34,7 @@ struct MainView: View {
                             .onEnded({ value in
                                 withAnimation(.spring()) {
                                     if currentDragOffsetY < -150 {
-                                        endingOffsetY = -startingOffsetY
+                                        endingOffsetY = -UIScreen.main.bounds.height * 0.7
                                         currentDragOffsetY = .zero
                                     } else if endingOffsetY != 0 && currentDragOffsetY > 150 {
                                         endingOffsetY = .zero
@@ -57,7 +56,7 @@ struct MainView: View {
                     SettingView()
                 }
             }
-        }
+        }.onAppear()
     }
 }
 
