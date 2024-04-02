@@ -42,7 +42,7 @@ enum NetworkError: Error {
 
 protocol NetworkManagerType {
     func requestGET<T: Codable>(url: String, decodeType: T) -> AnyPublisher<T,NetworkError>
-    func requestPOSTModel<T: Codable, U: Codable>(url: String, parameters: T) -> AnyPublisher<U, NetworkError> 
+    func requestPOSTModel<T: Codable, U: Codable>(url: String, parameters: T, ishttpHeader: Bool) -> AnyPublisher<U, NetworkError>
 }
 
 final class NetworkManager: NetworkManagerType {
@@ -85,15 +85,25 @@ final class NetworkManager: NetworkManagerType {
         }
     }
 
-    func requestPOSTModel<T: Codable, U: Codable>(url: String, parameters: T) -> AnyPublisher<U, NetworkError> {
+    func requestPOSTModel<T: Codable, U: Codable>(url: String, parameters: T, ishttpHeader: Bool) -> AnyPublisher<U, NetworkError> {
         guard let url = createURL(withPath: url) else {
             return Fail(error: NetworkError.urlError)
                 .eraseToAnyPublisher()
         }
-        
+                    
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        
+        if ishttpHeader {
+            let tk = KeychainManager()
+            guard let accessToken = tk.read("\(hostURL)/apple", account: "accessToken") else {
+                return Fail(error: NetworkError.urlError)
+                    .eraseToAnyPublisher()
+            }
+            
+            request.addValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
+        }
         
         do {
             let uploadData = try JSONEncoder().encode(parameters)
@@ -135,7 +145,7 @@ final class StubNetworkManager: NetworkManagerType {
         Empty().eraseToAnyPublisher()
     }
     
-    func requestPOSTModel<T, U>(url: String, parameters: T) -> AnyPublisher<U, NetworkError> where T : Decodable, T : Encodable, U : Decodable, U : Encodable {
+    func requestPOSTModel<T, U>(url: String, parameters: T, ishttpHeader: Bool) -> AnyPublisher<U, NetworkError> where T : Decodable, T : Encodable, U : Decodable, U : Encodable {
         Empty().eraseToAnyPublisher()
     }
     

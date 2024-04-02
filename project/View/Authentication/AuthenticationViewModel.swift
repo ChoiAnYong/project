@@ -26,7 +26,6 @@ final class AuthenticationViewModel: ObservableObject {
     @Published var authenticationState: AuthenticationState = .unAuthenticated
     
     private var container: DIContainer
-    private var currentNonce: String?
     private var subscription = Set<AnyCancellable>()
     
     init(container: DIContainer) {  
@@ -38,23 +37,30 @@ final class AuthenticationViewModel: ObservableObject {
         case .checkAuthenticationState:
             break
         case let .appleLogin(request): // case의 연관값에 접근하고 싶으면 let
-            let nonce = container.services.authService.handleSignInWithAppleRequest(request)
-            self.currentNonce = nonce
+            container.services.authService.handleSignInWithAppleRequest(request)
             
         case let .appleLoginCompletion(result):
             if case let .success(authorization) = result {
                 isLoading = true
-                guard let nonce = currentNonce else { return }
                 
-                container.services.authService.handleSignInWithAppleCompletion(authorization, nonce: nonce)
+                container.services.authService.handleSignInWithAppleCompletion(authorization)
                     .receive(on: DispatchQueue.main)
                     .sink { [weak self] completion in
                         if case .failure = completion {
                             self?.isLoading = false
                         }
                     } receiveValue: { [weak self] response in
-                        print(response)
-                        // TODO: - response 저장
+                        let tk = KeychainManager()
+                        
+                        tk.creat("https://emgapp.shop/login/apple", account: "accessToken", value: response.accessToken)
+                        tk.creat("https://emgapp.shop/login/apple", account: "refreshToken", value: response.refreshToken)
+                        
+                        
+                        guard let accessToken = tk.read("https://emgapp.shop/login/apple", account: "accessToken") else {
+                            return
+                        }
+                        print(accessToken)
+                        
                         self?.isLoading = false
                         self?.authenticationState = .authenticated
                     }.store(in: &subscription)

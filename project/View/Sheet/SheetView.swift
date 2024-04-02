@@ -17,7 +17,6 @@ struct SheetView: View {
         .background(Color.grayCool)
         .cornerRadius(15)
         .shadow(radius: 6)
-        
     }
 }
 
