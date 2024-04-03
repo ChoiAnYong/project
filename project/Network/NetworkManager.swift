@@ -10,6 +10,7 @@ import Combine
 
 enum NetworkError: Error {
     case urlError
+    case tokenError
     case timeoutError
     case hostUnreachable
     case connectionLost
@@ -21,32 +22,41 @@ enum NetworkError: Error {
     case unknownError
     
     static func mapURLError(_ error: Error) -> NetworkError {
-       guard let urlError = error as? URLError else {
-           return NetworkError.unknownError
-       }
-       
-       switch urlError.code {
-       case .timedOut:
-           return .timeoutError
-       case .cannotFindHost, .cannotConnectToHost:
-           return .hostUnreachable
-       case .networkConnectionLost:
-           return .connectionLost
-       case .notConnectedToInternet:
-           return .notConnected
-       default:
-           return .unknownError
-       }
-   }
+        guard let urlError = error as? URLError else {
+            return NetworkError.unknownError
+        }
+        
+        switch urlError.code {
+        case .timedOut:
+            return .timeoutError
+        case .cannotFindHost, .cannotConnectToHost:
+            return .hostUnreachable
+        case .networkConnectionLost:
+            return .connectionLost
+        case .notConnectedToInternet:
+            return .notConnected
+        default:
+            return .unknownError
+        }
+    }
+}
+
+enum HTTPMethod: String {
+    case GET
+    case POST
 }
 
 protocol NetworkManagerType {
-    func requestGET<T: Codable>(url: String, decodeType: T) -> AnyPublisher<T,NetworkError>
-    func requestPOSTModel<T: Codable, U: Codable>(url: String, parameters: T, ishttpHeader: Bool) -> AnyPublisher<U, NetworkError>
+    func request<T: Codable, U: Codable>(url: String, method: HTTPMethod, parameters: T?, isHTTPHeader: Bool) async -> AnyPublisher<U, NetworkError>
 }
 
 final class NetworkManager: NetworkManagerType {
+    private let tokenManager: KeychainManager
     private let hostURL = "https://emgapp.shop/login"
+    
+    init(tokenManager: KeychainManager) {
+        self.tokenManager = tokenManager
+    }
     
     private func createURL(withPath path: String)  -> URL? {
         let urlString: String = "\(hostURL)\(path)"
@@ -54,70 +64,47 @@ final class NetworkManager: NetworkManagerType {
         return url
     }
     
-    func requestGET<T: Decodable>(url: String, decodeType: T) -> AnyPublisher<T,NetworkError> {
-        do {
-            guard let url = createURL(withPath: url) else { throw NetworkError.urlError }
-            var request = URLRequest(url: url)
-            request.httpMethod = "GET"
-            
-            return URLSession.shared.dataTaskPublisher(for: request)
-                .tryMap { data, response in
-                    
-                    guard let httpResponse = response as? HTTPURLResponse else {
-                        throw NetworkError.responseError
-                    }
-                    guard (200...299).contains(httpResponse.statusCode) else {
-                        throw NetworkError.serverError(statusCode: httpResponse.statusCode)
-                    }
-                    return data
-                }
-                .decode(type: T.self, decoder: JSONDecoder())
-                .mapError { error in
-                    if let networkError = error as? NetworkError {
-                        return networkError
-                    } else {
-                        return NetworkError.unknownError
-                    }
-                }
-                .eraseToAnyPublisher()
-        } catch {
-            return Fail(error: NetworkError.urlError).eraseToAnyPublisher()
+    private func getToken() async -> String? {
+        let (status, value) = await self.tokenManager.read(KeychainManager.serviceUrl, account: "accessToken")
+        if status == errSecSuccess {
+            return value
+        } else {
+            return nil
         }
     }
-
-    func requestPOSTModel<T: Codable, U: Codable>(url: String, parameters: T, ishttpHeader: Bool) -> AnyPublisher<U, NetworkError> {
+    
+    func request<T: Encodable, U: Decodable>(url: String, method: HTTPMethod, parameters: T?, isHTTPHeader: Bool) async -> AnyPublisher<U, NetworkError> {
         guard let url = createURL(withPath: url) else {
             return Fail(error: NetworkError.urlError)
                 .eraseToAnyPublisher()
         }
-                    
-        var request = URLRequest(url: url)
-        request.httpMethod = "POST"
-        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         
-        if ishttpHeader {
-            let tk = KeychainManager()
-            guard let accessToken = tk.read("\(hostURL)/apple", account: "accessToken") else {
-                return Fail(error: NetworkError.urlError)
+        var request = URLRequest(url: url)
+        request.httpMethod = method.rawValue
+        
+        if isHTTPHeader {
+            guard let token = await getToken() else {
+                return Fail(error: NetworkError.tokenError)
                     .eraseToAnyPublisher()
             }
-            
-            request.addValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
+            request.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         }
         
-        do {
-            let uploadData = try JSONEncoder().encode(parameters)
-            request.httpBody = uploadData
-        } catch {
-            return Fail(error: NetworkError.encodeError)
-                .eraseToAnyPublisher()
+        if let parameters = parameters {
+            do {
+                let uploadData = try JSONEncoder().encode(parameters)
+                request.httpBody = uploadData
+            } catch {
+                return Fail(error: NetworkError.encodeError)
+                    .eraseToAnyPublisher()
+            }
         }
         
         return URLSession.shared.dataTaskPublisher(for: request)
             .mapError { error in
                 return NetworkError.mapURLError(error)
             }
-            .flatMap { data, response -> AnyPublisher<U,NetworkError> in
+            .flatMap { data, response -> AnyPublisher<U, NetworkError> in
                 guard let httpResponse = response as? HTTPURLResponse else {
                     return Fail(error: NetworkError.responseError)
                         .eraseToAnyPublisher()
@@ -141,13 +128,10 @@ final class NetworkManager: NetworkManagerType {
 }
 
 final class StubNetworkManager: NetworkManagerType {
-    func requestGET<T>(url: String, decodeType: T) -> AnyPublisher<T, NetworkError> where T : Decodable, T : Encodable {
+    func request<T: Codable, U: Codable>(url: String, 
+                                         method: HTTPMethod,
+                                         parameters: T?,
+                                         isHTTPHeader: Bool) -> AnyPublisher<U, NetworkError> {
         Empty().eraseToAnyPublisher()
     }
-    
-    func requestPOSTModel<T, U>(url: String, parameters: T, ishttpHeader: Bool) -> AnyPublisher<U, NetworkError> where T : Decodable, T : Encodable, U : Decodable, U : Encodable {
-        Empty().eraseToAnyPublisher()
-    }
-    
-    
 }

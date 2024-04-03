@@ -23,7 +23,7 @@ final class AuthenticationViewModel: ObservableObject {
     }
     
     @Published var isLoading: Bool = false
-    @Published var authenticationState: AuthenticationState = .unAuthenticated
+    @Published var authenticationState: AuthenticationState = .authenticated
     
     private var container: DIContainer
     private var subscription = Set<AnyCancellable>()
@@ -49,18 +49,7 @@ final class AuthenticationViewModel: ObservableObject {
                         if case .failure = completion {
                             self?.isLoading = false
                         }
-                    } receiveValue: { [weak self] response in
-                        let tk = KeychainManager()
-                        
-                        tk.creat("https://emgapp.shop/login/apple", account: "accessToken", value: response.accessToken)
-                        tk.creat("https://emgapp.shop/login/apple", account: "refreshToken", value: response.refreshToken)
-                        
-                        
-                        guard let accessToken = tk.read("https://emgapp.shop/login/apple", account: "accessToken") else {
-                            return
-                        }
-                        print(accessToken)
-                        
+                    } receiveValue: { [weak self] response in                                      
                         self?.isLoading = false
                         self?.authenticationState = .authenticated
                     }.store(in: &subscription)

@@ -9,17 +9,8 @@ import Foundation
 
 
 struct UserObject: Codable {
-    var users: [UserInfo]
+    var users: String
 }
-
-extension UserObject {
-
-    struct UserInfo: Codable {
-        var id: Int
-        var title: String
-    }
-}
-
 
 //extension UserObject {
 //    func toModel() -> User {

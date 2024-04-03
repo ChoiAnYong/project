@@ -9,52 +9,67 @@ import Foundation
 import Security
 
 final class KeychainManager {
+    static let serviceUrl = "https://emgapp.shop/login/apple"
     
-    func creat(_ service: String, account: String, value: String) {
-        let keyChainQuery: NSDictionary = [
+    func creat(_ service: String, account: String, value: String) async -> OSStatus {
+        guard let data = value.data(using: .utf8) else {
+            return errSecBadReq
+        }
+        
+        let keyChainQuery: CFDictionary = [
             kSecClass: kSecClassGenericPassword,
             kSecAttrService: service,
             kSecAttrAccount: account,
-            kSecValueData: value.data(using: .utf8, allowLossyConversion: false)!
-        ]
+            kSecValueData: data
+        ] as CFDictionary
         
         
         SecItemDelete(keyChainQuery)
         
-        let status: OSStatus = SecItemAdd(keyChainQuery, nil)
-        assert(status==noErr, "failed to saving Token")
+        return SecItemAdd(keyChainQuery, nil)
     }
     
-    func read(_ service: String, account: String) -> String? {
-        let keyChainQuery: NSDictionary = [
+    func read(_ service: String, account: String) async -> (status: OSStatus, value: String?) {
+        let keyChainQuery: CFDictionary = [
             kSecClass: kSecClassGenericPassword,
             kSecAttrService: service,
             kSecAttrAccount: account,
-            kSecReturnData: kCFBooleanTrue!,
+            kSecReturnData: kCFBooleanTrue as Any,
             kSecMatchLimit: kSecMatchLimitOne
-        ]
+        ] as CFDictionary
         
         var dataTypeRef: AnyObject?
         let status = SecItemCopyMatching(keyChainQuery, &dataTypeRef)
         
-        if(status == errSecSuccess) {
-            let retrievedData = dataTypeRef as! Data
-            let value = String(data: retrievedData, encoding: String.Encoding.utf8)
-            return value
-        } else {
-            print("failed to loading, status code = \(status)")
-            return nil
+        guard let data = dataTypeRef as? Data else {
+            return (status, nil)
         }
+        
+        let value = String(decoding: data, as: UTF8.self)
+        return (status, value)
     }
     
-    func delete(_ service: String, account: String) {
-        let keyChainQuery: NSDictionary = [
+    func update(service: String, account: String, value: String) async -> OSStatus {
+        guard let data = value.data(using: .utf8) else {
+            return errSecBadReq
+        }
+        
+        let keyChainQuery: CFDictionary = [
             kSecClass: kSecClassGenericPassword,
             kSecAttrService: service,
             kSecAttrAccount: account
-        ]
+        ] as CFDictionary
         
-        let status = SecItemDelete(keyChainQuery)
-        assert(status == noErr, "failed to delete the value, status code = \(status)")
+        return SecItemUpdate(keyChainQuery, [kSecValueData: data] as CFDictionary)
+    }
+    
+    func delete(_ service: String, account: String) async -> OSStatus {
+        let keyChainQuery: CFDictionary = [
+            kSecClass: kSecClassGenericPassword,
+            kSecAttrService: service,
+            kSecAttrAccount: account
+        ] as CFDictionary
+        
+        return SecItemDelete(keyChainQuery)
     }
 }

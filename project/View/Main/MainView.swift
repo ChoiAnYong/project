@@ -90,13 +90,7 @@ fileprivate struct toolbarView: View {
                 Spacer()
                 
                 Button(action: {
-                    let tk = KeychainManager()
-                    
-                    guard let accessToken = tk.read("https://emgapp.shop/login/apple", account: "accessToken") else {
-                        return
-                    }
-                    
-                    print(accessToken)
+
                 }, label: {
                     CustomIcon(iconName: "phoneIcon")
                 })

@@ -23,9 +23,28 @@ protocol AuthenticationServiceType {
     func handleSignInWithAppleCompletion(
         _ authorization: ASAuthorization
     ) -> AnyPublisher<ServerAuthResponse, ServiceError>
+    func test()
 }
 
 final class AuthenticationService: AuthenticationServiceType {
+    func test() {
+        networkManager.request(url: "/hello", method: .GET, parameters: nil, isHTTPHeader: true)
+        .sink(receiveCompletion: { completion in
+                switch completion {
+                case .finished:
+                    print("Request completed successfully")
+                case .failure(let error):
+                    print("Request failed with error: \(error)")
+                }
+            }, receiveValue: { (data: UserObject) in
+                // 디코딩된 데이터(data)를 사용합니다.
+                print("Received data: \(data)")
+            })
+            .store(in: &subscriptions)
+    }
+    
+  
+    
     private var networkManager: NetworkManagerType
     private var subscriptions = Set<AnyCancellable>()
     
@@ -43,24 +62,27 @@ final class AuthenticationService: AuthenticationServiceType {
         _ authorization: ASAuthorization
     ) -> AnyPublisher<ServerAuthResponse, ServiceError> {
         Future { [weak self] promise in
-            self?.handleSignInWithAppleCompletion(authorization) { result in
-                switch result {
-                case let .success(response):
-                    promise(.success(response))
-                case let .failure(error):
-                    promise(.failure(.error(error)))
+            guard let self = self else { return }
+            Task {
+                await self.handleSignInWithAppleCompletion(authorization) { result in
+                    switch result {
+                    case let .success(response):
+                        promise(.success(response))
+                    case let .failure(error):
+                        promise(.failure(.error(error)))
+                    }
                 }
             }
         }.eraseToAnyPublisher()
     }
-    
+
 }
 
 extension AuthenticationService {
     private func handleSignInWithAppleCompletion(
         _ authorization: ASAuthorization,
         completion: @escaping (Result<ServerAuthResponse, Error>) -> Void
-    )  {
+    ) async  {
         guard let appleIDCredential = authorization.credential as? ASAuthorizationAppleIDCredential,
               let appleIDToken = appleIDCredential.identityToken else {
             completion(.failure(AuthenticationError.tokenError))
@@ -78,7 +100,7 @@ extension AuthenticationService {
         
         let token = AppleLoginToken(id_token: idTokenString, name: name)
         
-        authenticateUserWithServer(token: token) { result in
+        await authenticateUserWithServer(token: token) { result in
             switch result {
             case let .success(response):
                 completion(.success(response))
@@ -89,14 +111,13 @@ extension AuthenticationService {
     }
     
     private func authenticateUserWithServer(token: AppleLoginToken,
-                                            completion: @escaping (Result<ServerAuthResponse, Error>) -> Void) {
-        networkManager.requestPOSTModel(url: "/apple", parameters: token, ishttpHeader: false)
+                                            completion: @escaping (Result<ServerAuthResponse, Error>) -> Void) async {
+        await networkManager.request(url: "/apple", method: .POST, parameters: token, isHTTPHeader: false)
             .sink { result in
                 if case .failure = result {
                     completion(.failure(AuthenticationError.invalidated))
                 }
             } receiveValue: { (response: ServerAuthResponse) in
-                print(response)
                 completion(.success(response))
             }.store(in: &subscriptions)
     }
@@ -104,6 +125,11 @@ extension AuthenticationService {
 }
 
 final class StubAuthenticationService: AuthenticationServiceType {
+    func test() -> AnyPublisher<UserObject, ServiceError> {
+        Empty().eraseToAnyPublisher()
+    }
+    
+    
     func handleSignInWithAppleRequest(_ request: ASAuthorizationAppleIDRequest) -> Void {
         
     }
