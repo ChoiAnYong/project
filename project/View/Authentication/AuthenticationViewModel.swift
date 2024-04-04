@@ -23,12 +23,13 @@ final class AuthenticationViewModel: ObservableObject {
     }
     
     @Published var isLoading: Bool = false
-    @Published var authenticationState: AuthenticationState = .authenticated
+    @Published var authenticationState: AuthenticationState = .unAuthenticated
     
     private var container: DIContainer
     private var subscription = Set<AnyCancellable>()
+    private var km = KeychainManager()
     
-    init(container: DIContainer) {  
+    init(container: DIContainer) {
         self.container = container
     }
     
@@ -49,9 +50,8 @@ final class AuthenticationViewModel: ObservableObject {
                         if case .failure = completion {
                             self?.isLoading = false
                         }
-                    } receiveValue: { [weak self] response in                                      
-                        self?.isLoading = false
-                        self?.authenticationState = .authenticated
+                    } receiveValue: { [weak self] response in
+                        self?.handleServerAuthResponse(response)
                     }.store(in: &subscription)
             } else if case let .failure(error) = result {
                 isLoading = false
@@ -59,6 +59,20 @@ final class AuthenticationViewModel: ObservableObject {
             }
         case .logout:
             return
+        }
+    }
+    
+    
+    private func handleServerAuthResponse(_ response: ServerAuthResponse) {
+        Task {
+            let a = await km.creat(KeychainManager.serviceUrl, account:"accessToken", value:response.accessToken)
+            let b = await km.creat(KeychainManager.serviceUrl, account:"refreshToken", value:response.refreshToken)
+            if a == noErr && b == noErr {
+                DispatchQueue.main.async {
+                    self.isLoading = false
+                    self.authenticationState = .authenticated
+                }
+            }
         }
     }
 }

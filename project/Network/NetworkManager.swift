@@ -47,12 +47,16 @@ enum HTTPMethod: String {
 }
 
 protocol NetworkManagerType {
-    func request<T: Codable, U: Codable>(url: String, method: HTTPMethod, parameters: T?, isHTTPHeader: Bool) async -> AnyPublisher<U, NetworkError>
+    func request<T: Decodable>(url: String,
+                               method: HTTPMethod,
+                               parameters: [String: String]?,
+                               isHTTPHeader: Bool)
+    async -> AnyPublisher<T, NetworkError>
 }
 
 final class NetworkManager: NetworkManagerType {
     private let tokenManager: KeychainManager
-    private let hostURL = "https://emgapp.shop/login"
+    private let hostURL = "https://emgapp.shop"
     
     init(tokenManager: KeychainManager) {
         self.tokenManager = tokenManager
@@ -73,7 +77,11 @@ final class NetworkManager: NetworkManagerType {
         }
     }
     
-    func request<T: Encodable, U: Decodable>(url: String, method: HTTPMethod, parameters: T?, isHTTPHeader: Bool) async -> AnyPublisher<U, NetworkError> {
+    func request<T: Decodable>(url: String, 
+                               method: HTTPMethod,
+                               parameters: [String: String]?,
+                               isHTTPHeader: Bool)
+    async -> AnyPublisher<T, NetworkError> {
         guard let url = createURL(withPath: url) else {
             return Fail(error: NetworkError.urlError)
                 .eraseToAnyPublisher()
@@ -81,6 +89,7 @@ final class NetworkManager: NetworkManagerType {
         
         var request = URLRequest(url: url)
         request.httpMethod = method.rawValue
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         
         if isHTTPHeader {
             guard let token = await getToken() else {
@@ -104,7 +113,7 @@ final class NetworkManager: NetworkManagerType {
             .mapError { error in
                 return NetworkError.mapURLError(error)
             }
-            .flatMap { data, response -> AnyPublisher<U, NetworkError> in
+            .flatMap { data, response -> AnyPublisher<T, NetworkError> in
                 guard let httpResponse = response as? HTTPURLResponse else {
                     return Fail(error: NetworkError.responseError)
                         .eraseToAnyPublisher()
@@ -114,7 +123,7 @@ final class NetworkManager: NetworkManagerType {
                         .eraseToAnyPublisher()
                 }
                 do {
-                    let decodedObject = try JSONDecoder().decode(U.self, from: data)
+                    let decodedObject = try JSONDecoder().decode(T.self, from: data)
                     return Just(decodedObject)
                         .setFailureType(to: NetworkError.self)
                         .eraseToAnyPublisher()
@@ -128,10 +137,7 @@ final class NetworkManager: NetworkManagerType {
 }
 
 final class StubNetworkManager: NetworkManagerType {
-    func request<T: Codable, U: Codable>(url: String, 
-                                         method: HTTPMethod,
-                                         parameters: T?,
-                                         isHTTPHeader: Bool) -> AnyPublisher<U, NetworkError> {
+    func request<T>(url: String, method: HTTPMethod, parameters: [String : String]?, isHTTPHeader: Bool) async -> AnyPublisher<T, NetworkError> where T : Decodable {
         Empty().eraseToAnyPublisher()
     }
 }

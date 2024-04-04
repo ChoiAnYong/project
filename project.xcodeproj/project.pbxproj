@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		82D0D741DBA891D42B115AE5 /* Pods_project_projectUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 985B43E0F89C930438631A6C /* Pods_project_projectUITests.framework */; };
+		AD03A46A2BBE39FF00F2DB47 /* UserService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD03A4692BBE39FF00F2DB47 /* UserService.swift */; };
+		AD03A46C2BBE937200F2DB47 /* MainViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD03A46B2BBE937200F2DB47 /* MainViewModel.swift */; };
 		AD0F52552BB41CAD00A9723A /* MapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD0F52542BB41CAD00A9723A /* MapView.swift */; };
 		AD1F9DA32BA16DF4005DD9D6 /* projectApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD1F9DA22BA16DF4005DD9D6 /* projectApp.swift */; };
 		AD1F9DA52BA16DF4005DD9D6 /* AuthenticationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD1F9DA42BA16DF4005DD9D6 /* AuthenticationView.swift */; };
@@ -68,6 +70,8 @@
 		64902609864D69EE7EE65D53 /* Pods-project-projectUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-project-projectUITests.debug.xcconfig"; path = "Target Support Files/Pods-project-projectUITests/Pods-project-projectUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		7319C6A88859E59BFC93EC21 /* Pods_projectTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_projectTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		985B43E0F89C930438631A6C /* Pods_project_projectUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_project_projectUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		AD03A4692BBE39FF00F2DB47 /* UserService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserService.swift; sourceTree = "<group>"; };
+		AD03A46B2BBE937200F2DB47 /* MainViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewModel.swift; sourceTree = "<group>"; };
 		AD0F52542BB41CAD00A9723A /* MapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapView.swift; sourceTree = "<group>"; };
 		AD1F9D9F2BA16DF4005DD9D6 /* project.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = project.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AD1F9DA22BA16DF4005DD9D6 /* projectApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = projectApp.swift; sourceTree = "<group>"; };
@@ -294,6 +298,7 @@
 			isa = PBXGroup;
 			children = (
 				AD6572252BB974C200557ED6 /* MainView.swift */,
+				AD03A46B2BBE937200F2DB47 /* MainViewModel.swift */,
 			);
 			path = Main;
 			sourceTree = "<group>";
@@ -326,8 +331,8 @@
 		AD9ED1112BA97634005F89D1 /* Network */ = {
 			isa = PBXGroup;
 			children = (
-				AD9ED1302BA9BF6D005F89D1 /* DTO */,
 				AD9ED12D2BA9B1B3005F89D1 /* NetworkManager.swift */,
+				AD9ED1302BA9BF6D005F89D1 /* DTO */,
 			);
 			path = Network;
 			sourceTree = "<group>";
@@ -356,6 +361,7 @@
 			children = (
 				ADC04B522BA8631E00AD8A14 /* Services.swift */,
 				ADC04B542BA8638F00AD8A14 /* AuthenticationService.swift */,
+				AD03A4692BBE39FF00F2DB47 /* UserService.swift */,
 				AD9ED10F2BA91E38005F89D1 /* ServiceError.swift */,
 			);
 			path = Service;
@@ -639,9 +645,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				AD9ED12E2BA9B1B3005F89D1 /* NetworkManager.swift in Sources */,
+				AD03A46A2BBE39FF00F2DB47 /* UserService.swift in Sources */,
 				AD5E48992BB7F4170035329E /* PathModel.swift in Sources */,
 				AD9ED1102BA91E38005F89D1 /* ServiceError.swift in Sources */,
 				ADE769542BB172F0004C9B43 /* ServerAuthResponse.swift in Sources */,
+				AD03A46C2BBE937200F2DB47 /* MainViewModel.swift in Sources */,
 				AD1F9DA52BA16DF4005DD9D6 /* AuthenticationView.swift in Sources */,
 				AD9ED1322BA9BF7B005F89D1 /* UserObject.swift in Sources */,
 				AD6572232BB96CA700557ED6 /* SettingView.swift in Sources */,

@@ -10,6 +10,8 @@ import AuthenticationServices
 
 struct AuthenticationView: View {
     @StateObject var viewModel: AuthenticationViewModel
+    @EnvironmentObject var container: DIContainer
+    
     
     var body: some View {
         VStack {
@@ -18,7 +20,7 @@ struct AuthenticationView: View {
                 LoginView()
                     .environmentObject(viewModel)
             case .authenticated:
-                MainView(pathModel: PathModel())
+                MainView(pathModel: PathModel(), viewModel: MainViewModel(container: container))
             }
         }
         .onAppear {

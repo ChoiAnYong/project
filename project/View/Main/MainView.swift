@@ -8,7 +8,9 @@
 import SwiftUI
 
 struct MainView: View {
+    @EnvironmentObject var container: DIContainer
     @StateObject var pathModel: PathModel
+    @StateObject var viewModel: MainViewModel
     @State private var isTopDrag: Bool = true
     @State private var startingOffsetY: CGFloat = UIScreen.main.bounds.height * 0.78
     @State private var currentDragOffsetY: CGFloat = 0
@@ -19,7 +21,7 @@ struct MainView: View {
             ZStack {
                 MapView()
                 
-                toolbarView(pathModel: pathModel)
+                toolbarView(pathModel: pathModel, viewModel: viewModel)
                 
                 SheetView()
                     .offset(y: startingOffsetY)
@@ -72,9 +74,11 @@ struct MainView: View {
 
 fileprivate struct toolbarView: View {
     @ObservedObject private var pathModel: PathModel
+    @ObservedObject private var viewModel: MainViewModel
     
-    init(pathModel: PathModel) {
+    init(pathModel: PathModel, viewModel: MainViewModel) {
         self.pathModel = pathModel
+        self.viewModel = viewModel
     }
     
     var body: some View {
@@ -90,7 +94,7 @@ fileprivate struct toolbarView: View {
                 Spacer()
                 
                 Button(action: {
-
+                    viewModel.send(action: .getUser)
                 }, label: {
                     CustomIcon(iconName: "phoneIcon")
                 })
@@ -104,5 +108,5 @@ fileprivate struct toolbarView: View {
 
 
 #Preview {
-    MainView(pathModel: PathModel())
+    MainView(pathModel: PathModel(), viewModel: MainViewModel(container: .init(services: StubService())))
 }

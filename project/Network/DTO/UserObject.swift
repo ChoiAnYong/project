@@ -9,7 +9,11 @@ import Foundation
 
 
 struct UserObject: Codable {
-    var users: String
+    var name: String
+    var image: Data
+    var email: String
+    var hasWatch: Bool
+    var connectionMemberList: [String]
 }
 
 //extension UserObject {
