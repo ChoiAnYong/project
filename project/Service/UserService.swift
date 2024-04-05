@@ -28,7 +28,11 @@ final class UserService: UserServiceType {
         Future { [weak self] promise in
             guard let self = self else {return}
             Task {
-                await self.handleNetworkCompletion(url: "/member/info", method: .GET, parameter: nil, isHTTPHeader: true) { (result: Result<UserObject, Error>) in
+                await self.handleNetworkCompletion(url: "/member/info",
+                                                   method: .GET,
+                                                   parameter: nil,
+                                                   isHTTPHeader: true)
+                { (result: Result<UserObject, Error>) in
                     switch result {
                     case let .success(response):
                         promise(.success(response))

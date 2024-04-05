@@ -92,16 +92,20 @@ extension AuthenticationService {
     }
     
     private func authenticateUserWithServer(token: AppleLoginToken,
-                                            completion: @escaping (Result<ServerAuthResponse, Error>) -> Void) async {
-        await networkManager.request(url: "/login/apple", method: .POST, parameters: ["id_token":token.id_token, "name":token.name], isHTTPHeader: false)
-            .sink { result in
-                if case .failure = result {
-                    completion(.failure(AuthenticationError.invalidated))
-                }
-            } receiveValue: { (response: ServerAuthResponse) in
-                
-                completion(.success(response))
-            }.store(in: &subscriptions)
+                                            completion: @escaping
+                                            (Result<ServerAuthResponse, Error>) -> Void) async {
+        await networkManager.request(url: "/login/apple",
+                                     method: .POST,
+                                     parameters: ["id_token":token.id_token, "name":token.name],
+                                     isHTTPHeader: false)
+        .sink { result in
+            if case .failure = result {
+                completion(.failure(AuthenticationError.invalidated))
+            }
+        } receiveValue: { (response: ServerAuthResponse) in
+            
+            completion(.success(response))
+        }.store(in: &subscriptions)
     }
     
 }
@@ -111,7 +115,8 @@ final class StubAuthenticationService: AuthenticationServiceType {
         
     }
     
-    func handleSignInWithAppleCompletion( _ authorization: ASAuthorization) -> AnyPublisher<ServerAuthResponse, ServiceError> {
+    func handleSignInWithAppleCompletion( _ authorization: ASAuthorization)
+    -> AnyPublisher<ServerAuthResponse, ServiceError> {
         Empty().eraseToAnyPublisher()
     }
 }
