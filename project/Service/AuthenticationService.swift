@@ -23,6 +23,7 @@ protocol AuthenticationServiceType {
     func handleSignInWithAppleCompletion(
         _ authorization: ASAuthorization
     ) -> AnyPublisher<ServerAuthResponse, ServiceError>
+    func checkAuthentication() -> AnyPublisher<ServerAuthResponse, ServiceError>
 }
 
 final class AuthenticationService: AuthenticationServiceType {
@@ -56,7 +57,20 @@ final class AuthenticationService: AuthenticationServiceType {
             }
         }.eraseToAnyPublisher()
     }
-
+    
+//    func checkAuthentication() -> AnyPublisher<ServerAuthResponse, ServiceError> {
+//        Future<ServerAuthResponse { [weak self] promise in
+//            networkManager.request(url: "/check", method: .GET, parameters: nil, isHTTPHeader: true)
+//                .sink { completion in
+//                    if case .failure = completion {
+//                        completion(.failure(AuthenticationError.invalidated))
+//                    }
+//                } receiveValue: { (response: Bool) in
+//                    completion(.success(response))
+//                }
+//            
+//        }
+//    }
 }
 
 extension AuthenticationService {
@@ -110,7 +124,11 @@ extension AuthenticationService {
     
 }
 
-final class StubAuthenticationService: AuthenticationServiceType {    
+final class StubAuthenticationService: AuthenticationServiceType {
+    func checkAuthentication() -> AnyPublisher<ServerAuthResponse, ServiceError> {
+        Empty().eraseToAnyPublisher()
+    }
+    
     func handleSignInWithAppleRequest(_ request: ASAuthorizationAppleIDRequest) -> Void {
         
     }

@@ -23,7 +23,7 @@ final class AuthenticationViewModel: ObservableObject {
     }
     
     @Published var isLoading: Bool = false
-    @Published var authenticationState: AuthenticationState = .unAuthenticated
+    @Published var authenticationState: AuthenticationState = .authenticated
     @Published var isDisplayAlert: Bool = true
     
     private var container: DIContainer
@@ -66,13 +66,18 @@ final class AuthenticationViewModel: ObservableObject {
     
     private func handleServerAuthResponse(_ response: ServerAuthResponse) {
         Task {
-            let accessStatus = await km.creat(KeychainManager.serviceUrl, 
+            let accessStatus = await km.creat(KeychainManager.serviceUrl,
                                               account:"accessToken",
                                               value:response.accessToken)
-            let refreshStatus = await km.creat(KeychainManager.serviceUrl, 
+            let refreshStatus = await km.creat(KeychainManager.serviceUrl,
                                                account:"refreshToken",
                                                value:response.refreshToken)
-            if accessStatus == noErr && refreshStatus == noErr {
+            let expiresStatus = await km.creat(KeychainManager.serviceUrl,
+                                               account:"accessTokenExpiresIn",
+                                               value: String(response.accessTokenExpiresIn))
+            if accessStatus == errSecSuccess &&
+                refreshStatus == errSecSuccess &&
+                expiresStatus == errSecSuccess {
                 DispatchQueue.main.async {
                     self.isLoading = false
                     self.authenticationState = .authenticated
