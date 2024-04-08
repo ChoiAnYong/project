@@ -109,4 +109,5 @@ fileprivate struct toolbarView: View {
 
 #Preview {
     MainView(pathModel: PathModel(), viewModel: MainViewModel(container: .init(services: StubService())))
+        .environmentObject(DIContainer(services: StubService()))
 }

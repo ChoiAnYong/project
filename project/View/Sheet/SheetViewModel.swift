@@ -9,7 +9,7 @@ import Foundation
 
 final class SheetViewModel: ObservableObject {
     @Published var user: User = .stub1
-    @Published var users: [User] = []
+    @Published var users: [User] = [.stub2, .stub3, .stub4, .stub5]
     
     private var container: DIContainer
     

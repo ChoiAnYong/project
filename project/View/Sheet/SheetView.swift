@@ -47,12 +47,8 @@ fileprivate struct SheetScrollView: View {
         ScrollView {
             UserInfoView(sheetViewModel: sheetViewModel)
             
-            LazyVStack {
-                ForEach(ex, id: \.self) { ex in
-                    Text("\(ex)")
-                    
-                }
-            }
+            OtherInfoCellListView(sheetViewModel: sheetViewModel)
+            
             .padding(.all, 8)
             .background(RoundedRectangle(cornerRadius: 18).foregroundColor(Color.white))
             .padding(.horizontal, 20)
@@ -82,7 +78,7 @@ fileprivate struct UserInfoView: View {
                     .font(.system(size: 18, weight: .bold))
                 
                 Text(sheetViewModel.user.descriptino ?? "상태 메시지를 입력하세요")
-                    .font(.system(size: 18, weight: .regular))
+                    .font(.system(size: 15, weight: .regular))
             }
             Spacer()
         }
@@ -90,6 +86,46 @@ fileprivate struct UserInfoView: View {
         .background(RoundedRectangle(cornerRadius: 18).foregroundColor(Color.white))
         .padding(.horizontal, 20)
         .padding(.bottom, 30)
+    }
+}
+
+fileprivate struct OtherInfoCellListView: View {
+    @ObservedObject private var sheetViewModel: SheetViewModel
+    
+    fileprivate init(sheetViewModel: SheetViewModel) {
+        self.sheetViewModel = sheetViewModel
+    }
+    
+    var body: some View {
+        LazyVStack {
+            ForEach(sheetViewModel.users, id: \.self) { user in
+                OtherInfoCellView(other: user)
+            }
+        }
+    }
+}
+
+fileprivate struct OtherInfoCellView: View {
+    private var other: User
+    
+    fileprivate init(other: User) {
+        self.other = other
+    }
+    
+    var body: some View {
+        HStack {
+            Image("personIcon")
+                .resizable()
+                .frame(width: 50, height: 50)
+            
+            VStack(alignment: .leading) {
+                Text(other.name)
+                    .font(.system(size: 18, weight: .bold))
+                Text(other.descriptino ?? "상태 메시지를 입려하세요.")
+                    .font(.system(size: 15, weight: .regular))
+            }
+            Spacer()
+        }
     }
 }
 

@@ -59,7 +59,7 @@ final class NetworkManager: NetworkManagerType {
     private let tokenManager: KeychainManager
     private let hostURL = "https://emgapp.shop"
     private var accessToken: String?
-    
+
     init(tokenManager: KeychainManager) {
         self.tokenManager = tokenManager
     }
