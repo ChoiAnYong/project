@@ -8,11 +8,13 @@
 import SwiftUI
 
 struct SheetView: View {
+    @StateObject var sheetViewModel: SheetViewModel
+    
     var body: some View {
         VStack {
             topView()
             
-            SheetScrollView()
+            SheetScrollView(sheetViewModel: sheetViewModel)
         }
         .background(Color.grayCool)
         .cornerRadius(15)
@@ -34,15 +36,21 @@ fileprivate struct topView: View {
 }
 
 fileprivate struct SheetScrollView: View {
+    @ObservedObject private var sheetViewModel: SheetViewModel
     let ex: [Int] = [Int](0..<100)
+    
+    fileprivate init(sheetViewModel: SheetViewModel) {
+        self.sheetViewModel = sheetViewModel
+    }
     
     var body: some View {
         ScrollView {
-            UserInfoView()
+            UserInfoView(sheetViewModel: sheetViewModel)
             
             LazyVStack {
                 ForEach(ex, id: \.self) { ex in
                     Text("\(ex)")
+                    
                 }
             }
             .padding(.all, 8)
@@ -57,6 +65,12 @@ fileprivate struct SheetScrollView: View {
 }
 
 fileprivate struct UserInfoView: View {
+    @ObservedObject private var sheetViewModel: SheetViewModel
+    
+    fileprivate init(sheetViewModel: SheetViewModel) {
+        self.sheetViewModel = sheetViewModel
+    }
+    
     var body: some View {
         HStack {
             Image("personIcon")
@@ -64,10 +78,10 @@ fileprivate struct UserInfoView: View {
                 .frame(width: 50, height: 50)
             
             VStack(alignment: .leading) {
-                Text("이름")
+                Text(sheetViewModel.user.name)
                     .font(.system(size: 18, weight: .bold))
                 
-                Text("상태메시지")
+                Text(sheetViewModel.user.descriptino ?? "상태 메시지를 입력하세요")
                     .font(.system(size: 18, weight: .regular))
             }
             Spacer()
@@ -79,17 +93,6 @@ fileprivate struct UserInfoView: View {
     }
 }
 
-//fileprivate struct OtherInfoView: View {
-//    
-//    var body: some View {
-//        ScrollView {
-//            
-//        }
-//       
-//    }
-//}
-
-
 #Preview {
-    SheetView()
+    SheetView(sheetViewModel: SheetViewModel(container: .init(services: StubService())))
 }

@@ -37,5 +37,6 @@ struct AuthenticationView: View {
 }
 
 #Preview {
-    AuthenticationView(viewModel: .init(container: .init(services: StubService())))
+    AuthenticationView(viewModel: .init(container: DIContainer(services: StubService())))
+        .environmentObject(DIContainer(services: StubService()))
 }

@@ -39,24 +39,16 @@ final class AuthenticationViewModel: ObservableObject {
         switch action {
         case .checkAuthenticationState:
             isLoading = true
-            Task {
-                await container.services.authService.checkAuthentication { result in
-                    switch result {
-                    case let .success(success):
-                        DispatchQueue.main.async {
-                            self.isLoading = false
-                            if success == true {
-                                self.authenticationState = .authenticated
-                            } else {
-                                self.authenticationState = .unAuthenticated
-                            }
-                        }
-                    case let .failure(error):
-                        print(error.localizedDescription)
-                        DispatchQueue.main.async {
-                            self.isLoading = false
-                            self.authenticationState = .unAuthenticated
-                        }
+            Task { [weak self] in
+                guard let self = self else { return }
+                
+                let check = await container.services.authService.checkAuthentication()
+                DispatchQueue.main.async {
+                    self.isLoading = false
+                    if check == nil {
+                        self.authenticationState = .unAuthenticated
+                    } else {
+                        self.authenticationState = .authenticated
                     }
                 }
             }
@@ -88,7 +80,9 @@ final class AuthenticationViewModel: ObservableObject {
     
     
     private func handleServerAuthResponse(_ response: ServerAuthResponse) {
-        Task {
+        Task { [weak self] in
+            guard let self = self else { return }
+            
             let accessStatus = await km.creat(KeychainManager.serviceUrl,
                                               account:"accessToken",
                                               value:response.accessToken)

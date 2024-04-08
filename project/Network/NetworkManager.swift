@@ -52,7 +52,7 @@ protocol NetworkManagerType {
                                parameters: [String: String]?,
                                isHTTPHeader: Bool)
     async -> AnyPublisher<T, NetworkError>
-    func getToken() async -> String?
+    func refreshAccessToken() async -> String?
 }
 
 final class NetworkManager: NetworkManagerType {
@@ -79,7 +79,7 @@ final class NetworkManager: NetworkManagerType {
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         
         if isHTTPHeader {
-            guard var accessToken = await getToken(),
+            guard let accessToken = await getToken(),
                   let expires = await getExpires() else {
                 return Fail(error: NetworkError.tokenError)
                     .eraseToAnyPublisher()
@@ -142,7 +142,7 @@ extension NetworkManager {
         return url
     }
     
-    func getToken() async -> String? {
+    private func getToken() async -> String? {
         let (status, value) = await self.tokenManager.read(KeychainManager.serviceUrl,
                                                            account: "accessToken")
         if status == errSecSuccess {
@@ -182,10 +182,11 @@ extension NetworkManager {
         return expirationDate.timeIntervalSince1970 < now.timeIntervalSince1970
     }
 
-    private func refreshAccessToken() async -> String? {
+    func refreshAccessToken() async -> String? {
         // refreshToken을 가져옵니다.
         let (status, refreshToken) = await self.tokenManager.read(KeychainManager.serviceUrl,
                                                             account: "refreshToken")
+        let accessToken = await getToken()
          if status != errSecSuccess {
              return nil
          }
@@ -244,8 +245,8 @@ extension NetworkManager {
 
 
 final class StubNetworkManager: NetworkManagerType {
-    func getToken() async -> String? {
-        return nil
+    func refreshAccessToken() async -> String? {
+        return ""
     }
     
     func request<T>(url: String, method: HTTPMethod, parameters: [String : String]?, isHTTPHeader: Bool) async -> AnyPublisher<T, NetworkError> where T : Decodable {

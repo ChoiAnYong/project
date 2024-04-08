@@ -64,3 +64,9 @@ extension UserService {
         
     }
 }
+
+final class StubUserService: UserServiceType {
+    func getUser() -> AnyPublisher<UserObject, ServiceError> {
+        Empty().eraseToAnyPublisher() 
+    }    
+}

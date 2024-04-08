@@ -10,6 +10,8 @@ import SwiftUI
 @main
 struct projectApp: App {
     @StateObject var container: DIContainer = .init(services: Services())
+    // register app delegate for Firebase setup
+    @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
     
     var body: some Scene {
         WindowGroup {

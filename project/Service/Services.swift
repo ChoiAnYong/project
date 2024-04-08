@@ -25,5 +25,5 @@ final class Services: ServiceType {
 
 final class StubService: ServiceType {
     var authService: AuthenticationServiceType = StubAuthenticationService()
-    var userService: UserServiceType = UserService(networkManager: NetworkManager(tokenManager: KeychainManager()))
+    var userService: UserServiceType = StubUserService()
 }

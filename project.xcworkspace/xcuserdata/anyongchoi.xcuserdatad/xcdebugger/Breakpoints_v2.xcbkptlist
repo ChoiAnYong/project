@@ -7,54 +7,6 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "E3C60684-1D62-47FC-B8B9-6A4F93160861"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "project/View/Authentication/AuthenticationViewModel.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "47"
-            endingLineNumber = "47"
-            landmarkName = "send(action:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "05097003-A6F8-4236-9BE5-1BBB05871482"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "project/View/Authentication/AuthenticationViewModel.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "48"
-            endingLineNumber = "48"
-            landmarkName = "send(action:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "A0E09992-8F62-4C84-84B9-18B9CBDCAA6A"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "project/Service/AuthenticationService.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "50"
-            endingLineNumber = "50"
-            landmarkName = "checkAuthentication(completion:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
             uuid = "7B19E43B-FCA1-431D-803E-9A1FA6D37265"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
@@ -62,8 +14,8 @@
             filePath = "project/Network/NetworkManager.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "202"
-            endingLineNumber = "202"
+            startingLineNumber = "203"
+            endingLineNumber = "203"
             landmarkName = "refreshAccessToken()"
             landmarkType = "7">
             <Locations>
@@ -157,6 +109,96 @@
                   endingLineNumber = "202"
                   offsetFromSymbolStart = "232">
                </Location>
+               <Location
+                  uuid = "7B19E43B-FCA1-431D-803E-9A1FA6D37265 - 63b32ef2e45cd246"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(5) suspend resume partial function for project.NetworkManager.refreshAccessToken() async -&gt; Swift.Optional&lt;Swift.String&gt;"
+                  moduleName = "project"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/anyongchoi/Desktop/project/project/Network/NetworkManager.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "204"
+                  endingLineNumber = "204"
+                  offsetFromSymbolStart = "736">
+               </Location>
+               <Location
+                  uuid = "7B19E43B-FCA1-431D-803E-9A1FA6D37265 - 94b6795e42650e44"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(7) suspend resume partial function for project.NetworkManager.refreshAccessToken() async -&gt; Swift.Optional&lt;Swift.String&gt;"
+                  moduleName = "project"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/anyongchoi/Desktop/project/project/Network/NetworkManager.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "204"
+                  endingLineNumber = "204"
+                  offsetFromSymbolStart = "1792">
+               </Location>
+               <Location
+                  uuid = "7B19E43B-FCA1-431D-803E-9A1FA6D37265 - dc0efd71064fc501"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(14) suspend resume partial function for project.NetworkManager.refreshAccessToken() async -&gt; Swift.Optional&lt;Swift.String&gt;"
+                  moduleName = "project"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/anyongchoi/Desktop/project/project/Network/NetworkManager.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "204"
+                  endingLineNumber = "204"
+                  offsetFromSymbolStart = "244">
+               </Location>
+               <Location
+                  uuid = "7B19E43B-FCA1-431D-803E-9A1FA6D37265 - 63b32ef2e45cd227"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(5) suspend resume partial function for project.NetworkManager.refreshAccessToken() async -&gt; Swift.Optional&lt;Swift.String&gt;"
+                  moduleName = "project"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/anyongchoi/Desktop/project/project/Network/NetworkManager.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "203"
+                  endingLineNumber = "203"
+                  offsetFromSymbolStart = "736">
+               </Location>
+               <Location
+                  uuid = "7B19E43B-FCA1-431D-803E-9A1FA6D37265 - 94b6795e42650e25"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(7) suspend resume partial function for project.NetworkManager.refreshAccessToken() async -&gt; Swift.Optional&lt;Swift.String&gt;"
+                  moduleName = "project"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/anyongchoi/Desktop/project/project/Network/NetworkManager.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "203"
+                  endingLineNumber = "203"
+                  offsetFromSymbolStart = "1792">
+               </Location>
+               <Location
+                  uuid = "7B19E43B-FCA1-431D-803E-9A1FA6D37265 - dc0efd71064fc560"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(14) suspend resume partial function for project.NetworkManager.refreshAccessToken() async -&gt; Swift.Optional&lt;Swift.String&gt;"
+                  moduleName = "project"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/anyongchoi/Desktop/project/project/Network/NetworkManager.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "203"
+                  endingLineNumber = "203"
+                  offsetFromSymbolStart = "244">
+               </Location>
             </Locations>
          </BreakpointContent>
       </BreakpointProxy>
@@ -170,8 +212,8 @@
             filePath = "project/Network/NetworkManager.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "203"
-            endingLineNumber = "203"
+            startingLineNumber = "204"
+            endingLineNumber = "204"
             landmarkName = "refreshAccessToken()"
             landmarkType = "7">
             <Locations>
@@ -235,6 +277,66 @@
                   endingLineNumber = "203"
                   offsetFromSymbolStart = "1928">
                </Location>
+               <Location
+                  uuid = "50ABA825-893A-4F44-A2B4-D014AEF1A0E0 - 63b32ef2e45cd265"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(5) suspend resume partial function for project.NetworkManager.refreshAccessToken() async -&gt; Swift.Optional&lt;Swift.String&gt;"
+                  moduleName = "project"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/anyongchoi/Desktop/project/project/Network/NetworkManager.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "205"
+                  endingLineNumber = "205"
+                  offsetFromSymbolStart = "812">
+               </Location>
+               <Location
+                  uuid = "50ABA825-893A-4F44-A2B4-D014AEF1A0E0 - 63b32ef2e45cd265"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(5) suspend resume partial function for project.NetworkManager.refreshAccessToken() async -&gt; Swift.Optional&lt;Swift.String&gt;"
+                  moduleName = "project"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/anyongchoi/Desktop/project/project/Network/NetworkManager.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "205"
+                  endingLineNumber = "205"
+                  offsetFromSymbolStart = "1876">
+               </Location>
+               <Location
+                  uuid = "50ABA825-893A-4F44-A2B4-D014AEF1A0E0 - 63b32ef2e45cd246"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(5) suspend resume partial function for project.NetworkManager.refreshAccessToken() async -&gt; Swift.Optional&lt;Swift.String&gt;"
+                  moduleName = "project"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/anyongchoi/Desktop/project/project/Network/NetworkManager.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "204"
+                  endingLineNumber = "204"
+                  offsetFromSymbolStart = "812">
+               </Location>
+               <Location
+                  uuid = "50ABA825-893A-4F44-A2B4-D014AEF1A0E0 - 63b32ef2e45cd246"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(5) suspend resume partial function for project.NetworkManager.refreshAccessToken() async -&gt; Swift.Optional&lt;Swift.String&gt;"
+                  moduleName = "project"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/anyongchoi/Desktop/project/project/Network/NetworkManager.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "204"
+                  endingLineNumber = "204"
+                  offsetFromSymbolStart = "1876">
+               </Location>
             </Locations>
          </BreakpointContent>
       </BreakpointProxy>
@@ -248,8 +350,8 @@
             filePath = "project/Network/NetworkManager.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "207"
-            endingLineNumber = "207"
+            startingLineNumber = "208"
+            endingLineNumber = "208"
             landmarkName = "refreshAccessToken()"
             landmarkType = "7">
             <Locations>
@@ -283,113 +385,35 @@
                   endingLineNumber = "207"
                   offsetFromSymbolStart = "996">
                </Location>
-            </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "78FBC815-4D9E-4FD6-9CFB-F5E28ED3240A"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "project/Network/NetworkManager.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "187"
-            endingLineNumber = "187"
-            landmarkName = "refreshAccessToken()"
-            landmarkType = "7">
-            <Locations>
                <Location
-                  uuid = "78FBC815-4D9E-4FD6-9CFB-F5E28ED3240A - 41ae5a0db99145f4"
+                  uuid = "4E7EBC37-9CB7-4E23-BCF8-0F9474F6C3F4 - 63b32ef2e45cd2f9"
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
-                  symbolName = "(1) suspend resume partial function for project.NetworkManager.refreshAccessToken() async -&gt; Swift.Optional&lt;Swift.String&gt;"
+                  symbolName = "(5) suspend resume partial function for project.NetworkManager.refreshAccessToken() async -&gt; Swift.Optional&lt;Swift.String&gt;"
                   moduleName = "project"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/anyongchoi/Desktop/project/project/Network/NetworkManager.swift"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "186"
-                  endingLineNumber = "186"
-                  offsetFromSymbolStart = "92">
+                  startingLineNumber = "209"
+                  endingLineNumber = "209"
+                  offsetFromSymbolStart = "924">
                </Location>
                <Location
-                  uuid = "78FBC815-4D9E-4FD6-9CFB-F5E28ED3240A - c6a3bb3d2bc42d70"
+                  uuid = "4E7EBC37-9CB7-4E23-BCF8-0F9474F6C3F4 - 63b32ef2e45cd2da"
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
-                  symbolName = "(2) await resume partial function for project.NetworkManager.refreshAccessToken() async -&gt; Swift.Optional&lt;Swift.String&gt;"
+                  symbolName = "(5) suspend resume partial function for project.NetworkManager.refreshAccessToken() async -&gt; Swift.Optional&lt;Swift.String&gt;"
                   moduleName = "project"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/anyongchoi/Desktop/project/project/Network/NetworkManager.swift"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "196"
-                  endingLineNumber = "196"
-                  offsetFromSymbolStart = "24">
-               </Location>
-               <Location
-                  uuid = "78FBC815-4D9E-4FD6-9CFB-F5E28ED3240A - f2b1e46907b79748"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "(3) suspend resume partial function for project.NetworkManager.refreshAccessToken() async -&gt; Swift.Optional&lt;Swift.String&gt;"
-                  moduleName = "project"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/anyongchoi/Desktop/project/project/Network/NetworkManager.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "196"
-                  endingLineNumber = "196"
-                  offsetFromSymbolStart = "76">
-               </Location>
-               <Location
-                  uuid = "78FBC815-4D9E-4FD6-9CFB-F5E28ED3240A - 41ae5a0db9914413"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "(1) suspend resume partial function for project.NetworkManager.refreshAccessToken() async -&gt; Swift.Optional&lt;Swift.String&gt;"
-                  moduleName = "project"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/anyongchoi/Desktop/project/project/Network/NetworkManager.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "187"
-                  endingLineNumber = "187"
-                  offsetFromSymbolStart = "92">
-               </Location>
-               <Location
-                  uuid = "78FBC815-4D9E-4FD6-9CFB-F5E28ED3240A - c6a3bb3d2bc42d53"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "(2) await resume partial function for project.NetworkManager.refreshAccessToken() async -&gt; Swift.Optional&lt;Swift.String&gt;"
-                  moduleName = "project"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/anyongchoi/Desktop/project/project/Network/NetworkManager.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "197"
-                  endingLineNumber = "197"
-                  offsetFromSymbolStart = "24">
-               </Location>
-               <Location
-                  uuid = "78FBC815-4D9E-4FD6-9CFB-F5E28ED3240A - f2b1e46907b7976b"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "(3) suspend resume partial function for project.NetworkManager.refreshAccessToken() async -&gt; Swift.Optional&lt;Swift.String&gt;"
-                  moduleName = "project"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/anyongchoi/Desktop/project/project/Network/NetworkManager.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "197"
-                  endingLineNumber = "197"
-                  offsetFromSymbolStart = "76">
+                  startingLineNumber = "208"
+                  endingLineNumber = "208"
+                  offsetFromSymbolStart = "924">
                </Location>
             </Locations>
          </BreakpointContent>
@@ -469,6 +493,21 @@
                   endingLineNumber = "82"
                   offsetFromSymbolStart = "300">
                </Location>
+               <Location
+                  uuid = "5CC3E357-ED5B-4BC3-91D6-BE57A928DB72 - a28563dabc02e59"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(3) suspend resume partial function for project.NetworkManager.request&lt;&#x3c4;_0_0 where &#x3c4;_0_0: Swift.Decodable&gt;(url: Swift.String, method: project.HTTPMethod, parameters: Swift.Optional&lt;Swift.Dictionary&lt;Swift.String, Swift.String&gt;&gt;, isHTTPHeader: Swift.Bool) async -&gt; Combine.AnyPublisher&lt;&#x3c4;_0_0, project.NetworkError&gt;"
+                  moduleName = "project"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/anyongchoi/Desktop/project/project/Network/NetworkManager.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "82"
+                  endingLineNumber = "82"
+                  offsetFromSymbolStart = "100">
+               </Location>
             </Locations>
          </BreakpointContent>
       </BreakpointProxy>
@@ -482,8 +521,8 @@
             filePath = "project/Network/NetworkManager.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "217"
-            endingLineNumber = "217"
+            startingLineNumber = "218"
+            endingLineNumber = "218"
             landmarkName = "refreshAccessToken()"
             landmarkType = "7">
             <Locations>
@@ -697,6 +736,216 @@
                   endingLineNumber = "217"
                   offsetFromSymbolStart = "120">
                </Location>
+               <Location
+                  uuid = "7D3AA5C3-6F80-47F8-A46B-87E71E3B6AFA - 63b32ef2e45cd037"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(5) suspend resume partial function for project.NetworkManager.refreshAccessToken() async -&gt; Swift.Optional&lt;Swift.String&gt;"
+                  moduleName = "project"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/anyongchoi/Desktop/project/project/Network/NetworkManager.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "219"
+                  endingLineNumber = "219"
+                  offsetFromSymbolStart = "1588">
+               </Location>
+               <Location
+                  uuid = "7D3AA5C3-6F80-47F8-A46B-87E71E3B6AFA - 72b7983e51b3a599"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(6) await resume partial function for project.NetworkManager.refreshAccessToken() async -&gt; Swift.Optional&lt;Swift.String&gt;"
+                  moduleName = "project"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/anyongchoi/Desktop/project/project/Network/NetworkManager.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "199"
+                  endingLineNumber = "199"
+                  offsetFromSymbolStart = "24">
+               </Location>
+               <Location
+                  uuid = "7D3AA5C3-6F80-47F8-A46B-87E71E3B6AFA - 72b7983e51b3a60d"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(6) await resume partial function for project.NetworkManager.refreshAccessToken() async -&gt; Swift.Optional&lt;Swift.String&gt;"
+                  moduleName = "project"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/anyongchoi/Desktop/project/project/Network/NetworkManager.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "219"
+                  endingLineNumber = "219"
+                  offsetFromSymbolStart = "56">
+               </Location>
+               <Location
+                  uuid = "7D3AA5C3-6F80-47F8-A46B-87E71E3B6AFA - 94b6795e42650fa1"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(7) suspend resume partial function for project.NetworkManager.refreshAccessToken() async -&gt; Swift.Optional&lt;Swift.String&gt;"
+                  moduleName = "project"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/anyongchoi/Desktop/project/project/Network/NetworkManager.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "199"
+                  endingLineNumber = "199"
+                  offsetFromSymbolStart = "116">
+               </Location>
+               <Location
+                  uuid = "7D3AA5C3-6F80-47F8-A46B-87E71E3B6AFA - 94b6795e42650c35"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(7) suspend resume partial function for project.NetworkManager.refreshAccessToken() async -&gt; Swift.Optional&lt;Swift.String&gt;"
+                  moduleName = "project"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/anyongchoi/Desktop/project/project/Network/NetworkManager.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "219"
+                  endingLineNumber = "219"
+                  offsetFromSymbolStart = "252">
+               </Location>
+               <Location
+                  uuid = "7D3AA5C3-6F80-47F8-A46B-87E71E3B6AFA - dc0efd71064fc4e4"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(14) suspend resume partial function for project.NetworkManager.refreshAccessToken() async -&gt; Swift.Optional&lt;Swift.String&gt;"
+                  moduleName = "project"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/anyongchoi/Desktop/project/project/Network/NetworkManager.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "199"
+                  endingLineNumber = "199"
+                  offsetFromSymbolStart = "40">
+               </Location>
+               <Location
+                  uuid = "7D3AA5C3-6F80-47F8-A46B-87E71E3B6AFA - dc0efd71064fc770"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(14) suspend resume partial function for project.NetworkManager.refreshAccessToken() async -&gt; Swift.Optional&lt;Swift.String&gt;"
+                  moduleName = "project"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/anyongchoi/Desktop/project/project/Network/NetworkManager.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "219"
+                  endingLineNumber = "219"
+                  offsetFromSymbolStart = "128">
+               </Location>
+               <Location
+                  uuid = "7D3AA5C3-6F80-47F8-A46B-87E71E3B6AFA - 63b32ef2e45cd010"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(5) suspend resume partial function for project.NetworkManager.refreshAccessToken() async -&gt; Swift.Optional&lt;Swift.String&gt;"
+                  moduleName = "project"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/anyongchoi/Desktop/project/project/Network/NetworkManager.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "218"
+                  endingLineNumber = "218"
+                  offsetFromSymbolStart = "1588">
+               </Location>
+               <Location
+                  uuid = "7D3AA5C3-6F80-47F8-A46B-87E71E3B6AFA - 72b7983e51b3a5b6"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(6) await resume partial function for project.NetworkManager.refreshAccessToken() async -&gt; Swift.Optional&lt;Swift.String&gt;"
+                  moduleName = "project"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/anyongchoi/Desktop/project/project/Network/NetworkManager.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "198"
+                  endingLineNumber = "198"
+                  offsetFromSymbolStart = "24">
+               </Location>
+               <Location
+                  uuid = "7D3AA5C3-6F80-47F8-A46B-87E71E3B6AFA - 72b7983e51b3a62a"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(6) await resume partial function for project.NetworkManager.refreshAccessToken() async -&gt; Swift.Optional&lt;Swift.String&gt;"
+                  moduleName = "project"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/anyongchoi/Desktop/project/project/Network/NetworkManager.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "218"
+                  endingLineNumber = "218"
+                  offsetFromSymbolStart = "56">
+               </Location>
+               <Location
+                  uuid = "7D3AA5C3-6F80-47F8-A46B-87E71E3B6AFA - 94b6795e42650f8e"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(7) suspend resume partial function for project.NetworkManager.refreshAccessToken() async -&gt; Swift.Optional&lt;Swift.String&gt;"
+                  moduleName = "project"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/anyongchoi/Desktop/project/project/Network/NetworkManager.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "198"
+                  endingLineNumber = "198"
+                  offsetFromSymbolStart = "116">
+               </Location>
+               <Location
+                  uuid = "7D3AA5C3-6F80-47F8-A46B-87E71E3B6AFA - 94b6795e42650c12"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(7) suspend resume partial function for project.NetworkManager.refreshAccessToken() async -&gt; Swift.Optional&lt;Swift.String&gt;"
+                  moduleName = "project"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/anyongchoi/Desktop/project/project/Network/NetworkManager.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "218"
+                  endingLineNumber = "218"
+                  offsetFromSymbolStart = "252">
+               </Location>
+               <Location
+                  uuid = "7D3AA5C3-6F80-47F8-A46B-87E71E3B6AFA - dc0efd71064fc4cb"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(14) suspend resume partial function for project.NetworkManager.refreshAccessToken() async -&gt; Swift.Optional&lt;Swift.String&gt;"
+                  moduleName = "project"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/anyongchoi/Desktop/project/project/Network/NetworkManager.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "198"
+                  endingLineNumber = "198"
+                  offsetFromSymbolStart = "40">
+               </Location>
+               <Location
+                  uuid = "7D3AA5C3-6F80-47F8-A46B-87E71E3B6AFA - dc0efd71064fc757"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(14) suspend resume partial function for project.NetworkManager.refreshAccessToken() async -&gt; Swift.Optional&lt;Swift.String&gt;"
+                  moduleName = "project"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/anyongchoi/Desktop/project/project/Network/NetworkManager.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "218"
+                  endingLineNumber = "218"
+                  offsetFromSymbolStart = "128">
+               </Location>
             </Locations>
          </BreakpointContent>
       </BreakpointProxy>
@@ -710,8 +959,8 @@
             filePath = "project/Network/NetworkManager.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "222"
-            endingLineNumber = "222"
+            startingLineNumber = "223"
+            endingLineNumber = "223"
             landmarkName = "refreshAccessToken()"
             landmarkType = "7">
             <Locations>
@@ -745,6 +994,36 @@
                   endingLineNumber = "222"
                   offsetFromSymbolStart = "1196">
                </Location>
+               <Location
+                  uuid = "ABA7E228-04D4-401D-81A9-5080D6471522 - 94b6795e42650ce8"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(7) suspend resume partial function for project.NetworkManager.refreshAccessToken() async -&gt; Swift.Optional&lt;Swift.String&gt;"
+                  moduleName = "project"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/anyongchoi/Desktop/project/project/Network/NetworkManager.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "224"
+                  endingLineNumber = "224"
+                  offsetFromSymbolStart = "1240">
+               </Location>
+               <Location
+                  uuid = "ABA7E228-04D4-401D-81A9-5080D6471522 - 94b6795e42650cc9"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(7) suspend resume partial function for project.NetworkManager.refreshAccessToken() async -&gt; Swift.Optional&lt;Swift.String&gt;"
+                  moduleName = "project"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/anyongchoi/Desktop/project/project/Network/NetworkManager.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "223"
+                  endingLineNumber = "223"
+                  offsetFromSymbolStart = "1240">
+               </Location>
             </Locations>
          </BreakpointContent>
       </BreakpointProxy>
@@ -762,6 +1041,117 @@
             endingLineNumber = "95"
             landmarkName = "NetworkManager"
             landmarkType = "3">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "18E32F18-2CAF-4D60-A627-FB244B44EF39"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "project/Network/NetworkManager.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "87"
+            endingLineNumber = "87"
+            landmarkName = "NetworkManager"
+            landmarkType = "3">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "34F4C286-4737-4FC7-9E01-F766352B856C"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "project/Network/NetworkManager.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "91"
+            endingLineNumber = "91"
+            landmarkName = "NetworkManager"
+            landmarkType = "3">
+            <Locations>
+               <Location
+                  uuid = "34F4C286-4737-4FC7-9E01-F766352B856C - 5f85bb5d77e96974"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(5) suspend resume partial function for project.NetworkManager.request&lt;&#x3c4;_0_0 where &#x3c4;_0_0: Swift.Decodable&gt;(url: Swift.String, method: project.HTTPMethod, parameters: Swift.Optional&lt;Swift.Dictionary&lt;Swift.String, Swift.String&gt;&gt;, isHTTPHeader: Swift.Bool) async -&gt; Combine.AnyPublisher&lt;&#x3c4;_0_0, project.NetworkError&gt;"
+                  moduleName = "project"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/anyongchoi/Desktop/project/project/Network/NetworkManager.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "91"
+                  endingLineNumber = "91"
+                  offsetFromSymbolStart = "772">
+               </Location>
+               <Location
+                  uuid = "34F4C286-4737-4FC7-9E01-F766352B856C - 76f627ff797356be"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(6) await resume partial function for project.NetworkManager.request&lt;&#x3c4;_0_0 where &#x3c4;_0_0: Swift.Decodable&gt;(url: Swift.String, method: project.HTTPMethod, parameters: Swift.Optional&lt;Swift.Dictionary&lt;Swift.String, Swift.String&gt;&gt;, isHTTPHeader: Swift.Bool) async -&gt; Combine.AnyPublisher&lt;&#x3c4;_0_0, project.NetworkError&gt;"
+                  moduleName = "project"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/anyongchoi/Desktop/project/project/Network/NetworkManager.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "91"
+                  endingLineNumber = "91"
+                  offsetFromSymbolStart = "44">
+               </Location>
+               <Location
+                  uuid = "34F4C286-4737-4FC7-9E01-F766352B856C - 93629c7ad38fa57a"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(7) suspend resume partial function for project.NetworkManager.request&lt;&#x3c4;_0_0 where &#x3c4;_0_0: Swift.Decodable&gt;(url: Swift.String, method: project.HTTPMethod, parameters: Swift.Optional&lt;Swift.Dictionary&lt;Swift.String, Swift.String&gt;&gt;, isHTTPHeader: Swift.Bool) async -&gt; Combine.AnyPublisher&lt;&#x3c4;_0_0, project.NetworkError&gt;"
+                  moduleName = "project"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/anyongchoi/Desktop/project/project/Network/NetworkManager.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "91"
+                  endingLineNumber = "91"
+                  offsetFromSymbolStart = "216">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "7ABD5A29-9035-4663-ABB4-5C9EC8B82A6F"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "project/Network/NetworkManager.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "90"
+            endingLineNumber = "90"
+            landmarkName = "NetworkManager"
+            landmarkType = "3">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "A55EA3AA-7B27-4C11-991E-5B73CF210D54"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "project/Network/NetworkManager.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "182"
+            endingLineNumber = "182"
+            landmarkName = "isExpired(expirationTimestamp:)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

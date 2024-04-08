@@ -23,7 +23,7 @@ struct MainView: View {
                 
                 toolbarView(pathModel: pathModel, viewModel: viewModel)
                 
-                SheetView()
+                SheetView(sheetViewModel: SheetViewModel(container: container))
                     .offset(y: startingOffsetY)
                     .offset(y: currentDragOffsetY)
                     .offset(y: endingOffsetY)

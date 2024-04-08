@@ -37,7 +37,6 @@ final class MainViewModel: ObservableObject {
                     print(user)
                 }
                 .store(in: &sub)
-
         }
     }
 }

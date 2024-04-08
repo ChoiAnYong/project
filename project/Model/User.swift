@@ -8,12 +8,12 @@
 import Foundation
 
 struct User {
-    var id: String
     var name: String
-    var age: Int
+    var email: String
+    var descriptino: String?
     
 }
 
 extension User {
-    static var stub1: User = .init(id: "dskfsdif", name: "최안용", age: 23)
+    static var stub1: User = .init(name: "최안용", email: "dksdyd78@naver.com", descriptino: "씨발")
 }

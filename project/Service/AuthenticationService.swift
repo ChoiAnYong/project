@@ -18,7 +18,7 @@ enum AuthenticationError: Error {
 }
 
 protocol AuthenticationServiceType {
-    func checkAuthentication(completion: @escaping (Result<Bool, Error>) -> Void) async
+    func checkAuthentication() async -> String?
     func handleSignInWithAppleRequest(_ request: ASAuthorizationAppleIDRequest) -> Void
     func handleSignInWithAppleCompletion(
         _ authorization: ASAuthorization
@@ -33,25 +33,8 @@ final class AuthenticationService: AuthenticationServiceType {
         self.networkManager = networkManager
     }
     
-    func checkAuthentication(completion: @escaping (Result<Bool, Error>) -> Void) async {
-        guard let _ = await networkManager.getToken() else {
-            return completion(.failure(AuthenticationError.invalidated))
-        }
-        
-        await networkManager.request(url: "/login/check",
-                               method: .GET,
-                               parameters: nil,
-                               isHTTPHeader: true)
-        .sink { result in
-            if case .failure = result {
-                completion(.failure(AuthenticationError.invalidated))
-            }
-        } receiveValue: { (response: Bool) in
-            completion(.success(response))
-    
-        }
-        .store(in: &subscriptions)
-        
+    func checkAuthentication() async -> String? {
+        return await networkManager.refreshAccessToken()
     }
     
     func handleSignInWithAppleRequest(_ request: ASAuthorizationAppleIDRequest) -> Void {
@@ -131,9 +114,11 @@ extension AuthenticationService {
 }
 
 final class StubAuthenticationService: AuthenticationServiceType {
-    func checkAuthentication(completion: @escaping (Result<Bool, Error>) -> Void) async {
-        completion(.success(true))
+    func checkAuthentication() async -> String? {
+        return ""
     }
+    
+    
     func handleSignInWithAppleRequest(_ request: ASAuthorizationAppleIDRequest) -> Void {
         
     }

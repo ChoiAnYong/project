@@ -13,5 +13,9 @@
 
 </key>
 	<string>앱의 기능을 위해 사용자의 현위치 정보를 수집합니다.</string>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>remote-notification</string>
+	</array>
 </dict>
 </plist>
