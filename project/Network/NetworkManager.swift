@@ -52,6 +52,7 @@ protocol NetworkManagerType {
                                parameters: [String: String]?,
                                isHTTPHeader: Bool)
     async -> AnyPublisher<T, NetworkError>
+    func getToken() async -> String?
 }
 
 final class NetworkManager: NetworkManagerType {
@@ -83,6 +84,7 @@ final class NetworkManager: NetworkManagerType {
                 return Fail(error: NetworkError.tokenError)
                     .eraseToAnyPublisher()
             }
+            self.accessToken = accessToken
             
             // 만료 검사 및 갱신
             if isExpired(expirationTimestamp: expires) {
@@ -90,10 +92,10 @@ final class NetworkManager: NetworkManagerType {
                     return Fail(error: NetworkError.tokenError)
                         .eraseToAnyPublisher()
                 }
-                accessToken = newAccessToken
+                self.accessToken = newAccessToken
             }
             
-            request.addValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
+            request.addValue("Bearer \(self.accessToken!)", forHTTPHeaderField: "Authorization")
         }
         
         if let parameters = parameters {
@@ -140,7 +142,7 @@ extension NetworkManager {
         return url
     }
     
-    private func getToken() async -> String? {
+    func getToken() async -> String? {
         let (status, value) = await self.tokenManager.read(KeychainManager.serviceUrl,
                                                            account: "accessToken")
         if status == errSecSuccess {
@@ -167,14 +169,17 @@ extension NetworkManager {
             return true
         }
         
-        // 유효 기간을 Date 객체로 변환합니다.
-        let expirationDate = Date(timeIntervalSince1970: TimeInterval(expiration))
         
-        // 현재 시간을 가져옵니다.
+        let expirationSeconds = TimeInterval(expiration) / 1000.0
+        
+        
+        let expirationDate = Date(timeIntervalSince1970: expirationSeconds)
+        
+        
         let now = Date()
         
         // 유효 기간이 현재 시간보다 이전인지 확인합니다.
-        return expirationDate < now
+        return expirationDate.timeIntervalSince1970 < now.timeIntervalSince1970
     }
 
     private func refreshAccessToken() async -> String? {
@@ -215,13 +220,13 @@ extension NetworkManager {
                 return nil
             }
             let decodedObject = try JSONDecoder().decode(ServerAuthResponse.self, from: data)
-            let accessStatus = await tokenManager.creat(KeychainManager.serviceUrl,
+            let accessStatus = await tokenManager.update(KeychainManager.serviceUrl,
                                               account:"accessToken",
                                               value:decodedObject.accessToken)
-            let refreshStatus = await tokenManager.creat(KeychainManager.serviceUrl,
+            let refreshStatus = await tokenManager.update(KeychainManager.serviceUrl,
                                                account:"refreshToken",
                                                value:decodedObject.refreshToken)
-            let expiresStatus = await tokenManager.creat(KeychainManager.serviceUrl,
+            let expiresStatus = await tokenManager.update(KeychainManager.serviceUrl,
                                                account:"accessTokenExpiresIn",
                                                value: String(decodedObject.accessTokenExpiresIn))
             if accessStatus == errSecSuccess &&
@@ -239,6 +244,10 @@ extension NetworkManager {
 
 
 final class StubNetworkManager: NetworkManagerType {
+    func getToken() async -> String? {
+        return nil
+    }
+    
     func request<T>(url: String, method: HTTPMethod, parameters: [String : String]?, isHTTPHeader: Bool) async -> AnyPublisher<T, NetworkError> where T : Decodable {
         Empty().eraseToAnyPublisher()
     }

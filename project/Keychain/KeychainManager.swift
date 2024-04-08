@@ -49,7 +49,7 @@ final class KeychainManager {
         return (status, value)
     }
     
-    func update(service: String, account: String, value: String) async -> OSStatus {
+    func update(_ service: String, account: String, value: String) async -> OSStatus {
         guard let data = value.data(using: .utf8) else {
             return errSecBadReq
         }

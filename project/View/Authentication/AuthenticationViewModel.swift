@@ -23,9 +23,10 @@ final class AuthenticationViewModel: ObservableObject {
     }
     
     @Published var isLoading: Bool = false
-    @Published var authenticationState: AuthenticationState = .authenticated
-    @Published var isDisplayAlert: Bool = true
+    @Published var authenticationState: AuthenticationState = .unAuthenticated
+    @Published var isDisplayAlert: Bool = false
     
+
     private var container: DIContainer
     private var subscription = Set<AnyCancellable>()
     private var km = KeychainManager()
@@ -37,14 +38,35 @@ final class AuthenticationViewModel: ObservableObject {
     func send(action: Action) {
         switch action {
         case .checkAuthenticationState:
-            break
+            isLoading = true
+            Task {
+                await container.services.authService.checkAuthentication { result in
+                    switch result {
+                    case let .success(success):
+                        DispatchQueue.main.async {
+                            self.isLoading = false
+                            if success == true {
+                                self.authenticationState = .authenticated
+                            } else {
+                                self.authenticationState = .unAuthenticated
+                            }
+                        }
+                    case let .failure(error):
+                        print(error.localizedDescription)
+                        DispatchQueue.main.async {
+                            self.isLoading = false
+                            self.authenticationState = .unAuthenticated
+                        }
+                    }
+                }
+            }
+            
         case let .appleLogin(request): // case의 연관값에 접근하고 싶으면 let
             container.services.authService.handleSignInWithAppleRequest(request)
             
         case let .appleLoginCompletion(result):
             if case let .success(authorization) = result {
                 isLoading = true
-                
                 container.services.authService.handleSignInWithAppleCompletion(authorization)
                     .receive(on: DispatchQueue.main)
                     .sink { [weak self] completion in
@@ -56,6 +78,7 @@ final class AuthenticationViewModel: ObservableObject {
                     }.store(in: &subscription)
             } else if case let .failure(error) = result {
                 isLoading = false
+                isDisplayAlert = true
                 print(error.localizedDescription)
             }
         case .logout:
@@ -84,7 +107,8 @@ final class AuthenticationViewModel: ObservableObject {
                 }
             } else {
                 DispatchQueue.main.async {
-                    self.isLoading.toggle()
+                    self.isLoading = false
+                    self.isDisplayAlert = true
                 }
             }
         }

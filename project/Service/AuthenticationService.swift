@@ -14,16 +14,15 @@ import AuthenticationServices
 enum AuthenticationError: Error {
     case clientIDError
     case tokenError
-    case authoCodeError
     case invalidated
 }
 
 protocol AuthenticationServiceType {
+    func checkAuthentication(completion: @escaping (Result<Bool, Error>) -> Void) async
     func handleSignInWithAppleRequest(_ request: ASAuthorizationAppleIDRequest) -> Void
     func handleSignInWithAppleCompletion(
         _ authorization: ASAuthorization
     ) -> AnyPublisher<ServerAuthResponse, ServiceError>
-    func checkAuthentication() -> AnyPublisher<ServerAuthResponse, ServiceError>
 }
 
 final class AuthenticationService: AuthenticationServiceType {
@@ -32,6 +31,27 @@ final class AuthenticationService: AuthenticationServiceType {
     
     init(networkManager: NetworkManagerType) {
         self.networkManager = networkManager
+    }
+    
+    func checkAuthentication(completion: @escaping (Result<Bool, Error>) -> Void) async {
+        guard let _ = await networkManager.getToken() else {
+            return completion(.failure(AuthenticationError.invalidated))
+        }
+        
+        await networkManager.request(url: "/login/check",
+                               method: .GET,
+                               parameters: nil,
+                               isHTTPHeader: true)
+        .sink { result in
+            if case .failure = result {
+                completion(.failure(AuthenticationError.invalidated))
+            }
+        } receiveValue: { (response: Bool) in
+            completion(.success(response))
+    
+        }
+        .store(in: &subscriptions)
+        
     }
     
     func handleSignInWithAppleRequest(_ request: ASAuthorizationAppleIDRequest) -> Void {
@@ -57,20 +77,6 @@ final class AuthenticationService: AuthenticationServiceType {
             }
         }.eraseToAnyPublisher()
     }
-    
-//    func checkAuthentication() -> AnyPublisher<ServerAuthResponse, ServiceError> {
-//        Future<ServerAuthResponse { [weak self] promise in
-//            networkManager.request(url: "/check", method: .GET, parameters: nil, isHTTPHeader: true)
-//                .sink { completion in
-//                    if case .failure = completion {
-//                        completion(.failure(AuthenticationError.invalidated))
-//                    }
-//                } receiveValue: { (response: Bool) in
-//                    completion(.success(response))
-//                }
-//            
-//        }
-//    }
 }
 
 extension AuthenticationService {
@@ -88,6 +94,7 @@ extension AuthenticationService {
             completion(.failure(AuthenticationError.tokenError))
             return
         }
+        print(idTokenString)
         
         let name = [appleIDCredential.fullName?.familyName, appleIDCredential.fullName?.givenName]
             .compactMap { $0 }
@@ -117,7 +124,6 @@ extension AuthenticationService {
                 completion(.failure(AuthenticationError.invalidated))
             }
         } receiveValue: { (response: ServerAuthResponse) in
-            
             completion(.success(response))
         }.store(in: &subscriptions)
     }
@@ -125,10 +131,9 @@ extension AuthenticationService {
 }
 
 final class StubAuthenticationService: AuthenticationServiceType {
-    func checkAuthentication() -> AnyPublisher<ServerAuthResponse, ServiceError> {
-        Empty().eraseToAnyPublisher()
+    func checkAuthentication(completion: @escaping (Result<Bool, Error>) -> Void) async {
+        completion(.success(true))
     }
-    
     func handleSignInWithAppleRequest(_ request: ASAuthorizationAppleIDRequest) -> Void {
         
     }
