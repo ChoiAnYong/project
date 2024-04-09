@@ -13,12 +13,17 @@ struct SheetView: View {
     var body: some View {
         VStack {
             topView()
-            
-            SheetScrollView(sheetViewModel: sheetViewModel)
+            UserInfoView(sheetViewModel: sheetViewModel)
+            if sheetViewModel.users.isEmpty {
+                BeginningView()
+            } else {
+                SheetScrollView(sheetViewModel: sheetViewModel)
+            }
         }
         .background(Color.grayCool)
         .cornerRadius(15)
         .shadow(radius: 6)
+        .ignoresSafeArea()
     }
 }
 
@@ -37,7 +42,6 @@ fileprivate struct topView: View {
 
 fileprivate struct SheetScrollView: View {
     @ObservedObject private var sheetViewModel: SheetViewModel
-    let ex: [Int] = [Int](0..<100)
     
     fileprivate init(sheetViewModel: SheetViewModel) {
         self.sheetViewModel = sheetViewModel
@@ -45,7 +49,7 @@ fileprivate struct SheetScrollView: View {
     
     var body: some View {
         ScrollView {
-            UserInfoView(sheetViewModel: sheetViewModel)
+            
             
             OtherInfoCellListView(sheetViewModel: sheetViewModel)
             
@@ -57,6 +61,15 @@ fileprivate struct SheetScrollView: View {
         .scrollIndicators(.hidden)
         .padding(.bottom, 50)
         
+    }
+}
+
+fileprivate struct BeginningView: View {
+    var body: some View {
+        VStack {
+            Text("연동된 계정이 없습니다.")
+            
+        }
     }
 }
 

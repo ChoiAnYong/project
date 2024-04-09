@@ -13,12 +13,15 @@ protocol ServiceType {
 }
 
 final class Services: ServiceType {
-    private var networkManager = NetworkManager(tokenManager: KeychainManager())
+    private let keychainManager: KeychainManager
+    private let networkManager: NetworkManager
     var authService: AuthenticationServiceType
     var userService: UserServiceType
     
     init() {
-        self.authService = AuthenticationService(networkManager: networkManager)
+        self.keychainManager = KeychainManager()
+        self.networkManager = NetworkManager(tokenManager: keychainManager)
+        self.authService = AuthenticationService(networkManager: networkManager, keychainManager: keychainManager)
         self.userService = UserService(networkManager: networkManager)
     }
 }

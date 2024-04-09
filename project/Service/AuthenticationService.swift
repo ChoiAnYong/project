@@ -26,11 +26,13 @@ protocol AuthenticationServiceType {
 }
 
 final class AuthenticationService: AuthenticationServiceType {
-    private var networkManager: NetworkManagerType
+    private let networkManager: NetworkManagerType
+    private let keychainManager: KeychainManager
     private var subscriptions = Set<AnyCancellable>()
     
-    init(networkManager: NetworkManagerType) {
+    init(networkManager: NetworkManagerType, keychainManager: KeychainManager) {
         self.networkManager = networkManager
+        self.keychainManager = keychainManager
     }
     
     func checkAuthentication() async -> String? {
@@ -107,7 +109,25 @@ extension AuthenticationService {
                 completion(.failure(AuthenticationError.invalidated))
             }
         } receiveValue: { (response: ServerAuthResponse) in
-            completion(.success(response))
+            Task {
+                let accessStatus = await self.keychainManager.creat(KeychainManager.serviceUrl,
+                                                                    account:"accessToken",
+                                                                    value:response.accessToken)
+                let refreshStatus = await self.keychainManager.creat(KeychainManager.serviceUrl,
+                                                                     account:"refreshToken",
+                                                                     value:response.refreshToken)
+                let expiresStatus = await self.keychainManager.creat(KeychainManager.serviceUrl,
+                                                                     account:"accessTokenExpiresIn",
+                                                                     value: String(response.accessTokenExpiresIn))
+                if accessStatus == errSecSuccess &&
+                refreshStatus == errSecSuccess &&
+                expiresStatus == errSecSuccess {
+                    completion(.success(response))
+                }
+                else {
+                    completion(.failure(AuthenticationError.tokenError))
+                }
+            }
         }.store(in: &subscriptions)
     }
     

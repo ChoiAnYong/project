@@ -56,12 +56,12 @@ protocol NetworkManagerType {
 }
 
 final class NetworkManager: NetworkManagerType {
-    private let tokenManager: KeychainManager
+    private let keychainManager: KeychainManager
     private let hostURL = "https://emgapp.shop"
     private var accessToken: String?
 
     init(tokenManager: KeychainManager) {
-        self.tokenManager = tokenManager
+        self.keychainManager = tokenManager
     }
     
     func request<T: Decodable>(url: String, 
@@ -143,7 +143,7 @@ extension NetworkManager {
     }
     
     private func getToken() async -> String? {
-        let (status, value) = await self.tokenManager.read(KeychainManager.serviceUrl,
+        let (status, value) = await self.keychainManager.read(KeychainManager.serviceUrl,
                                                            account: "accessToken")
         if status == errSecSuccess {
             return value
@@ -153,7 +153,7 @@ extension NetworkManager {
     }
     
     private func getExpires() async -> String? {
-        let (status, value) = await self.tokenManager.read(KeychainManager.serviceUrl,
+        let (status, value) = await self.keychainManager.read(KeychainManager.serviceUrl,
                                                            account: "accessTokenExpiresIn")
         if status == errSecSuccess {
             return value
@@ -167,8 +167,7 @@ extension NetworkManager {
         guard let expiration = Int64(expirationTimestamp) else {
             // 변환에 실패한 경우 유효하지 않은 것으로 처리합니다.
             return true
-        }
-        
+        }        
         
         let expirationSeconds = TimeInterval(expiration) / 1000.0
         
@@ -184,7 +183,7 @@ extension NetworkManager {
 
     func refreshAccessToken() async -> String? {
         // refreshToken을 가져옵니다.
-        let (status, refreshToken) = await self.tokenManager.read(KeychainManager.serviceUrl,
+        let (status, refreshToken) = await self.keychainManager.read(KeychainManager.serviceUrl,
                                                             account: "refreshToken")
         let accessToken = await getToken()
          if status != errSecSuccess {
@@ -221,13 +220,13 @@ extension NetworkManager {
                 return nil
             }
             let decodedObject = try JSONDecoder().decode(ServerAuthResponse.self, from: data)
-            let accessStatus = await tokenManager.update(KeychainManager.serviceUrl,
+            let accessStatus = await keychainManager.update(KeychainManager.serviceUrl,
                                               account:"accessToken",
                                               value:decodedObject.accessToken)
-            let refreshStatus = await tokenManager.update(KeychainManager.serviceUrl,
+            let refreshStatus = await keychainManager.update(KeychainManager.serviceUrl,
                                                account:"refreshToken",
                                                value:decodedObject.refreshToken)
-            let expiresStatus = await tokenManager.update(KeychainManager.serviceUrl,
+            let expiresStatus = await keychainManager.update(KeychainManager.serviceUrl,
                                                account:"accessTokenExpiresIn",
                                                value: String(decodedObject.accessTokenExpiresIn))
             if accessStatus == errSecSuccess &&

@@ -51,6 +51,10 @@ struct MainView: View {
                     } else if value.translation.height > 0  {
                         currentDragOffsetY = value.translation.height
                     }
+                    
+                    if currentDragOffsetY < -200 {
+                        isTopDrag = false
+                    }
                 }
             })
             .onEnded({ value in

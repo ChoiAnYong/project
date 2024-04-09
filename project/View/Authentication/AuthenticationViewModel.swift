@@ -64,9 +64,12 @@ final class AuthenticationViewModel: ObservableObject {
                     .sink { [weak self] completion in
                         if case .failure = completion {
                             self?.isLoading = false
+                            self?.authenticationState = .unAuthenticated
+                            self?.isDisplayAlert = true
                         }
-                    } receiveValue: { [weak self] response in
-                        self?.handleServerAuthResponse(response)
+                    } receiveValue: { [weak self] _ in
+                        self?.isLoading = false
+                        self?.authenticationState = .authenticated
                     }.store(in: &subscription)
             } else if case let .failure(error) = result {
                 isLoading = false
@@ -75,36 +78,6 @@ final class AuthenticationViewModel: ObservableObject {
             }
         case .logout:
             return
-        }
-    }
-    
-    
-    private func handleServerAuthResponse(_ response: ServerAuthResponse) {
-        Task { [weak self] in
-            guard let self = self else { return }
-            
-            let accessStatus = await km.creat(KeychainManager.serviceUrl,
-                                              account:"accessToken",
-                                              value:response.accessToken)
-            let refreshStatus = await km.creat(KeychainManager.serviceUrl,
-                                               account:"refreshToken",
-                                               value:response.refreshToken)
-            let expiresStatus = await km.creat(KeychainManager.serviceUrl,
-                                               account:"accessTokenExpiresIn",
-                                               value: String(response.accessTokenExpiresIn))
-            if accessStatus == errSecSuccess &&
-                refreshStatus == errSecSuccess &&
-                expiresStatus == errSecSuccess {
-                DispatchQueue.main.async {
-                    self.isLoading = false
-                    self.authenticationState = .authenticated
-                }
-            } else {
-                DispatchQueue.main.async {
-                    self.isLoading = false
-                    self.isDisplayAlert = true
-                }
-            }
         }
     }
 }

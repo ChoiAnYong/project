@@ -362,8 +362,8 @@
 			isa = PBXGroup;
 			children = (
 				ADC04B522BA8631E00AD8A14 /* Services.swift */,
-				ADC04B542BA8638F00AD8A14 /* AuthenticationService.swift */,
 				AD03A4692BBE39FF00F2DB47 /* UserService.swift */,
+				ADC04B542BA8638F00AD8A14 /* AuthenticationService.swift */,
 				AD9ED10F2BA91E38005F89D1 /* ServiceError.swift */,
 			);
 			path = Service;
