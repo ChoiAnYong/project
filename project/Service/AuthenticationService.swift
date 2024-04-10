@@ -79,13 +79,15 @@ extension AuthenticationService {
             completion(.failure(AuthenticationError.tokenError))
             return
         }
-        print(idTokenString)
         
         let name = [appleIDCredential.fullName?.familyName, appleIDCredential.fullName?.givenName]
             .compactMap { $0 }
             .joined(separator: "")
         
-        let token = AppleLoginToken(id_token: idTokenString, name: name)
+        let deviceToken = UserDefaults.standard.string(forKey: "deviceToken")
+        print(deviceToken!)
+        
+        let token = AppleLoginToken(idToken: idTokenString, name: name, deviceToken: deviceToken ?? "")
         
         await authenticateUserWithServer(token: token) { result in
             switch result {
@@ -102,7 +104,9 @@ extension AuthenticationService {
                                             (Result<ServerAuthResponse, Error>) -> Void) async {
         await networkManager.request(url: "/login/apple",
                                      method: .POST,
-                                     parameters: ["id_token":token.id_token, "name":token.name],
+                                     parameters: ["idToken":token.idToken,
+                                                  "name":token.name,
+                                                  "deviceToken": token.deviceToken],
                                      isHTTPHeader: false)
         .sink { result in
             if case .failure = result {

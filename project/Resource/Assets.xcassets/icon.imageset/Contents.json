@@ -1,8 +1,19 @@
 {
   "images" : [
     {
-      "filename" : "icons8-app-store.pdf",
-      "idiom" : "universal"
+      "filename" : "제목 없는 디자인 (2).png",
+      "idiom" : "universal",
+      "scale" : "1x"
+    },
+    {
+      "filename" : "제목 없는 디자인 (2)@2x.png",
+      "idiom" : "universal",
+      "scale" : "2x"
+    },
+    {
+      "filename" : "제목 없는 디자인 (2)@3x.png",
+      "idiom" : "universal",
+      "scale" : "3x"
     }
   ],
   "info" : {

@@ -2,6 +2,8 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>FirebaseAppDelegateProxyEnabled</key>
+	<false/>
 	<key>NMFClientId</key>
 	<string>$(NMFClientId)</string>
 	<key>NSAppTransportSecurity</key>
@@ -15,6 +17,7 @@
 	<string>앱의 기능을 위해 사용자의 현위치 정보를 수집합니다.</string>
 	<key>UIBackgroundModes</key>
 	<array>
+		<string>fetch</string>
 		<string>remote-notification</string>
 	</array>
 </dict>
