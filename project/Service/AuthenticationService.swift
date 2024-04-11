@@ -36,7 +36,13 @@ final class AuthenticationService: AuthenticationServiceType {
     }
     
     func checkAuthentication() async -> String? {
-        return await networkManager.refreshAccessToken()
+        let (_, refreshToken) = await keychainManager.read(KeychainManager.serviceUrl,
+                                                   account: "refreshToken")
+        if refreshToken != nil {
+            return await networkManager.refreshAccessToken()
+        } else {
+            return nil
+        }
     }
     
     func handleSignInWithAppleRequest(_ request: ASAuthorizationAppleIDRequest) -> Void {
@@ -105,7 +111,7 @@ extension AuthenticationService {
         await networkManager.request(url: "/login/apple",
                                      method: .POST,
                                      parameters: ["idToken":token.idToken,
-                                                  "name":token.name,
+                                                  "name":"최안용",
                                                   "deviceToken": token.deviceToken],
                                      isHTTPHeader: false)
         .sink { result in

@@ -10,6 +10,7 @@ import Combine
 import AuthenticationServices
 
 enum AuthenticationState {
+    case unknownAuthenticated
     case unAuthenticated
     case authenticated
 }
@@ -23,7 +24,7 @@ final class AuthenticationViewModel: ObservableObject {
     }
     
     @Published var isLoading: Bool = false
-    @Published var authenticationState: AuthenticationState = .unAuthenticated
+    @Published var authenticationState: AuthenticationState = .authenticated
     @Published var isDisplayAlert: Bool = false
     
 

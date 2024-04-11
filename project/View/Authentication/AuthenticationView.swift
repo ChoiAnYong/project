@@ -19,8 +19,11 @@ struct AuthenticationView: View {
             case .unAuthenticated:
                 LoginView()
                     .environmentObject(viewModel)
+                
             case .authenticated:
                 MainView(pathModel: PathModel(), viewModel: MainViewModel(container: container))
+            case .unknownAuthenticated:
+                LoadingView()
             }
         }
         .onAppear {

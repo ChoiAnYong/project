@@ -10,6 +10,7 @@
 		82D0D741DBA891D42B115AE5 /* Pods_project_projectUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 985B43E0F89C930438631A6C /* Pods_project_projectUITests.framework */; };
 		AD03A46A2BBE39FF00F2DB47 /* UserService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD03A4692BBE39FF00F2DB47 /* UserService.swift */; };
 		AD03A46C2BBE937200F2DB47 /* MainViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD03A46B2BBE937200F2DB47 /* MainViewModel.swift */; };
+		AD06422D2BC7DE4D00141FD6 /* Coordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD06422C2BC7DE4D00141FD6 /* Coordinator.swift */; };
 		AD0F52552BB41CAD00A9723A /* MapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD0F52542BB41CAD00A9723A /* MapView.swift */; };
 		AD1F9DA32BA16DF4005DD9D6 /* projectApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD1F9DA22BA16DF4005DD9D6 /* projectApp.swift */; };
 		AD1F9DA52BA16DF4005DD9D6 /* AuthenticationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD1F9DA42BA16DF4005DD9D6 /* AuthenticationView.swift */; };
@@ -25,6 +26,7 @@
 		AD6572232BB96CA700557ED6 /* SettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD6572222BB96CA600557ED6 /* SettingView.swift */; };
 		AD6572262BB974C200557ED6 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD6572252BB974C200557ED6 /* MainView.swift */; };
 		AD6572282BB976E200557ED6 /* CustomIcon.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD6572272BB976E200557ED6 /* CustomIcon.swift */; };
+		AD9956FB2BC6EC31000FEA1B /* LaunchScreenIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = AD9956FA2BC6EC31000FEA1B /* LaunchScreenIcon.png */; };
 		AD9DC8042BAAF644006D422F /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD9DC8032BAAF644006D422F /* LoginView.swift */; };
 		AD9ED1102BA91E38005F89D1 /* ServiceError.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD9ED10F2BA91E38005F89D1 /* ServiceError.swift */; };
 		AD9ED12E2BA9B1B3005F89D1 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD9ED12D2BA9B1B3005F89D1 /* NetworkManager.swift */; };
@@ -43,6 +45,8 @@
 		ADDDF3A62BB2C81800923127 /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADDDF3A52BB2C81800923127 /* LoadingView.swift */; };
 		ADDDF3C92BB2EC9400923127 /* Color.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = ADDDF3C82BB2EC9400923127 /* Color.xcassets */; };
 		ADE769542BB172F0004C9B43 /* ServerAuthResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADE769532BB172F0004C9B43 /* ServerAuthResponse.swift */; };
+		ADEFE9D42BC788770001B6FD /* PushNotificationProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADEFE9D32BC788770001B6FD /* PushNotificationProvider.swift */; };
+		ADEFE9D62BC788C00001B6FD /* PushObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADEFE9D52BC788C00001B6FD /* PushObject.swift */; };
 		ADF392072BB9A2F500E4FD78 /* SheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADF392062BB9A2F500E4FD78 /* SheetView.swift */; };
 		ADFB9C582BAAA86200DA0C01 /* SHA256.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADFB9C562BAAA86200DA0C01 /* SHA256.swift */; };
 		C318CF187E30ED5B6002EAC3 /* Pods_projectTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7319C6A88859E59BFC93EC21 /* Pods_projectTests.framework */; };
@@ -76,6 +80,7 @@
 		985B43E0F89C930438631A6C /* Pods_project_projectUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_project_projectUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		AD03A4692BBE39FF00F2DB47 /* UserService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserService.swift; sourceTree = "<group>"; };
 		AD03A46B2BBE937200F2DB47 /* MainViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewModel.swift; sourceTree = "<group>"; };
+		AD06422C2BC7DE4D00141FD6 /* Coordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coordinator.swift; sourceTree = "<group>"; };
 		AD0F52542BB41CAD00A9723A /* MapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapView.swift; sourceTree = "<group>"; };
 		AD1F9D9F2BA16DF4005DD9D6 /* project.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = project.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AD1F9DA22BA16DF4005DD9D6 /* projectApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = projectApp.swift; sourceTree = "<group>"; };
@@ -95,6 +100,7 @@
 		AD6572222BB96CA600557ED6 /* SettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingView.swift; sourceTree = "<group>"; };
 		AD6572252BB974C200557ED6 /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
 		AD6572272BB976E200557ED6 /* CustomIcon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomIcon.swift; sourceTree = "<group>"; };
+		AD9956FA2BC6EC31000FEA1B /* LaunchScreenIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = LaunchScreenIcon.png; sourceTree = "<group>"; };
 		AD9DC8032BAAF644006D422F /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		AD9ED10F2BA91E38005F89D1 /* ServiceError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceError.swift; sourceTree = "<group>"; };
 		AD9ED12D2BA9B1B3005F89D1 /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
@@ -113,6 +119,8 @@
 		ADDDF3A52BB2C81800923127 /* LoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingView.swift; sourceTree = "<group>"; };
 		ADDDF3C82BB2EC9400923127 /* Color.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Color.xcassets; sourceTree = "<group>"; };
 		ADE769532BB172F0004C9B43 /* ServerAuthResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerAuthResponse.swift; sourceTree = "<group>"; };
+		ADEFE9D32BC788770001B6FD /* PushNotificationProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushNotificationProvider.swift; sourceTree = "<group>"; };
+		ADEFE9D52BC788C00001B6FD /* PushObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushObject.swift; sourceTree = "<group>"; };
 		ADF392062BB9A2F500E4FD78 /* SheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SheetView.swift; sourceTree = "<group>"; };
 		ADFB9C562BAAA86200DA0C01 /* SHA256.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SHA256.swift; sourceTree = "<group>"; };
 		BACFE50A3FC667F520174EBC /* Pods_project.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_project.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -176,6 +184,7 @@
 			isa = PBXGroup;
 			children = (
 				AD0F52542BB41CAD00A9723A /* MapView.swift */,
+				AD06422C2BC7DE4D00141FD6 /* Coordinator.swift */,
 			);
 			path = Map;
 			sourceTree = "<group>";
@@ -229,6 +238,8 @@
 				ADC04B512BA862FD00AD8A14 /* Service */,
 				AD5C64882BB595EA006A7415 /* Keychain */,
 				AD9ED1112BA97634005F89D1 /* Network */,
+				ADEFE9D22BC788450001B6FD /* PushNotificationProvider */,
+				AD9ED1302BA9BF6D005F89D1 /* DTO */,
 				ADFB9C552BAAA84100DA0C01 /* Util */,
 				ADC04B5C2BA8727700AD8A14 /* Resource */,
 				AD1F9DA82BA16DF5005DD9D6 /* Preview Content */,
@@ -334,7 +345,6 @@
 			isa = PBXGroup;
 			children = (
 				AD9ED12D2BA9B1B3005F89D1 /* NetworkManager.swift */,
-				AD9ED1302BA9BF6D005F89D1 /* DTO */,
 			);
 			path = Network;
 			sourceTree = "<group>";
@@ -345,6 +355,7 @@
 				AD9ED1312BA9BF7B005F89D1 /* UserObject.swift */,
 				ADC832A42BB0301D00BBCF4F /* AppleAuthToken.swift */,
 				ADE769532BB172F0004C9B43 /* ServerAuthResponse.swift */,
+				ADEFE9D52BC788C00001B6FD /* PushObject.swift */,
 			);
 			path = DTO;
 			sourceTree = "<group>";
@@ -383,6 +394,7 @@
 			children = (
 				AD1F9DA62BA16DF5005DD9D6 /* Assets.xcassets */,
 				ADC04B5D2BA872A800AD8A14 /* LaunchScreen.storyboard */,
+				AD9956FA2BC6EC31000FEA1B /* LaunchScreenIcon.png */,
 				ADDDF3C82BB2EC9400923127 /* Color.xcassets */,
 			);
 			path = Resource;
@@ -395,6 +407,14 @@
 				AD6572272BB976E200557ED6 /* CustomIcon.swift */,
 			);
 			path = View;
+			sourceTree = "<group>";
+		};
+		ADEFE9D22BC788450001B6FD /* PushNotificationProvider */ = {
+			isa = PBXGroup;
+			children = (
+				ADEFE9D32BC788770001B6FD /* PushNotificationProvider.swift */,
+			);
+			path = PushNotificationProvider;
 			sourceTree = "<group>";
 		};
 		ADFB9C552BAAA84100DA0C01 /* Util */ = {
@@ -522,6 +542,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AD9956FB2BC6EC31000FEA1B /* LaunchScreenIcon.png in Resources */,
 				ADAA62D62BC41ED900CD0338 /* GoogleService-Info.plist in Resources */,
 				ADC04B5E2BA872A800AD8A14 /* LaunchScreen.storyboard in Resources */,
 				ADDDF3C92BB2EC9400923127 /* Color.xcassets in Resources */,
@@ -656,6 +677,7 @@
 			files = (
 				AD9ED12E2BA9B1B3005F89D1 /* NetworkManager.swift in Sources */,
 				AD03A46A2BBE39FF00F2DB47 /* UserService.swift in Sources */,
+				AD06422D2BC7DE4D00141FD6 /* Coordinator.swift in Sources */,
 				AD5E48992BB7F4170035329E /* PathModel.swift in Sources */,
 				ADAA62CD2BC3C34B00CD0338 /* SheetViewModel.swift in Sources */,
 				AD9ED1102BA91E38005F89D1 /* ServiceError.swift in Sources */,
@@ -673,12 +695,14 @@
 				ADC04B4F2BA862C700AD8A14 /* DIContainer.swift in Sources */,
 				AD1F9DA32BA16DF4005DD9D6 /* projectApp.swift in Sources */,
 				ADDDF3A62BB2C81800923127 /* LoadingView.swift in Sources */,
+				ADEFE9D42BC788770001B6FD /* PushNotificationProvider.swift in Sources */,
 				AD6572262BB974C200557ED6 /* MainView.swift in Sources */,
 				ADC04B552BA8638F00AD8A14 /* AuthenticationService.swift in Sources */,
 				AD9DC8042BAAF644006D422F /* LoginView.swift in Sources */,
 				AD5C648A2BB5962D006A7415 /* KeychainManager.swift in Sources */,
 				ADC832A52BB0301D00BBCF4F /* AppleAuthToken.swift in Sources */,
 				ADFB9C582BAAA86200DA0C01 /* SHA256.swift in Sources */,
+				ADEFE9D62BC788C00001B6FD /* PushObject.swift in Sources */,
 				ADC04B5B2BA8697500AD8A14 /* User.swift in Sources */,
 				AD6572282BB976E200557ED6 /* CustomIcon.swift in Sources */,
 			);
@@ -843,6 +867,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CODE_SIGN_ENTITLEMENTS = project/project.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -853,6 +878,7 @@
 				INFOPLIST_FILE = project/Info.plist;
 				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "앱의 기능을 위해 사용자의 현위치 정보를 수집합니다.";
 				INFOPLIST_KEY_NSLocationAlwaysUsageDescription = "앱의 기능을 위해 사용자의 현위치 정보를 수집합니다.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "앱의 기능을 위해 사용자의 현위치 정보를 수집합니다.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen.storyboard;
@@ -878,6 +904,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CODE_SIGN_ENTITLEMENTS = project/project.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -888,6 +915,7 @@
 				INFOPLIST_FILE = project/Info.plist;
 				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "앱의 기능을 위해 사용자의 현위치 정보를 수집합니다.";
 				INFOPLIST_KEY_NSLocationAlwaysUsageDescription = "앱의 기능을 위해 사용자의 현위치 정보를 수집합니다.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "앱의 기능을 위해 사용자의 현위치 정보를 수집합니다.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen.storyboard;

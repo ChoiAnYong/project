@@ -9,27 +9,31 @@ import SwiftUI
 import NMapsMap
 
 struct MapView: View {
+    @StateObject var coordinator: Coordinator = Coordinator.shared
+    
     var body: some View {
-        UIMapView()
-            .edgesIgnoringSafeArea(.top)
+        VStack {
+            NaverMap()
+                .edgesIgnoringSafeArea(.top)
+        }
+        .onAppear {
+            Coordinator.shared.checkIfLocationServiceIsEnabled()
+        }
     }
 }
 
-struct UIMapView: UIViewRepresentable {
-    func makeUIView(context: Context) -> NMFNaverMapView {
-        let view = NMFNaverMapView()
-        view.showZoomControls = false
-        view.mapView.positionMode = .direction
-        view.mapView.zoomLevel = 17
-        view.mapView.logoInteractionEnabled = false
-        
-        view.showLocationButton = true
-        view.showScaleBar = true
-        view.showZoomControls = true
-        return view
+struct NaverMap: UIViewRepresentable {
+    func makeCoordinator() -> Coordinator {
+        Coordinator.shared
     }
     
-    func updateUIView(_ uiView: NMFNaverMapView, context: Context) {}
+    func makeUIView(context: Context) -> NMFNaverMapView {
+        context.coordinator.getNaverMapView()
+    }
+    
+    func updateUIView(_ uiView: NMFNaverMapView, context: Context) {
+        
+    }
 }
 
 #Preview {
