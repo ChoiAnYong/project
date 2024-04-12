@@ -13,7 +13,7 @@ final class Coordinator: NSObject, ObservableObject {
     @Published var coord: (Double, Double) = (0.0, 0.0)
     @Published var userLocation: (Double, Double) = (0.0, 0.0)
     
-    var locationManager: CLLocationManager?
+    private var locationManager: CLLocationManager?
     
     static let shared = Coordinator()
     
@@ -23,25 +23,29 @@ final class Coordinator: NSObject, ObservableObject {
         super.init()
         
         view.mapView.positionMode = .direction
-        view.mapView.isNightModeEnabled = true
+        view.mapView.isNightModeEnabled = false
         
         view.mapView.zoomLevel = 15
-
-        view.showLocationButton = true
-        view.showZoomControls = true
+        
+        // 사용자 인터페이스
         view.showCompass = false
         view.showScaleBar = false
+        view.showZoomControls = false
+        view.showLocationButton = true
         
+        // 네이버 로고 위치 조정
         view.mapView.logoAlign = .leftBottom
         view.mapView.logoMargin = .init(top: 0, left: 0, bottom: 110, right: 0)
         
+        // 틸트 제스처 비활성화
         view.mapView.isTiltGestureEnabled = false
         
         view.mapView.addCameraDelegate(delegate: self)
         view.mapView.touchDelegate = self
+        makeMarker()
     }
     
-    func checkLocationAuthorization() {
+    private func checkLocationAuthorization() {
         guard let locationManager = locationManager else { return }
         
         switch locationManager.authorizationStatus {
@@ -103,7 +107,7 @@ extension Coordinator: CLLocationManagerDelegate {
             locationOverlay.icon = NMFOverlayImage(name: "location_overlay_icon")
             locationOverlay.iconWidth = CGFloat(NMF_LOCATION_OVERLAY_SIZE_AUTO)
             locationOverlay.iconHeight = CGFloat(NMF_LOCATION_OVERLAY_SIZE_AUTO)
-            locationOverlay.anchor = CGPoint(x: 0.5, y: 0.5)
+            locationOverlay.anchor = CGPoint(x: 0.5, y: 1)
             
             view.mapView.moveCamera(cameraUpdate)
         }
@@ -119,5 +123,20 @@ extension Coordinator: NMFMapViewCameraDelegate {
 extension Coordinator: NMFMapViewTouchDelegate {
     
 }
+
+// 마커
+extension Coordinator {
+    private func makeMarker() {
+        DispatchQueue.global(qos: .default) {
+            var markers = [NMFMarker]()
+            for index in 1...5 {
+                let marker = NMFMarker(position: User.stub1.latitude)
+            }
+            
+        }
+        
+    }
+}
+
 
 

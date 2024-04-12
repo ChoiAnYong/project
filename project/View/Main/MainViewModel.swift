@@ -9,6 +9,7 @@ import Foundation
 import Combine
 
 final class MainViewModel: ObservableObject {
+    @Published var ussers: [User] = [.stub2, .stub2, .stub3, .stub4, .stub5]
     enum Action {
         case getUser
     }
