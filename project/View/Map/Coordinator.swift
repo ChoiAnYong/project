@@ -10,14 +10,13 @@ import NMapsMap
 import CoreLocation
 
 final class Coordinator: NSObject, ObservableObject {
-    @Published var coord: (Double, Double) = (0.0, 0.0)
     @Published var userLocation: (Double, Double) = (0.0, 0.0)
     
     private var locationManager: CLLocationManager?
     
     static let shared = Coordinator()
     
-    let view = NMFNaverMapView()
+    let view = NMFNaverMapView(frame: .zero)
     
     override init() {
         super.init()
@@ -26,6 +25,8 @@ final class Coordinator: NSObject, ObservableObject {
         view.mapView.isNightModeEnabled = false
         
         view.mapView.zoomLevel = 15
+        view.mapView.minZoomLevel = 5
+        view.mapView.maxZoomLevel = 17
         
         // 사용자 인터페이스
         view.showCompass = false
@@ -42,7 +43,6 @@ final class Coordinator: NSObject, ObservableObject {
         
         view.mapView.addCameraDelegate(delegate: self)
         view.mapView.touchDelegate = self
-        makeMarker()
     }
     
     private func checkLocationAuthorization() {
@@ -57,9 +57,6 @@ final class Coordinator: NSObject, ObservableObject {
             print("위치 정보 접근을 거절했습니다. 설정에서 변경하세요.")
         case .authorizedAlways, .authorizedWhenInUse:
             print("Success")
-            
-            coord = (Double(locationManager.location?.coordinate.latitude ?? 0.0),
-                     Double(locationManager.location?.coordinate.longitude ?? 0.0))
             
             fetchUserLocation()
             
@@ -94,29 +91,36 @@ final class Coordinator: NSObject, ObservableObject {
 extension Coordinator: CLLocationManagerDelegate {
     func fetchUserLocation() {
         if let locationManager = locationManager {
-            let lat = locationManager.location?.coordinate.latitude
-            let lng = locationManager.location?.coordinate.longitude
-            let cameraUpdate = NMFCameraUpdate(scrollTo: NMGLatLng(lat: lat ?? 0.0, lng: lng ?? 0.0), zoomTo: 15)
-            cameraUpdate.animation = .easeIn
+            userLocation.0 = locationManager.location?.coordinate.latitude ?? 0.0
+            userLocation.1 = locationManager.location?.coordinate.longitude ?? 0.0
+            let cameraUpdate = NMFCameraUpdate(scrollTo: NMGLatLng(lat: userLocation.0, lng: userLocation.1), zoomTo: 15)
+            cameraUpdate.animation = .fly
             cameraUpdate.animationDuration = 1
             
             let locationOverlay = view.mapView.locationOverlay
-            locationOverlay.location = NMGLatLng(lat: lat ?? 0.0, lng: lng ?? 0.0)
+            locationOverlay.location = NMGLatLng(lat: userLocation.0, lng: userLocation.1)
             locationOverlay.hidden = false
+
+            locationOverlay.icon = .init(image: UIImage(resource: .icon))
+            locationOverlay.iconWidth = 60
+            locationOverlay.iconHeight = 60
             
-            locationOverlay.icon = NMFOverlayImage(name: "location_overlay_icon")
-            locationOverlay.iconWidth = CGFloat(NMF_LOCATION_OVERLAY_SIZE_AUTO)
-            locationOverlay.iconHeight = CGFloat(NMF_LOCATION_OVERLAY_SIZE_AUTO)
             locationOverlay.anchor = CGPoint(x: 0.5, y: 1)
             
             view.mapView.moveCamera(cameraUpdate)
         }
     }
+    
+//    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+//        fetchUserLocation()
+//    }
 }
 
 // 카메라 관련 이벤트
 extension Coordinator: NMFMapViewCameraDelegate {
-    
+    func mapView(_ mapView: NMFMapView, cameraDidChangeByReason reason: Int, animated: Bool) {
+        
+    }
 }
 
 // 터치 관련 이벤트
@@ -126,16 +130,42 @@ extension Coordinator: NMFMapViewTouchDelegate {
 
 // 마커
 extension Coordinator {
-    private func makeMarker() {
-        DispatchQueue.global(qos: .default) {
-            var markers = [NMFMarker]()
-            for index in 1...5 {
-                let marker = NMFMarker(position: User.stub1.latitude)
-            }
-            
-        }
-        
-    }
+    func setMarker(lat : Double, lng: Double, name: String) {
+          let marker = NMFMarker()
+          marker.iconImage = NMF_MARKER_IMAGE_PINK
+          marker.position = NMGLatLng(lat: lat, lng: lng)
+          marker.mapView = view.mapView
+          
+          let infoWindow = NMFInfoWindow()
+          let dataSource = NMFInfoWindowDefaultTextSource.data()
+          dataSource.title = name
+          infoWindow.dataSource = dataSource
+          infoWindow.open(with: marker)
+      }
+//    func makeMarker() {
+//        let users: [User] = [User.stub2, User.stub3, User.stub4, User.stub5]
+//        let infowindow = NMFInfoWindow()
+//        let dataSource = NMFInfoWindowDefaultTextSource.data()
+//        DispatchQueue.global(qos: .default).async {
+//            var markers = [NMFMarker]()
+//            for user in users {
+//                let marker = NMFMarker(position: NMGLatLng(lat: user.latitude, lng: user.longitude))
+//                marker.iconImage = NMFOverlayImage(name: "location_overlay_icon")
+//                marker.captionText = user.name
+//                
+//                markers.append(marker)
+//            }
+//            
+//            DispatchQueue.main.async { [weak self] in
+//                for marker in markers {
+//                    marker.mapView = self?.view.mapView
+//                    dataSource.title = "dksljfl"
+//                    infowindow.dataSource = dataSource
+//                    infowindow.open(with: marker)
+//                }
+//            }
+//        }
+//    }
 }
 
 

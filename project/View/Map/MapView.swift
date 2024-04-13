@@ -7,6 +7,7 @@
 
 import SwiftUI
 import NMapsMap
+import UIKit
 
 struct MapView: View {
     @StateObject var coordinator: Coordinator = Coordinator.shared
@@ -18,6 +19,9 @@ struct MapView: View {
         }
         .onAppear {
             Coordinator.shared.checkIfLocationServiceIsEnabled()
+            Task {
+                Coordinator.shared.setMarker(lat: User.stub2.latitude, lng:User.stub2.longitude, name:User.stub2.name )
+            }
         }
     }
 }
