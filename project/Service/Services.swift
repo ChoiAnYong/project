@@ -10,6 +10,7 @@ import Foundation
 protocol ServiceType {
     var authService: AuthenticationServiceType { get set }
     var userService: UserServiceType { get set }
+    var pushNotificationService: PushNotificationServiceType { get set }
 }
 
 final class Services: ServiceType {
@@ -17,16 +18,19 @@ final class Services: ServiceType {
     private let networkManager: NetworkManager
     var authService: AuthenticationServiceType
     var userService: UserServiceType
+    var pushNotificationService: PushNotificationServiceType
     
     init() {
         self.keychainManager = KeychainManager()
         self.networkManager = NetworkManager(tokenManager: keychainManager)
         self.authService = AuthenticationService(networkManager: networkManager, keychainManager: keychainManager)
         self.userService = UserService(networkManager: networkManager)
+        self.pushNotificationService = PushNotificationService()
     }
 }
 
 final class StubService: ServiceType {
     var authService: AuthenticationServiceType = StubAuthenticationService()
     var userService: UserServiceType = StubUserService()
+    var pushNotificationService: PushNotificationServiceType = StubPushNotificationService()
 }
