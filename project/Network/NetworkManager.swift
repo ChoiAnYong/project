@@ -11,34 +11,12 @@ import Combine
 enum NetworkError: Error {
     case urlError
     case tokenError
-    case timeoutError
-    case hostUnreachable
-    case connectionLost
-    case notConnected
     case responseError
     case decodeError
     case encodeError
+    case urlSessionError
     case serverError(statusCode: Int)
     case unknownError
-    
-    static func mapURLError(_ error: Error) -> NetworkError {
-        guard let urlError = error as? URLError else {
-            return NetworkError.unknownError
-        }
-        
-        switch urlError.code {
-        case .timedOut:
-            return .timeoutError
-        case .cannotFindHost, .cannotConnectToHost:
-            return .hostUnreachable
-        case .networkConnectionLost:
-            return .connectionLost
-        case .notConnectedToInternet:
-            return .notConnected
-        default:
-            return .unknownError
-        }
-    }
 }
 
 enum HTTPMethod: String {
@@ -110,7 +88,7 @@ final class NetworkManager: NetworkManagerType {
         
         return URLSession.shared.dataTaskPublisher(for: request)
             .mapError { error in
-                return NetworkError.mapURLError(error)
+                return NetworkError.urlSessionError
             }
             .flatMap { data, response -> AnyPublisher<T, NetworkError> in
                 guard let httpResponse = response as? HTTPURLResponse else {

@@ -20,6 +20,8 @@ final class AuthenticationViewModel: ObservableObject {
         case checkAuthenticationState
         case appleLogin(ASAuthorizationAppleIDRequest)
         case appleLoginCompletion(Result<ASAuthorization, Error>)
+        case requestPushNotification
+        case setPushToken
         case logout
     }
     
@@ -42,6 +44,7 @@ final class AuthenticationViewModel: ObservableObject {
             isLoading = true
             Task { [weak self] in
                 guard let self = self else { return }
+                self.send(action: .requestPushNotification)
                 
                 let check = await container.services.authService.checkAuthentication()
                 DispatchQueue.main.async {
@@ -77,6 +80,19 @@ final class AuthenticationViewModel: ObservableObject {
                 isDisplayAlert = true
                 print(error.localizedDescription)
             }
+            
+        case .requestPushNotification:
+            container.services.pushNotificationService.requestAuthorization { [weak self] granted in
+                guard granted else { return }
+                self?.send(action: .setPushToken)
+            }
+            
+        case .setPushToken:
+            container.services.pushNotificationService.fcmToken
+                .compactMap { $0 }
+                .sink { _ in
+                }.store(in: &subscription)
+            
         case .logout:
             return
         }

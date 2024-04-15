@@ -91,7 +91,6 @@ extension AuthenticationService {
             .joined(separator: "")
         
         let deviceToken = UserDefaults.standard.string(forKey: "deviceToken")
-        print(deviceToken!)
         
         let token = AppleLoginToken(idToken: idTokenString, name: name, deviceToken: deviceToken ?? "")
         

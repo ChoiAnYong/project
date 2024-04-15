@@ -22,6 +22,9 @@ struct AuthenticationView: View {
                 
             case .authenticated:
                 MainView(pathModel: PathModel(), viewModel: MainViewModel(container: container))
+                    .onAppear {
+                        viewModel.send(action: .requestPushNotification)
+                    }
             case .unknownAuthenticated:
                 LoadingView()
             }
