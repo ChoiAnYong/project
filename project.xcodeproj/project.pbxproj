@@ -19,6 +19,7 @@
 		AD1F9DB42BA16DF5005DD9D6 /* projectTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD1F9DB32BA16DF5005DD9D6 /* projectTests.swift */; };
 		AD1F9DBE2BA16DF5005DD9D6 /* projectUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD1F9DBD2BA16DF5005DD9D6 /* projectUITests.swift */; };
 		AD1F9DC02BA16DF5005DD9D6 /* projectUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD1F9DBF2BA16DF5005DD9D6 /* projectUITestsLaunchTests.swift */; };
+		AD214CA42BCEB89F00672F02 /* UserMarker.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD214CA32BCEB89F00672F02 /* UserMarker.swift */; };
 		AD5C648A2BB5962D006A7415 /* KeychainManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD5C64892BB5962D006A7415 /* KeychainManager.swift */; };
 		AD5E48992BB7F4170035329E /* PathModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD5E48982BB7F4170035329E /* PathModel.swift */; };
 		AD5E489C2BB7F45D0035329E /* PathType.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD5E489B2BB7F45D0035329E /* PathType.swift */; };
@@ -35,6 +36,7 @@
 		ADAA62D22BC41AC100CD0338 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = ADAA62D12BC41AC100CD0338 /* FirebaseAnalytics */; };
 		ADAA62D42BC41D4900CD0338 /* FirebaseMessaging in Frameworks */ = {isa = PBXBuildFile; productRef = ADAA62D32BC41D4900CD0338 /* FirebaseMessaging */; };
 		ADAA62D62BC41ED900CD0338 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = ADAA62D52BC41ED900CD0338 /* GoogleService-Info.plist */; };
+		ADAFEC312BCE7B3900E07889 /* MapViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADAFEC302BCE7B3900E07889 /* MapViewModel.swift */; };
 		ADBEEC5C2BCC252100648CD1 /* PushNotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADBEEC5B2BCC252100648CD1 /* PushNotificationService.swift */; };
 		ADC04B4F2BA862C700AD8A14 /* DIContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADC04B4E2BA862C700AD8A14 /* DIContainer.swift */; };
 		ADC04B532BA8631E00AD8A14 /* Services.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADC04B522BA8631E00AD8A14 /* Services.swift */; };
@@ -93,6 +95,7 @@
 		AD1F9DB92BA16DF5005DD9D6 /* projectUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = projectUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		AD1F9DBD2BA16DF5005DD9D6 /* projectUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = projectUITests.swift; sourceTree = "<group>"; };
 		AD1F9DBF2BA16DF5005DD9D6 /* projectUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = projectUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		AD214CA32BCEB89F00672F02 /* UserMarker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserMarker.swift; sourceTree = "<group>"; };
 		AD5C64892BB5962D006A7415 /* KeychainManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainManager.swift; sourceTree = "<group>"; };
 		AD5E48982BB7F4170035329E /* PathModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PathModel.swift; sourceTree = "<group>"; };
 		AD5E489B2BB7F45D0035329E /* PathType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PathType.swift; sourceTree = "<group>"; };
@@ -109,6 +112,7 @@
 		AD9ED1312BA9BF7B005F89D1 /* UserObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserObject.swift; sourceTree = "<group>"; };
 		ADAA62CC2BC3C34B00CD0338 /* SheetViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SheetViewModel.swift; sourceTree = "<group>"; };
 		ADAA62D52BC41ED900CD0338 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		ADAFEC302BCE7B3900E07889 /* MapViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewModel.swift; sourceTree = "<group>"; };
 		ADBEEC5B2BCC252100648CD1 /* PushNotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushNotificationService.swift; sourceTree = "<group>"; };
 		ADC04B4E2BA862C700AD8A14 /* DIContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DIContainer.swift; sourceTree = "<group>"; };
 		ADC04B522BA8631E00AD8A14 /* Services.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Services.swift; sourceTree = "<group>"; };
@@ -186,7 +190,9 @@
 			isa = PBXGroup;
 			children = (
 				AD0F52542BB41CAD00A9723A /* MapView.swift */,
+				ADAFEC302BCE7B3900E07889 /* MapViewModel.swift */,
 				AD06422C2BC7DE4D00141FD6 /* Coordinator.swift */,
+				AD214CA32BCEB89F00672F02 /* UserMarker.swift */,
 			);
 			path = Map;
 			sourceTree = "<group>";
@@ -235,6 +241,7 @@
 				AD9ED12F2BA9BA61005F89D1 /* Info.plist */,
 				AD5E489E2BB7FE730035329E /* App */,
 				ADC04B4D2BA862B300AD8A14 /* General */,
+				AD214CA22BCEB84C00672F02 /* Extension */,
 				AD1E10EC2BA847F2002D85BF /* View */,
 				ADC04B592BA8696500AD8A14 /* Model */,
 				ADC04B512BA862FD00AD8A14 /* Service */,
@@ -272,6 +279,13 @@
 				AD1F9DBF2BA16DF5005DD9D6 /* projectUITestsLaunchTests.swift */,
 			);
 			path = projectUITests;
+			sourceTree = "<group>";
+		};
+		AD214CA22BCEB84C00672F02 /* Extension */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Extension;
 			sourceTree = "<group>";
 		};
 		AD5C64882BB595EA006A7415 /* Keychain */ = {
@@ -694,6 +708,7 @@
 				ADC04B532BA8631E00AD8A14 /* Services.swift in Sources */,
 				AD5E489C2BB7F45D0035329E /* PathType.swift in Sources */,
 				AD0F52552BB41CAD00A9723A /* MapView.swift in Sources */,
+				AD214CA42BCEB89F00672F02 /* UserMarker.swift in Sources */,
 				ADF392072BB9A2F500E4FD78 /* SheetView.swift in Sources */,
 				ADC04B572BA8642800AD8A14 /* AuthenticationViewModel.swift in Sources */,
 				ADC04B4F2BA862C700AD8A14 /* DIContainer.swift in Sources */,
@@ -701,6 +716,7 @@
 				ADDDF3A62BB2C81800923127 /* LoadingView.swift in Sources */,
 				ADEFE9D42BC788770001B6FD /* PushNotificationProvider.swift in Sources */,
 				AD6572262BB974C200557ED6 /* MainView.swift in Sources */,
+				ADAFEC312BCE7B3900E07889 /* MapViewModel.swift in Sources */,
 				ADC04B552BA8638F00AD8A14 /* AuthenticationService.swift in Sources */,
 				AD9DC8042BAAF644006D422F /* LoginView.swift in Sources */,
 				AD5C648A2BB5962D006A7415 /* KeychainManager.swift in Sources */,

@@ -36,8 +36,7 @@ final class AuthenticationService: AuthenticationServiceType {
     }
     
     func checkAuthentication() async -> String? {
-        let (_, refreshToken) = await keychainManager.read(KeychainManager.serviceUrl,
-                                                   account: "refreshToken")
+        let (_, refreshToken) = await keychainManager.read(account: "refreshToken")
         if refreshToken != nil {
             return await networkManager.refreshAccessToken()
         } else {
@@ -119,14 +118,11 @@ extension AuthenticationService {
             }
         } receiveValue: { (response: ServerAuthResponse) in
             Task {
-                let accessStatus = await self.keychainManager.creat(KeychainManager.serviceUrl,
-                                                                    account:"accessToken",
+                let accessStatus = await self.keychainManager.creat(account:"accessToken",
                                                                     value:response.accessToken)
-                let refreshStatus = await self.keychainManager.creat(KeychainManager.serviceUrl,
-                                                                     account:"refreshToken",
+                let refreshStatus = await self.keychainManager.creat(account:"refreshToken",
                                                                      value:response.refreshToken)
-                let expiresStatus = await self.keychainManager.creat(KeychainManager.serviceUrl,
-                                                                     account:"accessTokenExpiresIn",
+                let expiresStatus = await self.keychainManager.creat(account:"accessTokenExpiresIn",
                                                                      value: String(response.accessTokenExpiresIn))
                 if accessStatus == errSecSuccess &&
                 refreshStatus == errSecSuccess &&

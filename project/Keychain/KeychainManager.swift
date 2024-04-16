@@ -9,16 +9,16 @@ import Foundation
 import Security
 
 final class KeychainManager {
-    static let serviceUrl = "https://emgapp.shop/login/apple"
+    private let serviceUrl = "https://emgapp.shop/login/apple"
     
-    func creat(_ service: String, account: String, value: String) async -> OSStatus {
+    func creat(account: String, value: String) async -> OSStatus {
         guard let data = value.data(using: .utf8) else {
             return errSecBadReq
         }
         
         let keyChainQuery: CFDictionary = [
             kSecClass: kSecClassGenericPassword,
-            kSecAttrService: service,
+            kSecAttrService: serviceUrl,
             kSecAttrAccount: account,
             kSecValueData: data
         ] as CFDictionary
@@ -29,10 +29,10 @@ final class KeychainManager {
         return SecItemAdd(keyChainQuery, nil)
     }
     
-    func read(_ service: String, account: String) async -> (status: OSStatus, value: String?) {
+    func read(account: String) async -> (status: OSStatus, value: String?) {
         let keyChainQuery: CFDictionary = [
             kSecClass: kSecClassGenericPassword,
-            kSecAttrService: service,
+            kSecAttrService: serviceUrl,
             kSecAttrAccount: account,
             kSecReturnData: kCFBooleanTrue as Any,
             kSecMatchLimit: kSecMatchLimitOne
@@ -49,24 +49,24 @@ final class KeychainManager {
         return (status, value)
     }
     
-    func update(_ service: String, account: String, value: String) async -> OSStatus {
+    func update(account: String, value: String) async -> OSStatus {
         guard let data = value.data(using: .utf8) else {
             return errSecBadReq
         }
         
         let keyChainQuery: CFDictionary = [
             kSecClass: kSecClassGenericPassword,
-            kSecAttrService: service,
+            kSecAttrService: serviceUrl,
             kSecAttrAccount: account
         ] as CFDictionary
         
         return SecItemUpdate(keyChainQuery, [kSecValueData: data] as CFDictionary)
     }
     
-    func delete(_ service: String, account: String) async -> OSStatus {
+    func delete(account: String) async -> OSStatus {
         let keyChainQuery: CFDictionary = [
             kSecClass: kSecClassGenericPassword,
-            kSecAttrService: service,
+            kSecAttrService: serviceUrl,
             kSecAttrAccount: account
         ] as CFDictionary
         

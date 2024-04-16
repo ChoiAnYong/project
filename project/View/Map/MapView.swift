@@ -11,8 +11,8 @@ import UIKit
 
 struct MapView: View {
     @StateObject var coordinator: Coordinator = Coordinator.shared
-    @EnvironmentObject private var viewModel: MainViewModel
-    
+    @StateObject var viewModel: MapViewModel
+        
     var body: some View {
         VStack {
             NaverMap()
@@ -21,7 +21,7 @@ struct MapView: View {
         .onAppear {
             Coordinator.shared.checkIfLocationServiceIsEnabled()
             Task {
-                for user in viewModel.ussers {
+                for user in viewModel.users {
                     Coordinator.shared.setMarker(lat: user.latitude, lng:user.longitude, name:user.name )
                 }
             }
@@ -44,6 +44,5 @@ struct NaverMap: UIViewRepresentable {
 }
 
 #Preview {
-    MapView()
-        .environmentObject(MainViewModel(container: .init(services: StubService())))
+    MapView(viewModel: MapViewModel(container: .init(services: StubService())))
 }

@@ -13,7 +13,6 @@ struct User: Hashable {
     var descriptino: String?
     var latitude: Double
     var longitude: Double
-    
 }
 
 extension User {

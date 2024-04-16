@@ -8,12 +8,14 @@
 import Foundation
 import Combine
 
-protocol UserServiceType {
-    func getUser() -> AnyPublisher<UserObject, ServiceError>
-}
 
 enum UserServiceError: Error {
     case error
+}
+
+protocol UserServiceType {
+    func getUser() -> AnyPublisher<UserObject, ServiceError>
+    
 }
 
 final class UserService: UserServiceType {
@@ -26,7 +28,7 @@ final class UserService: UserServiceType {
     
     func getUser() -> AnyPublisher<UserObject, ServiceError> {
         Future { [weak self] promise in
-            guard let self = self else {return}
+            guard let self = self else { return }
             Task {
                 await self.handleNetworkCompletion(url: "/member/info",
                                                    method: .GET,

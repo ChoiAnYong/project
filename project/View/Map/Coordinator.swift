@@ -131,42 +131,20 @@ extension Coordinator: NMFMapViewTouchDelegate {
 // 마커
 extension Coordinator {
     func setMarker(lat : Double, lng: Double, name: String) {
-          let marker = NMFMarker()
-          marker.iconImage = NMF_MARKER_IMAGE_PINK
-          marker.position = NMGLatLng(lat: lat, lng: lng)
-          marker.mapView = view.mapView
-          
-          let infoWindow = NMFInfoWindow()
-          let dataSource = NMFInfoWindowDefaultTextSource.data()
-          dataSource.title = name
-          infoWindow.dataSource = dataSource
-          infoWindow.open(with: marker)
-      }
-//    func makeMarker() {
-//        let users: [User] = [User.stub2, User.stub3, User.stub4, User.stub5]
-//        let infowindow = NMFInfoWindow()
-//        let dataSource = NMFInfoWindowDefaultTextSource.data()
-//        DispatchQueue.global(qos: .default).async {
-//            var markers = [NMFMarker]()
-//            for user in users {
-//                let marker = NMFMarker(position: NMGLatLng(lat: user.latitude, lng: user.longitude))
-//                marker.iconImage = NMFOverlayImage(name: "location_overlay_icon")
-//                marker.captionText = user.name
-//                
-//                markers.append(marker)
-//            }
-//            
-//            DispatchQueue.main.async { [weak self] in
-//                for marker in markers {
-//                    marker.mapView = self?.view.mapView
-//                    dataSource.title = "dksljfl"
-//                    infowindow.dataSource = dataSource
-//                    infowindow.open(with: marker)
-//                }
-//            }
-//        }
-//    }
+        let marker = UserMarker()
+
+        marker.mapView = view.mapView
+        
+        let infoWindow = NMFInfoWindow()
+        let dataSource = NMFInfoWindowDefaultTextSource.data()
+        dataSource.title = name
+        
+        infoWindow.dataSource = dataSource
+        infoWindow.open(with: marker)
+    }
 }
 
 
-
+extension NMFOverlayImage {
+    
+}

@@ -19,7 +19,7 @@ struct MainView: View {
     var body: some View {
         NavigationStack(path: $pathModel.paths) {
             ZStack {
-                MapView()
+                MapView(viewModel: MapViewModel(container: container))
                     .environmentObject(viewModel)
                 
                 toolbarView(pathModel: pathModel, viewModel: viewModel)

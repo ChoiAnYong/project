@@ -13,7 +13,13 @@ struct UserObject: Codable {
     var image: Data
     var email: String
     var hasWatch: Bool
-    var connectionMemberList: [String]
+    var otherUsers: [OtherObject]
+}
+
+struct OtherObject: Codable {
+    var name: String
+    var image: Data
+    var email: String
 }
 
 //extension UserObject {
