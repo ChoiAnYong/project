@@ -16,10 +16,10 @@ struct User: Hashable {
 }
 
 extension User {
-    static var stub1: User = .init(name: "홍길동", email: "dksdyd78@naver.com", descriptino: "씨발", latitude: 36.979278564453125, longitude: 126.92241151386197)
-    static var stub2: User = .init(name: "김철수", email: "@naver.com", descriptino: "짜증나", latitude: 36.979278564463125, longitude: 126.92241151386497)
-    static var stub3: User = .init(name: "이광혁", email: "dksdyd78@.com", descriptino: "짜증나", latitude: 36.979278264453125, longitude: 126.92241151386198)
-    static var stub4: User = .init(name: "이찬희", email: "dksdyd78@naver.", descriptino: "짜증나", latitude: 36.979218564453125, longitude: 126.92241151386397)
-    static var stub5: User = .init(name: "김민욱", email: "dksdyd78naver.com", descriptino: "짜증나", latitude: 36.979248564453125, longitude: 126.92241151486197)
-    static var stub6: User = .init(name: "정인호", email: "dkdyd78@naver.com", descriptino:"짜증나", latitude: 36.979271564453125, longitude: 126.92241151386197)
+    static var stub1: User = .init(name: "홍길동", email: "dksdyd78@naver.com", descriptino: "씨발", latitude: 36.999278564453125, longitude: 126.32241151386197)
+    static var stub2: User = .init(name: "이광혁", email: "@naver.com", descriptino: "짜증나", latitude: 36.079278564463125, longitude: 126.92241151386497)
+    static var stub3: User = .init(name: "이광혁", email: "dksdyd78@.com", descriptino: "짜증나", latitude: 36.919278264453125, longitude: 126.92241151386198)
+    static var stub4: User = .init(name: "이찬희", email: "dksdyd78@naver.", descriptino: "짜증나", latitude: 36.179218564453125, longitude: 126.92241191386397)
+    static var stub5: User = .init(name: "김민욱", email: "dksdyd78naver.com", descriptino: "짜증나", latitude: 36.979348564453125, longitude: 126.91241151486197)
+    static var stub6: User = .init(name: "정인호", email: "dkdyd78@naver.com", descriptino:"짜증나", latitude: 36.971271564453125, longitude: 126.92241351386197)
 }

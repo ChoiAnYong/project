@@ -6,64 +6,83 @@
 //
 
 import UIKit
-import NMapsMap
 
-final class UserMarker: NMFMarker {
-    
-    let userInfoWindow = NMFInfoWindow()
-    
-    override init() {
-        super.init()
-        setUI()
-    }
+enum MarkerType {
+    case _static
+    case human
+    case information
 }
 
-extension UserMarker {
-    private func setUI() {
-        let originalImage = UIImage(resource: .lee)
-        let resizedImage = resizeImage(originalImage)
-        if let circularImage = resizedImage.circularImage() {
-            self.iconImage = createOverlayImageFromImage(circularImage)
-        }
+/*
+ Marker의 기본이 되는 데이터
+ */
+protocol MarKerProtocol {
+    var type : MarkerType { get set }
+    var id : Int { get set }
+    var lat : Double { get set }
+    var lng : Double { get set }
+}
+
+/*
+ 사용자를 표현하는 마커 데이터
+ */
+struct HumanMarker : MarKerProtocol {
+    var type: MarkerType
+    var id: Int
+    var lat: Double
+    var lng: Double
+    let imgUrl : String
+    let decorateColor : String
+}
+
+class HumanMarkerView: UIView {
+    lazy var imageView = UIImageView(frame: .init(x: 0, y: 0, width: 50, height: 50))
+    lazy var decorateView = UIView(frame: .init(x: 50 / 2 - 10, y: 50 + 8, width: 10, height: 10))
+    
+    override var intrinsicContentSize: CGSize {
+        let imgSize = 50
+        let decorationHeight = 10 + 8
+        return CGSize(width: imgSize, height: imgSize + decorationHeight)
+    }
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
         
-        self.width = CGFloat(NMF_MARKER_SIZE_AUTO)
-        self.height = CGFloat(NMF_MARKER_SIZE_AUTO)
+        imageView.clipsToBounds = true
+        imageView.layer.cornerRadius = 12
+        imageView.layer.borderWidth = 3
+        decorateView.backgroundColor = .clear
+        decorateView.layer.cornerRadius = 5
         
-        self.anchor = CGPoint(x: 0.5, y: 0.5)
+        layout()
     }
     
-    func showInfoWindow() {
-        userInfoWindow.open(with: self)
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
     
-    func hideInfoWindow() {
-        userInfoWindow.close()
+    func configure(_ data: HumanMarker, completion: @escaping (UIImage?) -> Void) {
+        imageView.layer.borderColor = UIColor(.appOrange).cgColor
+        decorateView.backgroundColor = UIColor(.grayLight)
+        
+        self.imageView.image = UIImage(resource: .lee)
+        let img = self.toImage()
+        completion(img)
     }
-}
-
-extension UserMarker {
-    func resizeImage(_ image: UIImage) -> UIImage {
-        let renderer = UIGraphicsImageRenderer(size: CGSize(width: 50, height: 50))
-        return renderer.image { (context) in
-            image.draw(in: CGRect(origin: .zero, size: CGSize(width: 50, height: 50)))
-        }
-    }
-
-    func createOverlayImageFromImage(_ image: UIImage) -> NMFOverlayImage {
-        return NMFOverlayImage(image: image)
-    }
-}
-
-extension UIImage {
-    func circularImage() -> UIImage? {
-        let renderer = UIGraphicsImageRenderer(size: CGSize(width: 50, height: 50))
-        return renderer.image { context in
-            let roundedRect = CGRect(origin: .zero, size: size).insetBy(dx: 0.5, dy: 0.5)
-            let path = UIBezierPath(roundedRect: roundedRect, cornerRadius: size.width / 2.0)
-            path.addClip()
-            draw(in: roundedRect)
+    
+    private func layout() {
+        [imageView, decorateView].forEach {
+            addSubview($0)
         }
     }
 }
 
 
+extension UIView {
+    func toImage() -> UIImage {
+        let renderer = UIGraphicsImageRenderer(bounds: bounds)
+        return renderer.image { rendererContext in
+            layer.render(in: rendererContext.cgContext)
+        }
+    }
+}

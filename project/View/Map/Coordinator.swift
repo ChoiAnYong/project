@@ -131,16 +131,19 @@ extension Coordinator: NMFMapViewTouchDelegate {
 // 마커
 extension Coordinator {
     func setMarker(lat : Double, lng: Double, name: String) {
-        let marker = UserMarker()
-
+        let marker = NMFMarker()
+        let customView = HumanMarkerView(frame: .init(x: 0, y: 0, width: 50, height: 50))
+        customView.configure(.init(type: .human, id: 1, lat: lat, lng: lng, imgUrl: "", decorateColor: "")) {
+            marker.iconImage = NMFOverlayImage(image: $0!)
+        }
+        
+        marker.position = NMGLatLng(lat: lat, lng: lng)
+        
         marker.mapView = view.mapView
         
-        let infoWindow = NMFInfoWindow()
-        let dataSource = NMFInfoWindowDefaultTextSource.data()
-        dataSource.title = name
+        marker.captionAligns = [NMFAlignType.top]
+        marker.captionText = name
         
-        infoWindow.dataSource = dataSource
-        infoWindow.open(with: marker)
     }
 }
 
