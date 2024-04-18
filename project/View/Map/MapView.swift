@@ -12,20 +12,39 @@ import UIKit
 struct MapView: View {
     @StateObject var coordinator: Coordinator = Coordinator.shared
     @StateObject var viewModel: MapViewModel
-        
+    
     var body: some View {
-        VStack {
+        ZStack {
             NaverMap()
                 .edgesIgnoringSafeArea(.top)
+            
+            LocationBtnView()
+                .offset(x:0, y: UIScreen.main.bounds.height/3.5)
         }
         .onAppear {
             Coordinator.shared.checkIfLocationServiceIsEnabled()
             Task {
                 for user in viewModel.users {
-                    Coordinator.shared.setMarker(lat: user.latitude, lng:user.longitude, name:user.name )
+                    Coordinator.shared.setMarker(lat: user.latitude, 
+                                                 lng:user.longitude,
+                                                 name:user.name )
                 }
             }
         }
+    }
+}
+
+fileprivate struct LocationBtnView: View {
+    var body: some View {
+        HStack {
+            Spacer()
+            Button {
+                Coordinator.shared.moveMapToUserLocation()
+            } label: {
+                CustomIcon(iconName: "locationIcon")
+            }
+        }
+        .padding(.horizontal, 15)
     }
 }
 

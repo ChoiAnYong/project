@@ -5,9 +5,11 @@
 //  Created by 최안용 on 4/11/24.
 //
 
-import Foundation
-import NMapsMap
+
 import CoreLocation
+import Foundation
+
+import NMapsMap
 
 final class Coordinator: NSObject, ObservableObject {
     @Published var userLocation: (Double, Double) = (0.0, 0.0)
@@ -32,7 +34,7 @@ final class Coordinator: NSObject, ObservableObject {
         view.showCompass = false
         view.showScaleBar = false
         view.showZoomControls = false
-        view.showLocationButton = true
+        view.showLocationButton = false
         
         // 네이버 로고 위치 조정
         view.mapView.logoAlign = .leftBottom
@@ -95,7 +97,7 @@ extension Coordinator: CLLocationManagerDelegate {
             userLocation.1 = locationManager.location?.coordinate.longitude ?? 0.0
             let cameraUpdate = NMFCameraUpdate(scrollTo: NMGLatLng(lat: userLocation.0, lng: userLocation.1), zoomTo: 15)
             cameraUpdate.animation = .fly
-            cameraUpdate.animationDuration = 1
+            cameraUpdate.animationDuration = 0.8
             
             let locationOverlay = view.mapView.locationOverlay
             locationOverlay.location = NMGLatLng(lat: userLocation.0, lng: userLocation.1)
@@ -111,15 +113,26 @@ extension Coordinator: CLLocationManagerDelegate {
         }
     }
     
-//    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-//        fetchUserLocation()
-//    }
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        
+    }
 }
 
 // 카메라 관련 이벤트
 extension Coordinator: NMFMapViewCameraDelegate {
     func mapView(_ mapView: NMFMapView, cameraDidChangeByReason reason: Int, animated: Bool) {
         
+    }
+    
+    func moveMapToUserLocation() {
+        if let locationManager = locationManager,
+           let coordinate = locationManager.location?.coordinate {
+            let cameraUpdate = NMFCameraUpdate(scrollTo: NMGLatLng(lat: coordinate.latitude, 
+                                                                   lng: coordinate.longitude))
+            cameraUpdate.animation = .easeIn
+            cameraUpdate.animationDuration = 0.2
+            view.mapView.moveCamera(cameraUpdate)
+        }
     }
 }
 
@@ -145,9 +158,4 @@ extension Coordinator {
         marker.captionText = name
         
     }
-}
-
-
-extension NMFOverlayImage {
-    
 }

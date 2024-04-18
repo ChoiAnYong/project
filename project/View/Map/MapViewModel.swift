@@ -15,5 +15,9 @@ final class MapViewModel: ObservableObject {
         self.container = container
     }
     
+    enum Action {
+        case didTapLocationBtn
+    }
     
+
 }

@@ -18,6 +18,9 @@ struct SheetView: View {
                 BeginningView()
             } else {
                 SheetScrollView(sheetViewModel: sheetViewModel)
+                    .onAppear {
+                        print("스크롤뷰")
+                    }
             }
         }
         .background(Color.grayCool)
@@ -87,7 +90,7 @@ fileprivate struct UserInfoView: View {
                 .frame(width: 50, height: 50)
             
             VStack(alignment: .leading) {
-                Text(sheetViewModel.user.name)
+                Text(sheetViewModel.user.name )
                     .font(.system(size: 18, weight: .bold))
                 
                 Text(sheetViewModel.user.descriptino ?? "상태 메시지를 입력하세요")
