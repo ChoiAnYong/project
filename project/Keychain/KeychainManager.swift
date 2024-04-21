@@ -11,7 +11,7 @@ import Security
 final class KeychainManager {
     private let serviceUrl = "https://emgapp.shop/login/apple"
     
-    func creat(account: String, value: String) async -> OSStatus {
+    func creat(account: String, value: String) -> OSStatus {
         guard let data = value.data(using: .utf8) else {
             return errSecBadReq
         }
@@ -29,7 +29,7 @@ final class KeychainManager {
         return SecItemAdd(keyChainQuery, nil)
     }
     
-    func read(account: String) async -> (status: OSStatus, value: String?) {
+    func read(account: String) -> (status: OSStatus, value: String?) {
         let keyChainQuery: CFDictionary = [
             kSecClass: kSecClassGenericPassword,
             kSecAttrService: serviceUrl,
@@ -49,7 +49,7 @@ final class KeychainManager {
         return (status, value)
     }
     
-    func update(account: String, value: String) async -> OSStatus {
+    func update(account: String, value: String) -> OSStatus {
         guard let data = value.data(using: .utf8) else {
             return errSecBadReq
         }
@@ -63,7 +63,7 @@ final class KeychainManager {
         return SecItemUpdate(keyChainQuery, [kSecValueData: data] as CFDictionary)
     }
     
-    func delete(account: String) async -> OSStatus {
+    func delete(account: String) -> OSStatus {
         let keyChainQuery: CFDictionary = [
             kSecClass: kSecClassGenericPassword,
             kSecAttrService: serviceUrl,

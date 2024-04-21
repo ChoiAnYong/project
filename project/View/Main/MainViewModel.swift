@@ -9,13 +9,15 @@ import Foundation
 import Combine
 
 final class MainViewModel: ObservableObject {
-    @Published var ussers: [User] = [.stub2, .stub2, .stub3, .stub4, .stub5]
+    @Published var myUser: User?
+    @Published var users: [User] = []
+    
     enum Action {
         case getUser
     }
     
     private var container: DIContainer
-    private var sub = Set<AnyCancellable>()
+    private var subscriptions = Set<AnyCancellable>()
     
     init(container: DIContainer) {
         self.container = container
@@ -25,19 +27,16 @@ final class MainViewModel: ObservableObject {
         switch action {
         case .getUser:
             container.services.userService.getUser()
+                .receive(on: DispatchQueue.main)
                 .sink { completion in
-                    switch completion {
+                    if case .failure = completion {
                         
-                    case .finished:
-                        print("성공")
-                    case .failure(_):
-                        print("실패")
-                    }
-                    
-                } receiveValue: { user in
-                    print(user)
+                    }                    
+                } receiveValue: { [weak self] user in
+                    self?.myUser = user.0
+                    self?.users = user.1
                 }
-                .store(in: &sub)
+                .store(in: &subscriptions)
         }
     }
 }

@@ -5,12 +5,11 @@
 //  Created by 최안용 on 3/18/24.
 //
 
-import Foundation
-import Combine
 import AuthenticationServices
+import Combine
+import Foundation
 
 enum AuthenticationState {
-    case unknownAuthenticated
     case unAuthenticated
     case authenticated
 }
@@ -24,13 +23,12 @@ final class AuthenticationViewModel: ObservableObject {
     }
     
     @Published var isLoading: Bool = false
-    @Published var authenticationState: AuthenticationState = .authenticated
+    @Published var authenticationState: AuthenticationState = .unAuthenticated
     @Published var isDisplayAlert: Bool = false
     
 
     private var container: DIContainer
     private var subscription = Set<AnyCancellable>()
-    private var km = KeychainManager()
     
     init(container: DIContainer) {
         self.container = container
@@ -40,20 +38,13 @@ final class AuthenticationViewModel: ObservableObject {
         switch action {
         case .checkAuthenticationState:
             isLoading = true
-            Task { [weak self] in
-                guard let self = self else { return }
-                
-                let check = await container.services.authService.checkAuthentication()
-                DispatchQueue.main.async {
-                    self.isLoading = false
-                    if check == nil {
-                        self.authenticationState = .unAuthenticated
-                    } else {
-                        self.authenticationState = .authenticated
-                    }
-                }
+            if container.services.authService.checkAuthentication() {
+                isLoading = false
+                authenticationState = .authenticated
+            } else {
+                isLoading = false
+                authenticationState = .unAuthenticated
             }
-            
         case let .appleLogin(request): // case의 연관값에 접근하고 싶으면 let
             container.services.authService.handleSignInWithAppleRequest(request)
             

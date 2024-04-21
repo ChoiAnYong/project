@@ -9,7 +9,7 @@ import Foundation
 
 final class MapViewModel: ObservableObject {
     private var container: DIContainer
-    @Published var users: [User] = [.stub1, .stub2, .stub3, .stub4, .stub5, .stub6]
+    @Published var users: [User] = []
     
     init(container: DIContainer) {
         self.container = container

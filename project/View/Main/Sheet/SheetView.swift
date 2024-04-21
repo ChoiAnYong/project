@@ -8,16 +8,20 @@
 import SwiftUI
 
 struct SheetView: View {
-    @StateObject var sheetViewModel: SheetViewModel
+    @ObservedObject private var mainViewModel: MainViewModel
+    
+    init(mainViewModel: MainViewModel) {
+        self.mainViewModel = mainViewModel
+    }
     
     var body: some View {
         VStack {
             topView()
-            UserInfoView(sheetViewModel: sheetViewModel)
-            if sheetViewModel.users.isEmpty {
+            UserInfoView(mainViewModel: mainViewModel)
+            if mainViewModel.users.isEmpty {
                 BeginningView()
             } else {
-                SheetScrollView(sheetViewModel: sheetViewModel)
+                SheetScrollView(mainViewModel: mainViewModel)
                     .onAppear {
                         print("스크롤뷰")
                     }
@@ -44,17 +48,17 @@ fileprivate struct topView: View {
 }
 
 fileprivate struct SheetScrollView: View {
-    @ObservedObject private var sheetViewModel: SheetViewModel
+    @ObservedObject private var mainViewModel: MainViewModel
     
-    fileprivate init(sheetViewModel: SheetViewModel) {
-        self.sheetViewModel = sheetViewModel
+    fileprivate init(mainViewModel: MainViewModel) {
+        self.mainViewModel = mainViewModel
     }
     
     var body: some View {
         ScrollView {
             
             
-            OtherInfoCellListView(sheetViewModel: sheetViewModel)
+            OtherInfoCellListView(mainViewModel: mainViewModel)
             
             .padding(.all, 8)
             .background(RoundedRectangle(cornerRadius: 18).foregroundColor(Color.white))
@@ -70,17 +74,25 @@ fileprivate struct SheetScrollView: View {
 fileprivate struct BeginningView: View {
     var body: some View {
         VStack {
+            Spacer()
             Text("연동된 계정이 없습니다.")
+            Text("")
             
+            Button(action: {
+                
+            }, label: {
+                /*@START_MENU_TOKEN@*/Text("Button")/*@END_MENU_TOKEN@*/
+            })
+            Spacer()
         }
     }
 }
 
 fileprivate struct UserInfoView: View {
-    @ObservedObject private var sheetViewModel: SheetViewModel
+    @ObservedObject private var mainViewModel: MainViewModel
     
-    fileprivate init(sheetViewModel: SheetViewModel) {
-        self.sheetViewModel = sheetViewModel
+    fileprivate init(mainViewModel: MainViewModel) {
+        self.mainViewModel = mainViewModel
     }
     
     var body: some View {
@@ -90,10 +102,10 @@ fileprivate struct UserInfoView: View {
                 .frame(width: 50, height: 50)
             
             VStack(alignment: .leading) {
-                Text(sheetViewModel.user.name )
+                Text(mainViewModel.myUser?.name ?? "이름")
                     .font(.system(size: 18, weight: .bold))
                 
-                Text(sheetViewModel.user.descriptino ?? "상태 메시지를 입력하세요")
+                Text(mainViewModel.myUser?.description ?? "상태 메시지를 입력하세요")
                     .font(.system(size: 15, weight: .regular))
             }
             Spacer()
@@ -106,15 +118,15 @@ fileprivate struct UserInfoView: View {
 }
 
 fileprivate struct OtherInfoCellListView: View {
-    @ObservedObject private var sheetViewModel: SheetViewModel
+    @ObservedObject private var mainViewModel: MainViewModel
     
-    fileprivate init(sheetViewModel: SheetViewModel) {
-        self.sheetViewModel = sheetViewModel
+    fileprivate init(mainViewModel: MainViewModel) {
+        self.mainViewModel = mainViewModel
     }
     
     var body: some View {
         LazyVStack {
-            ForEach(sheetViewModel.users, id: \.self) { user in
+            ForEach(mainViewModel.users, id: \.self) { user in
                 OtherInfoCellView(other: user)
             }
         }
@@ -137,7 +149,7 @@ fileprivate struct OtherInfoCellView: View {
             VStack(alignment: .leading) {
                 Text(other.name)
                     .font(.system(size: 18, weight: .bold))
-                Text(other.descriptino ?? "상태 메시지를 입려하세요.")
+                Text(other.description ?? "상태 메시지를 입려하세요.")
                     .font(.system(size: 15, weight: .regular))
             }
             Spacer()
@@ -146,5 +158,5 @@ fileprivate struct OtherInfoCellView: View {
 }
 
 #Preview {
-    SheetView(sheetViewModel: SheetViewModel(container: .init(services: StubService())))
+    SheetView(mainViewModel: MainViewModel(container: .init(services: StubService())))
 }

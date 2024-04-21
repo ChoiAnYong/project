@@ -12,6 +12,7 @@ struct MainView: View {
     @StateObject var pathModel: PathModel
     @StateObject var viewModel: MainViewModel
     @State private var isTopDrag: Bool = true
+    @State private var isBottomDrag: Bool = false
     @State private var startingOffsetY: CGFloat = UIScreen.main.bounds.height * 0.78
     @State private var currentDragOffsetY: CGFloat = 0
     @State private var endingOffsetY: CGFloat = 0
@@ -24,7 +25,7 @@ struct MainView: View {
                 
                 toolbarView(pathModel: pathModel, viewModel: viewModel)
                 
-                SheetView(sheetViewModel: SheetViewModel(container: container))
+                SheetView(mainViewModel: viewModel)
                     .offset(y: startingOffsetY)
                     .offset(y: currentDragOffsetY)
                     .offset(y: endingOffsetY)

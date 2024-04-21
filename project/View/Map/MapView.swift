@@ -25,8 +25,11 @@ struct MapView: View {
             Coordinator.shared.checkIfLocationServiceIsEnabled()
             Task {
                 for user in viewModel.users {
-                    Coordinator.shared.setMarker(lat: user.latitude, 
-                                                 lng:user.longitude,
+                    guard let lat = user.latitude,
+                          let lng = user.longitude else { return }
+                    
+                    Coordinator.shared.setMarker(lat: lat,
+                                                 lng: lng,
                                                  name:user.name )
                 }
             }
