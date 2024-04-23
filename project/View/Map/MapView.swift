@@ -11,7 +11,7 @@ import UIKit
 
 struct MapView: View {
     @StateObject var coordinator: Coordinator = Coordinator.shared
-    @StateObject var viewModel: MapViewModel
+    @EnvironmentObject private var viewModel: MainViewModel
     
     var body: some View {
         ZStack {
@@ -37,7 +37,7 @@ struct MapView: View {
     }
 }
 
-fileprivate struct LocationBtnView: View {
+struct LocationBtnView: View {
     var body: some View {
         HStack {
             Spacer()
@@ -66,5 +66,6 @@ struct NaverMap: UIViewRepresentable {
 }
 
 #Preview {
-    MapView(viewModel: MapViewModel(container: .init(services: StubService())))
+    MapView()
+        .environmentObject(MainViewModel(container: .init(services: StubService())))
 }

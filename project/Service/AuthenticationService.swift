@@ -27,15 +27,14 @@ protocol AuthenticationServiceType {
 
 final class AuthenticationService: AuthenticationServiceType {
     private let networkManager: Provider
-    private let keychainManager: KeychainManager
+    private let keychainManager = KeychainManager.shared
     
-    init(networkManager: Provider, keychainManager: KeychainManager) {
+    init(networkManager: Provider) {
         self.networkManager = networkManager
-        self.keychainManager = keychainManager
     }
     
     func checkAuthentication() -> Bool {
-        guard let accessToken = keychainManager.read(account: "accessToken").value else {
+        guard keychainManager.read(account: SaveToken.access.rawValue) != nil else {
             return false
         }
         return true
@@ -78,7 +77,7 @@ extension AuthenticationService {
             completion(.failure(AuthenticationError.tokenError))
             return
         }
-        
+
         let name = [appleIDCredential.fullName?.familyName, appleIDCredential.fullName?.givenName]
             .compactMap { $0 }
             .joined(separator: "")
@@ -94,14 +93,13 @@ extension AuthenticationService {
         
         let endpoint = APIEndpoints.authenticateUser(with: token)
         networkManager.request(with: endpoint) { [weak self] result in
+            guard let self = self else { return }
             switch result {
             case let .success(response):
-                completion(.success(response))
-                let accessStatus = self?.keychainManager.creat(account: "accessToken",
-                                                               value: response.accessToken)
-                let refreshStatus = self?.keychainManager.creat(account: "refreshToken", value: response.refreshToken)
-                
-                if accessStatus == errSecSuccess && refreshStatus == errSecSuccess {
+                if self.keychainManager.creat(account: SaveToken.access.rawValue,
+                                              value: response.accessToken) &&
+                   self.keychainManager.creat(account: SaveToken.refresh.rawValue, 
+                                              value: response.refreshToken){
                     completion(.success(response))
                 } else {
                     completion(.failure(AuthenticationError.tokenError))

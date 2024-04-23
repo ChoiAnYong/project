@@ -7,12 +7,13 @@
 
 import Foundation
 
-struct User: Hashable {
+struct User {
     var name: String
-    var thumbnailUrl: String?
+    var profileUrl: String?
     var email: String
-    var description: String?
+    var hasWatch: Bool?
     var latitude: Double?
     var longitude: Double?
+    var connectionMemberDtoList: [OtherDTO]?
 }
 

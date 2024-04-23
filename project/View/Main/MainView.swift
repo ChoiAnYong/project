@@ -10,7 +10,7 @@ import SwiftUI
 struct MainView: View {
     @EnvironmentObject var container: DIContainer
     @StateObject var pathModel: PathModel
-    @StateObject var viewModel: MainViewModel
+    @StateObject var mainViewModel: MainViewModel
     @State private var isTopDrag: Bool = true
     @State private var isBottomDrag: Bool = false
     @State private var startingOffsetY: CGFloat = UIScreen.main.bounds.height * 0.78
@@ -19,29 +19,73 @@ struct MainView: View {
     
     var body: some View {
         NavigationStack(path: $pathModel.paths) {
-            ZStack {
-                MapView(viewModel: MapViewModel(container: container))
-                    .environmentObject(viewModel)
-                
-                toolbarView(pathModel: pathModel, viewModel: viewModel)
-                
-                SheetView(mainViewModel: viewModel)
-                    .offset(y: startingOffsetY)
-                    .offset(y: currentDragOffsetY)
-                    .offset(y: endingOffsetY)
-                    .gesture(drag)
-            }
-            .navigationDestination(for: PathType.self) { pathType in
-                switch pathType {
-                case .myProfile:
-                    Text("my")
-                case .otherProfile:
-                    Text("other")
-                case .setting:
-                    SettingView()
+            contentView
+                .navigationDestination(for: PathType.self) { pathType in
+                    switch pathType {
+                    case .myProfile:
+                        Text("my")
+                    case .otherProfile:
+                        Text("other")
+                    case .setting:
+                        SettingView()
+                    }
                 }
-            }
         }
+    }
+    
+    @ViewBuilder
+    var contentView: some View {
+        switch mainViewModel.phase {
+        case .notRequested:
+            PlaceholderView()
+                .onAppear {
+                    mainViewModel.send(action: .load)
+                }
+        case .loading:
+            LoadingView()
+        case .success:
+            loadedView
+        case .fail:
+            ErrorView()
+        }
+    }
+    
+    var loadedView: some View {
+        ZStack {
+            MapView()
+                .environmentObject(mainViewModel)
+            
+            toolbarView
+            
+            SheetView(mainViewModel: mainViewModel)
+                .offset(y: startingOffsetY)
+                .offset(y: currentDragOffsetY)
+                .offset(y: endingOffsetY)
+                .gesture(drag)
+        }
+    }
+    
+    var toolbarView: some View {
+        VStack {
+            HStack {
+                Button(action: {
+                    pathModel.paths.append(.setting)
+                    
+                }, label: {
+                    CustomIcon(iconName: "settingIcon")
+                })
+                
+                Spacer()
+                
+                Button(action: {
+                    
+                }, label: {
+                    CustomIcon(iconName: "phoneIcon")
+                })
+            }
+            Spacer()
+        }
+        .padding(.horizontal, 15)
     }
     
     var drag: some Gesture {
@@ -78,42 +122,7 @@ struct MainView: View {
     }
 }
 
-fileprivate struct toolbarView: View {
-    @ObservedObject private var pathModel: PathModel
-    @ObservedObject private var viewModel: MainViewModel
-    
-    init(pathModel: PathModel, viewModel: MainViewModel) {
-        self.pathModel = pathModel
-        self.viewModel = viewModel
-    }
-    
-    var body: some View {
-        VStack {
-            HStack {
-                Button(action: {
-                    pathModel.paths.append(.setting)
-                    
-                }, label: {
-                    CustomIcon(iconName: "settingIcon")
-                })
-                
-                Spacer()
-                
-                Button(action: {
-                    viewModel.send(action: .getUser)
-                }, label: {
-                    CustomIcon(iconName: "phoneIcon")
-                })
-            }
-            Spacer()
-        }
-        .padding(.horizontal, 15)
-    }
-}
-
-
-
 #Preview {
-    MainView(pathModel: PathModel(), viewModel: MainViewModel(container: .init(services: StubService())))
+    MainView(pathModel: PathModel(), mainViewModel: MainViewModel(container: .init(services: StubService())))
         .environmentObject(DIContainer(services: StubService()))
 }

@@ -23,12 +23,11 @@ protocol Provider {
 
 class ProviderImpl: Provider {
     private var failUrlRequest: URLRequest?
-    private let keychainManager: KeychainManager
+    private let keychainManager = KeychainManager.shared
     
     let session: URLSessionable
-    init(session: URLSessionable = URLSession.shared, keychainManager: KeychainManager) {
+    init(session: URLSessionable = URLSession.shared) {
         self.session = session
-        self.keychainManager = keychainManager
     }
     
     func request<R: Decodable, E: RequestResponsable>(with endpoint: E, completion: @escaping (Result<R, Error>) -> Void) where E.Response == R {
@@ -116,13 +115,13 @@ class ProviderImpl: Provider {
             let decoded = try JSONDecoder().decode(T.self, from: data)
             return .success(decoded)
         } catch {
-            return .failure(NetworkError.emptyData)
+            return .failure(NetworkError.decodeError)
         }
     }
     
     private func refreshAccessToken(completion: @escaping (Result<ServerAuthResponse, Error>) -> Void) {
-        guard let accessToken = keychainManager.read(account: "accessToken").value,
-              let refreshToken = keychainManager.read(account: "refreshToken").value else {
+        guard let accessToken = keychainManager.read(account: SaveToken.access.rawValue),
+              let refreshToken = keychainManager.read(account: SaveToken.refresh.rawValue) else {
             completion(.failure(NetworkError.tokenError))
             return
         }
@@ -135,13 +134,10 @@ class ProviderImpl: Provider {
             
             switch result {
             case let .success(response):
-                let accessStatus = self.keychainManager.update(account: "accessToken", 
-                                                               value: response.accessToken)
-                
-                let refreshStatus = self.keychainManager.update(account: "refreshToken",
-                                                               value: response.refreshToken)
-                
-                if accessStatus == errSecSuccess && refreshStatus == errSecSuccess {
+                if  self.keychainManager.update(account: SaveToken.access.rawValue, 
+                                                value: response.accessToken) &&
+                    self.keychainManager.update(account: SaveToken.refresh.rawValue,
+                                                value: response.refreshToken) {
                     completion(.success(response))
                 } else {
                     completion(.failure(AuthenticationError.tokenError))
@@ -151,14 +147,5 @@ class ProviderImpl: Provider {
                 completion(.failure(error))
             }
         }
-    }
-}
-
-
-extension Encodable {
-    func toDictionary() throws -> [String: Any]? {
-        let data = try JSONEncoder().encode(self)
-        let jsonData = try JSONSerialization.jsonObject(with: data)
-        return jsonData as? [String: Any]
     }
 }

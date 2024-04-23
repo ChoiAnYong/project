@@ -14,17 +14,15 @@ protocol ServiceType {
 }
 
 final class Services: ServiceType {
-    private let keychainManager: KeychainManager
     private let networkManager: Provider
     var authService: AuthenticationServiceType
     var userService: UserServiceType
 //    var pushNotificationService: PushNotificationServiceType
     
     init() {
-        self.keychainManager = KeychainManager()
-        self.networkManager = ProviderImpl(keychainManager: keychainManager)
-        self.authService = AuthenticationService(networkManager: networkManager, keychainManager: keychainManager)
-        self.userService = UserService(networkManager: networkManager, keychainManager: keychainManager)
+        self.networkManager = ProviderImpl()
+        self.authService = AuthenticationService(networkManager: networkManager)
+        self.userService = UserService(networkManager: networkManager)
 //        self.pushNotificationService = PushNotificationService()
     }
 }

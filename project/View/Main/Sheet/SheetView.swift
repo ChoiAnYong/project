@@ -8,11 +8,12 @@
 import SwiftUI
 
 struct SheetView: View {
-    @ObservedObject private var mainViewModel: MainViewModel
+    @ObservedObject var mainViewModel: MainViewModel
     
     init(mainViewModel: MainViewModel) {
         self.mainViewModel = mainViewModel
     }
+    
     
     var body: some View {
         VStack {
@@ -22,9 +23,6 @@ struct SheetView: View {
                 BeginningView()
             } else {
                 SheetScrollView(mainViewModel: mainViewModel)
-                    .onAppear {
-                        print("스크롤뷰")
-                    }
             }
         }
         .background(Color.grayCool)
@@ -34,9 +32,8 @@ struct SheetView: View {
     }
 }
 
-fileprivate struct topView: View {
-    var body: some View {
-
+private struct topView: View {
+    fileprivate var body: some View {
             Image("minusIcon")
                 .resizable()
                 .renderingMode(.template)
@@ -47,19 +44,16 @@ fileprivate struct topView: View {
     }
 }
 
-fileprivate struct SheetScrollView: View {
-    @ObservedObject private var mainViewModel: MainViewModel
+private struct SheetScrollView: View {
+    @ObservedObject var mainViewModel: MainViewModel
     
     fileprivate init(mainViewModel: MainViewModel) {
         self.mainViewModel = mainViewModel
     }
     
-    var body: some View {
+    fileprivate var body: some View {
         ScrollView {
-            
-            
             OtherInfoCellListView(mainViewModel: mainViewModel)
-            
             .padding(.all, 8)
             .background(RoundedRectangle(cornerRadius: 18).foregroundColor(Color.white))
             .padding(.horizontal, 20)
@@ -71,31 +65,39 @@ fileprivate struct SheetScrollView: View {
     }
 }
 
-fileprivate struct BeginningView: View {
-    var body: some View {
+private struct BeginningView: View {
+    fileprivate var body: some View {
         VStack {
             Spacer()
             Text("연동된 계정이 없습니다.")
             Text("")
             
-            Button(action: {
+            Button {
                 
-            }, label: {
-                /*@START_MENU_TOKEN@*/Text("Button")/*@END_MENU_TOKEN@*/
-            })
+            } label: {
+                Text("친구 추가")
+                    .font(.system(size: 15))
+                    .foregroundColor(.black)
+                    .padding(.vertical, 9)
+                    .padding(.horizontal, 24)
+            }
+            .overlay {
+                RoundedRectangle(cornerRadius: 5)
+                    .stroke(Color.appOrange)
+            }
             Spacer()
         }
     }
 }
 
-fileprivate struct UserInfoView: View {
-    @ObservedObject private var mainViewModel: MainViewModel
+private struct UserInfoView: View {
+    @ObservedObject var mainViewModel: MainViewModel
     
     fileprivate init(mainViewModel: MainViewModel) {
         self.mainViewModel = mainViewModel
     }
     
-    var body: some View {
+    fileprivate var body: some View {
         HStack {
             Image("personIcon")
                 .resizable()
@@ -105,7 +107,7 @@ fileprivate struct UserInfoView: View {
                 Text(mainViewModel.myUser?.name ?? "이름")
                     .font(.system(size: 18, weight: .bold))
                 
-                Text(mainViewModel.myUser?.description ?? "상태 메시지를 입력하세요")
+                Text(mainViewModel.myUser?.email ?? "이메일 없음")
                     .font(.system(size: 15, weight: .regular))
             }
             Spacer()
@@ -117,14 +119,14 @@ fileprivate struct UserInfoView: View {
     }
 }
 
-fileprivate struct OtherInfoCellListView: View {
-    @ObservedObject private var mainViewModel: MainViewModel
+private struct OtherInfoCellListView: View {
+    @ObservedObject var mainViewModel: MainViewModel
     
     fileprivate init(mainViewModel: MainViewModel) {
         self.mainViewModel = mainViewModel
     }
     
-    var body: some View {
+    fileprivate var body: some View {
         LazyVStack {
             ForEach(mainViewModel.users, id: \.self) { user in
                 OtherInfoCellView(other: user)
@@ -133,14 +135,14 @@ fileprivate struct OtherInfoCellListView: View {
     }
 }
 
-fileprivate struct OtherInfoCellView: View {
-    private var other: User
+private struct OtherInfoCellView: View {
+    private var other: ConnectedUser
     
-    fileprivate init(other: User) {
+    fileprivate init(other: ConnectedUser) {
         self.other = other
     }
     
-    var body: some View {
+    fileprivate var body: some View {
         HStack {
             Image("personIcon")
                 .resizable()
@@ -149,7 +151,7 @@ fileprivate struct OtherInfoCellView: View {
             VStack(alignment: .leading) {
                 Text(other.name)
                     .font(.system(size: 18, weight: .bold))
-                Text(other.description ?? "상태 메시지를 입려하세요.")
+                Text(other.email)
                     .font(.system(size: 15, weight: .regular))
             }
             Spacer()

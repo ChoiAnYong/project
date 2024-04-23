@@ -9,12 +9,15 @@ import Foundation
 import Combine
 
 final class MainViewModel: ObservableObject {
-    @Published var myUser: User?
-    @Published var users: [User] = []
     
     enum Action {
-        case getUser
+        case load
+        case presentView
     }
+    
+    @Published var myUser: User?
+    @Published var users: [ConnectedUser] = []
+    @Published var phase: Phase = .notRequested
     
     private var container: DIContainer
     private var subscriptions = Set<AnyCancellable>()
@@ -25,18 +28,22 @@ final class MainViewModel: ObservableObject {
     
     func send(action: Action) {
         switch action {
-        case .getUser:
+        case .load:
+            phase = .loading
             container.services.userService.getUser()
                 .receive(on: DispatchQueue.main)
-                .sink { completion in
+                .sink { [weak self] completion in
                     if case .failure = completion {
-                        
-                    }                    
+                        self?.phase = .fail
+                    }
                 } receiveValue: { [weak self] user in
                     self?.myUser = user.0
                     self?.users = user.1
-                }
-                .store(in: &subscriptions)
+                    self?.phase = .success                    
+                }.store(in: &subscriptions)
+            
+        case .presentView:
+            return
         }
     }
 }

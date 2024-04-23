@@ -10,46 +10,42 @@ import Foundation
 
 struct UserDTO: Codable {
     var name: String
-    var thumbnailUrl: String?
+    var profileUrl: String?
     var email: String
-    var description: String?
-    var latitude: Double?
-    var longitude: Double?
-    var otherUsers: [OtherDTO]
+    var hasWatch: Bool
+    var location: LocationDTO?
+    var connectionMemberDtoList: [OtherDTO]
+}
+
+struct LocationDTO: Codable {
+    var latitude: Double
+    var longitude: Double
 }
 
 struct OtherDTO: Codable {
     var name: String
-    var thumbnailUrl: String?
     var email: String
-    var description: String?
-    var latitude: Double?
-    var longitude: Double?
+    var profileUrl: String?
+    var location: LocationDTO?
 }
 
 extension UserDTO {
-    func toModel() -> (User,[User]) {
+    func toModel() -> (User,[ConnectedUser]) {
         let myUser = User(name: name,
-                          thumbnailUrl: thumbnailUrl,
+                          profileUrl: profileUrl,
                           email: email,
-                          description: description,
-                          latitude: latitude,
-                          longitude: longitude)
+                          hasWatch: hasWatch,
+                          latitude: location?.latitude,
+                          longitude: location?.longitude,
+                          connectionMemberDtoList: connectionMemberDtoList)
         
-        let users = otherUsers.map { otherObject in
-            User(name: name,
-                 thumbnailUrl: thumbnailUrl,
-                 email: email,
-                 description: description,
-                 latitude: latitude,
-                 longitude: longitude)
+        let connectionUsers = connectionMemberDtoList.map { otherObject in
+            ConnectedUser(name: otherObject.name,
+                          email: otherObject.email,
+                          profileUrl: otherObject.profileUrl,
+                          latitude: location?.latitude,
+                          longitude: location?.longitude)
         }
-        return (myUser, users)
+        return (myUser, connectionUsers)
     }
 }
-
-//extension UserObject {
-//    func toModel() -> User {
-//        .init(id: id, name: name, age: age)
-//    }
-//}

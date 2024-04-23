@@ -12,6 +12,7 @@ import FirebaseCore
 import FirebaseMessaging
 
 class AppDelegate: NSObject, UIApplicationDelegate {
+    private let keychainManager = KeychainManager.shared
     // 앱 시작시 호출
     func application(_ application: UIApplication,
                      didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
@@ -37,7 +38,16 @@ class AppDelegate: NSObject, UIApplicationDelegate {
         // 알림 관련 작업을 하는 UNUserNotificationCenter에 delegate 연결
         UNUserNotificationCenter.current().delegate = self
         
+        removeKeychainAtFirstLaunch()
+        
         return true
+    }
+    
+    private func removeKeychainAtFirstLaunch() {
+        guard UserDefaults.isFirstLaunch() else { return }
+        
+        _ = keychainManager.delete(account: SaveToken.access.rawValue)
+        _ = keychainManager.delete(account: SaveToken.refresh.rawValue)
     }
 }
 
