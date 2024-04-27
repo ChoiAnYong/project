@@ -87,6 +87,7 @@ private struct BeginningView: View {
             }
             Spacer()
         }
+        .foregroundColor(.bkFix)
     }
 }
 
@@ -106,9 +107,11 @@ private struct UserInfoView: View {
             VStack(alignment: .leading) {
                 Text(mainViewModel.myUser?.name ?? "이름")
                     .font(.system(size: 18, weight: .bold))
+                    .foregroundColor(.bkFix)
                 
                 Text(mainViewModel.myUser?.email ?? "이메일 없음")
                     .font(.system(size: 15, weight: .regular))
+                    .foregroundColor(.bkFix)
             }
             Spacer()
         }
@@ -151,8 +154,10 @@ private struct OtherInfoCellView: View {
             VStack(alignment: .leading) {
                 Text(other.name)
                     .font(.system(size: 18, weight: .bold))
+                    .foregroundColor(.bkFix)
                 Text(other.email)
                     .font(.system(size: 15, weight: .regular))
+                    .foregroundColor(.bkFix)
             }
             Spacer()
         }

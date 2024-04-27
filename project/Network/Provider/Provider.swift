@@ -61,7 +61,10 @@ class ProviderImpl: Provider {
         }.resume()
     }
     
-    private func checkError(with data: Data?, _ response: URLResponse?, _ error: Error?, completion: @escaping (Result<Data, Error>) -> ()) {
+    private func checkError(with data: Data?,
+                            _ response: URLResponse?,
+                            _ error: Error?,
+                            completion: @escaping (Result<Data, Error>) -> ()) {
         if let error = error {
             completion(.failure(error))
             return
@@ -75,11 +78,14 @@ class ProviderImpl: Provider {
         
         guard (200...299).contains(response.statusCode) else {
             if response.statusCode == 401 {
-                refreshAccessToken { result in
+                refreshAccessToken { [weak self] result in
+                    guard let self = self else { return }
+                    
                     switch result {
                     case let .success(response):
                         if var failUrlRequest = self.failUrlRequest {
-                            failUrlRequest.setValue("Bearer \(response.accessToken)", forHTTPHeaderField: "Authorization")
+                            failUrlRequest.setValue("Bearer \(response.accessToken)", 
+                                                    forHTTPHeaderField: "Authorization")
                             self.session.dataTask(with: failUrlRequest) { data, _, error in
                                 if let error = error {
                                     completion(.failure(error))

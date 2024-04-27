@@ -16,8 +16,9 @@ final class MainViewModel: ObservableObject {
     }
     
     @Published var myUser: User?
-    @Published var users: [ConnectedUser] = []
-    @Published var phase: Phase = .notRequested
+    @Published var users: [ConnectedUser] = [.init(name: "이찬희", email: "이찬희@naver.com", latitude: 36.9791, longitude: 126.9222),
+                                             .init(name: "이광혁", email: "이광혁@naver.com", latitude: 36.7745, longitude: 126.9338)]
+    @Published var phase: Phase = .success
     
     private var container: DIContainer
     private var subscriptions = Set<AnyCancellable>()

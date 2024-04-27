@@ -10,16 +10,11 @@ import SwiftUI
 struct MainView: View {
     @EnvironmentObject var container: DIContainer
     @StateObject var pathModel: PathModel
-    @StateObject var mainViewModel: MainViewModel
-    @State private var isTopDrag: Bool = true
-    @State private var isBottomDrag: Bool = false
-    @State private var startingOffsetY: CGFloat = UIScreen.main.bounds.height * 0.78
-    @State private var currentDragOffsetY: CGFloat = 0
-    @State private var endingOffsetY: CGFloat = 0
-    
+    @StateObject var viewModel: MainViewModel
+
     var body: some View {
         NavigationStack(path: $pathModel.paths) {
-            contentView
+            ContentView(container: container, pathModel: pathModel, viewModel: viewModel)
                 .navigationDestination(for: PathType.self) { pathType in
                     switch pathType {
                     case .myProfile:
@@ -32,62 +27,68 @@ struct MainView: View {
                 }
         }
     }
-    
+}
+
+private struct ContentView: View {
+    @ObservedObject private var container: DIContainer
+    @ObservedObject private var pathModel: PathModel
+    @ObservedObject private var viewModel: MainViewModel
+
+    fileprivate init(container: DIContainer, pathModel: PathModel, viewModel: MainViewModel) {
+        self.container = container
+        self.pathModel = pathModel
+        self.viewModel = viewModel
+    }
+
     @ViewBuilder
-    var contentView: some View {
-        switch mainViewModel.phase {
+    fileprivate var body: some View {
+        switch viewModel.phase {
         case .notRequested:
             PlaceholderView()
                 .onAppear {
-                    mainViewModel.send(action: .load)
+                    viewModel.send(action: .load)
                 }
         case .loading:
             LoadingView()
         case .success:
-            loadedView
+            LoadedView(container: container, pathModel: pathModel, viewModel: viewModel)
         case .fail:
             ErrorView()
         }
     }
-    
-    var loadedView: some View {
+}
+
+private struct LoadedView: View {
+    @ObservedObject private var container: DIContainer
+    @ObservedObject private var pathModel: PathModel
+    @ObservedObject private var viewModel: MainViewModel
+    @State private var isTopDrag: Bool = true
+    @State private var isBottomDrag: Bool = false
+    @State private var startingOffsetY: CGFloat = UIScreen.main.bounds.height * 0.78
+    @State private var currentDragOffsetY: CGFloat = 0
+    @State private var endingOffsetY: CGFloat = 0
+
+    fileprivate init(container: DIContainer, pathModel: PathModel, viewModel: MainViewModel) {
+        self.container = container
+        self.pathModel = pathModel
+        self.viewModel = viewModel
+    }
+
+    fileprivate var body: some View {
         ZStack {
             MapView()
-                .environmentObject(mainViewModel)
-            
-            toolbarView
-            
-            SheetView(mainViewModel: mainViewModel)
+                .environmentObject(viewModel)
+
+            ToolbarView(pathModel: pathModel, viewModel: viewModel)
+
+            SheetView(mainViewModel: viewModel)
                 .offset(y: startingOffsetY)
                 .offset(y: currentDragOffsetY)
                 .offset(y: endingOffsetY)
                 .gesture(drag)
         }
     }
-    
-    var toolbarView: some View {
-        VStack {
-            HStack {
-                Button(action: {
-                    pathModel.paths.append(.setting)
-                    
-                }, label: {
-                    CustomIcon(iconName: "settingIcon")
-                })
-                
-                Spacer()
-                
-                Button(action: {
-                    
-                }, label: {
-                    CustomIcon(iconName: "phoneIcon")
-                })
-            }
-            Spacer()
-        }
-        .padding(.horizontal, 15)
-    }
-    
+
     var drag: some Gesture {
         DragGesture()
             .onChanged({ value in
@@ -97,7 +98,7 @@ struct MainView: View {
                     } else if value.translation.height > 0  {
                         currentDragOffsetY = value.translation.height
                     }
-                    
+
                     if currentDragOffsetY < -200 {
                         isTopDrag = false
                     }
@@ -114,7 +115,7 @@ struct MainView: View {
                         endingOffsetY = .zero
                         currentDragOffsetY = .zero
                     } else {
-                        
+
                         currentDragOffsetY = .zero
                     }
                 }
@@ -122,7 +123,42 @@ struct MainView: View {
     }
 }
 
+private struct ToolbarView: View {
+    @ObservedObject private var pathModel: PathModel
+    @ObservedObject private var viewModel: MainViewModel
+
+    fileprivate init(pathModel: PathModel, viewModel: MainViewModel) {
+        self.pathModel = pathModel
+        self.viewModel = viewModel
+    }
+
+    fileprivate var body: some View {
+        VStack {
+            HStack {
+                Button(action: {
+                    pathModel.paths.append(.setting)
+
+                }, label: {
+                    CustomIcon(iconName: "settingIcon")
+                })
+
+                Spacer()
+
+                Button(action: {
+
+                }, label: {
+                    CustomIcon(iconName: "phoneIcon")
+                })
+            }
+            Spacer()
+        }
+        .padding(.horizontal, 15)
+    }
+}
+
+
+
 #Preview {
-    MainView(pathModel: PathModel(), mainViewModel: MainViewModel(container: .init(services: StubService())))
+    MainView(pathModel: PathModel(), viewModel: MainViewModel(container: .init(services: StubService())))
         .environmentObject(DIContainer(services: StubService()))
 }
