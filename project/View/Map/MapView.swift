@@ -30,7 +30,7 @@ struct MapView: View {
                     
                     Coordinator.shared.setMarker(lat: lat,
                                                  lng: lng,
-                                                 name:user.name )
+                                                 name:user.name)
                 }
             }
         }

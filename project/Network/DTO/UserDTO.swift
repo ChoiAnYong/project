@@ -43,8 +43,8 @@ extension UserDTO {
             ConnectedUser(name: otherObject.name,
                           email: otherObject.email,
                           profileUrl: otherObject.profileUrl,
-                          latitude: location?.latitude,
-                          longitude: location?.longitude)
+                          latitude: otherObject.location?.latitude,
+                          longitude: otherObject.location?.longitude)
         }
         return (myUser, connectionUsers)
     }

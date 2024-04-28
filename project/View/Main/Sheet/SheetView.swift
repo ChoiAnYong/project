@@ -109,7 +109,7 @@ private struct UserInfoView: View {
                     .font(.system(size: 18, weight: .bold))
                     .foregroundColor(.bkFix)
                 
-                Text(mainViewModel.myUser?.email ?? "이메일 없음")
+                Text(mainViewModel.myUser?.email ?? "이메일")
                     .font(.system(size: 15, weight: .regular))
                     .foregroundColor(.bkFix)
             }

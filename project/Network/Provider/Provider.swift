@@ -22,7 +22,8 @@ protocol Provider {
 }
 
 class ProviderImpl: Provider {
-    private var failUrlRequest: URLRequest?
+    private var currentRequest: URLRequest?
+    private var failedRequest: URLRequest?
     private let keychainManager = KeychainManager.shared
     
     let session: URLSessionable
@@ -33,7 +34,7 @@ class ProviderImpl: Provider {
     func request<R: Decodable, E: RequestResponsable>(with endpoint: E, completion: @escaping (Result<R, Error>) -> Void) where E.Response == R {
         do {
             let urlRequest = try endpoint.getUrlRequest()
-            failUrlRequest = urlRequest
+            currentRequest = urlRequest
             
             
             session.dataTask(with: urlRequest) { [weak self] data, response, error in
@@ -78,13 +79,13 @@ class ProviderImpl: Provider {
         
         guard (200...299).contains(response.statusCode) else {
             if response.statusCode == 401 {
+                self.failedRequest = currentRequest
                 refreshAccessToken { [weak self] result in
                     guard let self = self else { return }
-                    
                     switch result {
                     case let .success(response):
-                        if var failUrlRequest = self.failUrlRequest {
-                            failUrlRequest.setValue("Bearer \(response.accessToken)", 
+                        if var failUrlRequest = self.failedRequest {
+                            failUrlRequest.setValue("Bearer \(response.accessToken)",
                                                     forHTTPHeaderField: "Authorization")
                             self.session.dataTask(with: failUrlRequest) { data, _, error in
                                 if let error = error {
