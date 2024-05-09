@@ -17,6 +17,7 @@ struct APIEndpoints {
                         path: "/login/apple",
                         method: .post,
                         bodyParameters: token,
+                        needsToken: false,
                         headers: ["Content-Type":"application/json"],
                         sampleData: NetworkResponseMock.auth
                         )
@@ -28,21 +29,34 @@ struct APIEndpoints {
                         path: "/login/reissue",
                         method: .post,
                         bodyParameters: refresh,
-                        headers: ["Content-Type":"application/json"])
+                        needsToken: false,
+                        headers: ["Content-Type":"application/json"]
+                        )
     }
     
     // 앱 서버에 로그인 상태 확인
 //    static func checkAuthForServer()
     
     // MARK: - 유저 정보 관련
-    static func getUser(token: String) -> EndPoint<UserDTO> {
+    static func getUser() -> EndPoint<UserDTO> {
         return EndPoint(baseURL: baseURL,
                         path: "/member/home",
                         method: .get,
-                        headers: ["Content-Type":"application/json",
-                                  "Authorization": "Bearer \(token)"]
+                        headers: ["Content-Type":"application/json"]
                         )
     }
     
+    static func updateInfo<T: Encodable>(with info: T, path: String) -> EndPoint<String> {
+        return EndPoint(baseURL: baseURL,
+                        path: path,
+                        method: .post,
+                        bodyParameters: info,
+                        headers: ["Content-Type":"application/json"]
+                        )
+    }
+    
+    static func getImages(with url: String) -> EndPoint<Data> {
+        return EndPoint(baseURL: url)
+    }
     
 }

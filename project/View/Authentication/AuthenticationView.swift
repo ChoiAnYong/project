@@ -25,7 +25,7 @@ struct AuthenticationView: View {
             }
         }
         .onAppear {
-            viewModel.send(action: .checkAuthenticationState)
+//            viewModel.send(action: .checkAuthenticationState)
         }
         .alert("로그인 중 오류가 발생했습니다.", isPresented: $viewModel.isDisplayAlert) {
             Button(action: {

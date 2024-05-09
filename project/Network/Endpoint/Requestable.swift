@@ -14,6 +14,7 @@ protocol Requestable {
     var queryParameters: Encodable? { get }
     var bodyParameters: Encodable? { get }
     var headers: [String: String]? { get }
+    var needsToken: Bool { get }
     var sampleData: Data? { get }
 }
 

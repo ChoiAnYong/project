@@ -12,7 +12,7 @@ struct UserDTO: Codable {
     var name: String
     var profileUrl: String?
     var email: String
-    var hasWatch: Bool
+    var hasWatch: Bool?
     var location: LocationDTO?
     var connectionMemberDtoList: [OtherDTO]
 }
@@ -27,6 +27,7 @@ struct OtherDTO: Codable {
     var email: String
     var profileUrl: String?
     var location: LocationDTO?
+    var emgState: Bool
 }
 
 extension UserDTO {
@@ -44,7 +45,8 @@ extension UserDTO {
                           email: otherObject.email,
                           profileUrl: otherObject.profileUrl,
                           latitude: otherObject.location?.latitude,
-                          longitude: otherObject.location?.longitude)
+                          longitude: otherObject.location?.longitude,
+                          emgState: otherObject.emgState)
         }
         return (myUser, connectionUsers)
     }

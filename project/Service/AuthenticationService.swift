@@ -86,7 +86,7 @@ extension AuthenticationService {
             completion(.failure(AuthenticationError.tokenError))
             return
         }
-        
+    
         let token = AppleLoginDTO(idToken: idTokenString,
                                     name: name,
                                     deviceToken: deviceToken)

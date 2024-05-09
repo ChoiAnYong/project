@@ -34,7 +34,7 @@ struct SheetView: View {
 
 private struct topView: View {
     fileprivate var body: some View {
-            Image("minusIcon")
+            Image("ic_minus")
                 .resizable()
                 .renderingMode(.template)
                 .foregroundColor(.grayLight)
@@ -100,16 +100,16 @@ private struct UserInfoView: View {
     
     fileprivate var body: some View {
         HStack {
-            Image("personIcon")
+            Image("ic_person")
                 .resizable()
                 .frame(width: 50, height: 50)
             
             VStack(alignment: .leading) {
-                Text(mainViewModel.myUser?.name ?? "이름")
+                Text(mainViewModel.myUser.name)
                     .font(.system(size: 18, weight: .bold))
                     .foregroundColor(.bkFix)
                 
-                Text(mainViewModel.myUser?.email ?? "이메일")
+                Text(mainViewModel.myUser.email)
                     .font(.system(size: 15, weight: .regular))
                     .foregroundColor(.bkFix)
             }
@@ -147,7 +147,7 @@ private struct OtherInfoCellView: View {
     
     fileprivate var body: some View {
         HStack {
-            Image("personIcon")
+            Image("ic_person")
                 .resizable()
                 .frame(width: 50, height: 50)
             

@@ -17,3 +17,8 @@ struct User {
     var connectionMemberDtoList: [OtherDTO]?
 }
 
+extension User {
+    static var stubUser: User {
+        .init(name: "최안용", email: "dksdyd78@naver.com")
+    }
+}

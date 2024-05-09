@@ -23,7 +23,7 @@ final class AuthenticationViewModel: ObservableObject {
     }
     
     @Published var isLoading: Bool = false
-    @Published var authenticationState: AuthenticationState = .unAuthenticated
+    @Published var authenticationState: AuthenticationState = .authenticated
     @Published var isDisplayAlert: Bool = false
     
 

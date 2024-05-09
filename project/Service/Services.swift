@@ -10,6 +10,7 @@ import Foundation
 protocol ServiceType {
     var authService: AuthenticationServiceType { get set }
     var userService: UserServiceType { get set }
+    var imageCacheService: ImageCacheServiceType { get set }
 //    var pushNotificationService: PushNotificationServiceType { get set }
 }
 
@@ -17,12 +18,16 @@ final class Services: ServiceType {
     private let networkManager: Provider
     var authService: AuthenticationServiceType
     var userService: UserServiceType
+    var imageCacheService: ImageCacheServiceType
 //    var pushNotificationService: PushNotificationServiceType
     
     init() {
         self.networkManager = ProviderImpl()
         self.authService = AuthenticationService(networkManager: networkManager)
         self.userService = UserService(networkManager: networkManager)
+        self.imageCacheService = ImageCacheService(memoryStorage: MemoryStorage(),
+                                                   diskStorage: DiskStorage(),
+                                                   networkManager: networkManager)
 //        self.pushNotificationService = PushNotificationService()
     }
 }
@@ -30,5 +35,6 @@ final class Services: ServiceType {
 final class StubService: ServiceType {
     var authService: AuthenticationServiceType = StubAuthenticationService()
     var userService: UserServiceType = StubUserService()
+    var imageCacheService: ImageCacheServiceType = StubImageCacheService()
 //    var pushNotificationService: PushNotificationServiceType = StubPushNotificationService()
 }

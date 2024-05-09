@@ -33,9 +33,17 @@ class ProviderImpl: Provider {
     
     func request<R: Decodable, E: RequestResponsable>(with endpoint: E, completion: @escaping (Result<R, Error>) -> Void) where E.Response == R {
         do {
-            let urlRequest = try endpoint.getUrlRequest()
-            currentRequest = urlRequest
+            var urlRequest = try endpoint.getUrlRequest()
             
+            if endpoint.needsToken {
+                guard let accessToken = keychainManager.read(account: SaveToken.access.rawValue) else {
+                    completion(.failure(NetworkError.tokenError))
+                    return
+                }
+                urlRequest.setValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
+            }
+            
+            currentRequest = urlRequest
             
             session.dataTask(with: urlRequest) { [weak self] data, response, error in
                 self?.checkError(with: data, response, error) { result in
@@ -141,7 +149,7 @@ class ProviderImpl: Provider {
             
             switch result {
             case let .success(response):
-                if  self.keychainManager.update(account: SaveToken.access.rawValue, 
+                if  self.keychainManager.update(account: SaveToken.access.rawValue,
                                                 value: response.accessToken) &&
                     self.keychainManager.update(account: SaveToken.refresh.rawValue,
                                                 value: response.refreshToken) {

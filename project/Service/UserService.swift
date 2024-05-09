@@ -16,12 +16,11 @@ enum UserServiceError: Error {
 
 protocol UserServiceType {
     func getUser() -> AnyPublisher<(User, [ConnectedUser]), ServiceError>
-    
+    func updateLocation(location: LocationDTO) -> AnyPublisher<Void, ServiceError>
 }
 
 final class UserService: UserServiceType {
     private let networkManager: Provider
-    private let keychainManager = KeychainManager.shared
     
     init(networkManager: Provider) {
         self.networkManager = networkManager
@@ -30,8 +29,7 @@ final class UserService: UserServiceType {
     func getUser() -> AnyPublisher<(User, [ConnectedUser]), ServiceError> {
         Future { [weak self] promise in
             guard let self = self else { return }
-            guard let token = self.keychainManager.read(account: "accessToken") else { return }
-            let endpoint = APIEndpoints.getUser(token: token)
+            let endpoint = APIEndpoints.getUser()
             networkManager.request(with: endpoint) { result in
                 switch result {
                 case let .success(response):
@@ -43,10 +41,30 @@ final class UserService: UserServiceType {
         }
         .eraseToAnyPublisher()
     }
+    
+    func updateLocation(location: LocationDTO) -> AnyPublisher<Void, ServiceError> {
+        Future<Void, ServiceError> { [weak self] promise in
+            guard let self = self else { return }
+            let endpoint = APIEndpoints.updateInfo(with: location, path: "/member/gps")
+            networkManager.request(with: endpoint) { result in
+                switch result {
+                case .success(_):
+                    promise(.success(()))
+                case let .failure(error):
+                    promise(.failure(.error(error)))
+                }
+            }
+        }
+        .eraseToAnyPublisher()
+    }
 }
 
 final class StubUserService: UserServiceType {
     func getUser() -> AnyPublisher<(User, [ConnectedUser]), ServiceError> {
+        return Just((.stubUser, [.stubConnected1, .stubConnected2])).setFailureType(to: ServiceError.self).eraseToAnyPublisher()
+    }
+    
+    func updateLocation(location: LocationDTO) -> AnyPublisher<Void, ServiceError> {
         Empty().eraseToAnyPublisher()
-    }    
+    }
 }

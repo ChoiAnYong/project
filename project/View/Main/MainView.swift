@@ -76,7 +76,7 @@ private struct LoadedView: View {
 
     fileprivate var body: some View {
         ZStack {
-            MapView()
+            MapView(mapViewModel: MapViewModel(), coordinator: Coordinator(container: container))
                 .environmentObject(viewModel)
 
             ToolbarView(pathModel: pathModel, viewModel: viewModel)
@@ -139,7 +139,7 @@ private struct ToolbarView: View {
                     pathModel.paths.append(.setting)
 
                 }, label: {
-                    CustomIcon(iconName: "settingIcon")
+                    CustomIcon(iconName: "ic_setting")
                 })
 
                 Spacer()
@@ -147,7 +147,7 @@ private struct ToolbarView: View {
                 Button(action: {
 
                 }, label: {
-                    CustomIcon(iconName: "phoneIcon")
+                    CustomIcon(iconName: "ic_phone")
                 })
             }
             Spacer()

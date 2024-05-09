@@ -44,6 +44,31 @@ class MockURLSession: URLSessionable {
     }
     
     func dataTask(with url: URL, completionHandler: @escaping (Data?, URLResponse?, Error?) -> Void) -> URLSessionDataTask {
-        return sessionDataTask!
+        let endpoint = APIEndpoints.getImages(with: "https://i.ibb.co/py7bBk0/2.png")
+
+        // 성공 callback
+        let successResponse = HTTPURLResponse(url: try! endpoint.url(),
+                                              statusCode: 200,
+                                              httpVersion: "2",
+                                              headerFields: nil)
+        // 실패 callback
+        let failureResponse = HTTPURLResponse(url: try! endpoint.url(),
+                                              statusCode: 301,
+                                              httpVersion: "2",
+                                              headerFields: nil)
+
+        let sessionDataTask = MockURLSessionDataTask()
+
+        // resume() 이 호출되면 completionHandler()가 호출
+        sessionDataTask.resumeDidCall = {
+            if self.makeRequestFail {
+                completionHandler(nil, failureResponse, nil)
+            } else {
+                completionHandler(endpoint.sampleData!, successResponse, nil)
+            }
+        }
+        self.sessionDataTask = sessionDataTask
+        return sessionDataTask
     }
+
 }

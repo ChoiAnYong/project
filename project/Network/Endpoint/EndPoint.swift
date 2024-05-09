@@ -18,6 +18,7 @@ class EndPoint<R>: RequestResponsable {
     var queryParameters: Encodable?
     var bodyParameters: Encodable?
     var headers: [String : String]?
+    var needsToken: Bool
     var sampleData: Data?
     
     init(baseURL: String, 
@@ -25,6 +26,7 @@ class EndPoint<R>: RequestResponsable {
          method: HttpMethod = .get,
          queryParameters: Encodable? = nil,
          bodyParameters: Encodable? = nil,
+         needsToken: Bool = true,
          headers: [String : String]? = [:],
          sampleData: Data? = nil) {
         self.baseURL = baseURL
@@ -32,6 +34,7 @@ class EndPoint<R>: RequestResponsable {
         self.method = method
         self.queryParameters = queryParameters
         self.bodyParameters = bodyParameters
+        self.needsToken = needsToken
         self.headers = headers
         self.sampleData = sampleData
     }

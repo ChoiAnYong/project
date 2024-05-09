@@ -15,7 +15,7 @@ struct LoginView: View {
         ZStack {
             Color.appOrange
             
-            Image("Icon")
+            Image("ic_appIcon")
                 .resizable()
                 .frame(width: 200, height: 200)
                 .padding(.top, 11)
