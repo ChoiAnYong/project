@@ -34,9 +34,6 @@ struct APIEndpoints {
                         )
     }
     
-    // 앱 서버에 로그인 상태 확인
-//    static func checkAuthForServer()
-    
     // MARK: - 유저 정보 관련
     static func getUser() -> EndPoint<UserDTO> {
         return EndPoint(baseURL: baseURL,

@@ -17,9 +17,9 @@ struct CustomIcon: View {
             .padding(12)
             .background(
                 RoundedRectangle(cornerRadius: 15)
-                    .fill(Color.white)
+                     .fill(Color.white)
             )
-            .shadow(radius: 20)
+            .shadow(radius: 5)
     }
 }
 

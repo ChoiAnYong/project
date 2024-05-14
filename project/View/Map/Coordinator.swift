@@ -23,6 +23,17 @@ final class Coordinator: NSObject, ObservableObject {
     private let locationOverlayIcon = NMFOverlayImage(name: "ic_location")
     private let locationOverlayNoArrowIcon = NMFOverlayImage(name: "ic_noArrowLocation")
     
+    lazy var touchHandler =  { (overlay : NMFOverlay) -> Bool in
+        let userInfo = overlay.userInfo
+        let data = userInfo["data"] as! UserMarker
+        let cameraUpdate = NMFCameraUpdate(scrollTo: NMGLatLng(lat: data.lat, lng: data.lng), zoomTo: 15)
+        cameraUpdate.animation = .fly
+        cameraUpdate.animationDuration = 0.8
+        
+        self.view.mapView.moveCamera(cameraUpdate)
+        return true
+    }
+    
     let view = NMFNaverMapView(frame: .zero)
     
     init(container: DIContainer) {
@@ -30,23 +41,22 @@ final class Coordinator: NSObject, ObservableObject {
         self.humanMarkerView = UserMarkerView(container: container)
         
         super.init()
-        view.mapView.isNightModeEnabled = false
         view.mapView.positionMode = .direction
         
         view.mapView.zoomLevel = 15
         view.mapView.minZoomLevel = 5
         view.mapView.maxZoomLevel = 17
-        view.mapView.isNightModeEnabled = true
+        view.mapView.isNightModeEnabled = false
         
         // 사용자 인터페이스 설정
         view.showCompass = false
         view.showScaleBar = false
         view.showZoomControls = false
-        view.showLocationButton = true
+        view.showLocationButton = false
         
         // 네이버 로고 위치 조정
         view.mapView.logoAlign = .leftBottom
-        view.mapView.logoMargin = .init(top: 0, left: 0, bottom: 110, right: 0)
+        view.mapView.logoMargin = .init(top: 0, left: 0, bottom: 200, right: 0)
         
         // 틸트 제스처 비활성화
         view.mapView.isTiltGestureEnabled = false
@@ -182,36 +192,11 @@ extension Coordinator: NMFMapViewTouchDelegate {
 
 // 마커
 extension Coordinator {
-    //    func bind(_ viewModel: MapViewModel) {
-    //        viewModel.$userMarkerList
-    //            .receive(on: DispatchQueue.main)
-    //            .sink { [weak self] userMarkers in
-    //                guard let self = self else { return }
-    //                self.humanMarkerList.forEach { $0.mapView = nil }
-    //                self.humanMarkerList.removeAll()
-    //
-    //                userMarkers.forEach { userMarker in
-    //                    let marker = NMFMarker()
-    //                    marker.position = .init(lat: userMarker.lat, lng: userMarker.lng)
-    //                    marker.userInfo = ["data": userMarker]
-    //                    self.humanMarkerView.configure(userMarker) { image in
-    //                        marker.iconImage = NMFOverlayImage(image: image!)
-    //                    }
-    //                    self.humanMarkerList.append(marker)
-    //                }
-    //
-    //                self.humanMarkerList.forEach {
-    //                    if $0.mapView == nil {
-    //                        $0.mapView = self.view.mapView
-    //                    }
-    //                }
-    //            }
-    //            .store(in: &subscriptions)
-    //    }
     func setMarker(markers: [UserMarker]) {
         markers.forEach { [weak self] userMarker in
             let marker = NMFMarker()
             marker.position = .init(lat: userMarker.lat, lng: userMarker.lng)
+            marker.touchHandler = self?.touchHandler
             marker.userInfo = ["data": userMarker]
             marker.captionAligns = [NMFAlignType.top]
             marker.captionText = userMarker.name

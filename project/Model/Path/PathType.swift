@@ -8,7 +8,5 @@
 import Foundation
 
 enum PathType {
-    case myProfile
-    case otherProfile
     case setting
 }

@@ -12,12 +12,13 @@ final class MainViewModel: ObservableObject {
     
     enum Action {
         case load
-        case presentView
+        case presentView(MainModalDestination)
     }
 
     @Published var myUser: User = .stubUser
     @Published var users: [ConnectedUser] = [.stubConnected1,.stubConnected2]
     @Published var phase: Phase = .success
+    @Published var modalDestination: MainModalDestination?
     
     private var container: DIContainer
     private var subscriptions = Set<AnyCancellable>()
@@ -42,8 +43,8 @@ final class MainViewModel: ObservableObject {
                     self?.phase = .success                    
                 }.store(in: &subscriptions)
             
-        case .presentView:
-            return
+        case let .presentView(destination):
+            modalDestination = destination
         }
     }
 }

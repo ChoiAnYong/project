@@ -56,7 +56,6 @@ class UserMarkerView: UIView {
                 completion(img)
             }
             .store(in: &subscriptions)
-
     }
     
     private func layout() {
