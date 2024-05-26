@@ -7,19 +7,42 @@
 
 import Foundation
 import CoreLocation
+import PhotosUI
+import SwiftUI
 
+@MainActor
 final class MapViewModel: ObservableObject {
     @Published var userMarkerList: [UserMarker] = []
-    @Published var selectedUser: UserMarker?
+    @Published var myMarker: UserMarker?
+    @Published var imageSelection: PhotosPickerItem? {
+        didSet {
+            Task {
+                await updateProfileImage(pickerItem: imageSelection)
+            }
+        }
+    }
+    
+    private var container: DIContainer
+    
+    init(container: DIContainer) {
+        self.container = container
+    }
     
     enum Action {
-        case loadUserMarker([ConnectedUser])
-        case moveMapUser
+        case loadUserMarker(User, [ConnectedUser])
     }
     
     func send(action: Action) {
         switch action {
-        case let .loadUserMarker(connectedUser):
+        case let .loadUserMarker(user, connectedUser):
+            myMarker = .init(id: UUID().hashValue,
+                             lat: user.latitude ?? 0,
+                             lng: user.longitude ?? 0,
+                             imgUrl: user.profileUrl,
+                             name: user.name,
+                             myMarker: true)
+            
+            userMarkerList.removeAll()
             connectedUser.forEach { user in
                 let userMarker: UserMarker = .init(id: UUID().hashValue,
                                                    lat: user.latitude!,
@@ -28,11 +51,21 @@ final class MapViewModel: ObservableObject {
                                                    name: user.name)
                 fetchAddress(for: userMarker)
             }
-        case .moveMapUser:
-            // TODO: - 클릭된 유저의 위치로 카메라 이동
-            break
         }
     }
+    
+    func updateProfileImage(pickerItem: PhotosPickerItem?) async {
+        guard let pickerItem else { return }
+        
+        do {
+            let data = try await container.services.photoPickerService.loadTransferable(from: pickerItem)
+            let url = try await container.services.uploadService.uploadImage(data: data)
+//            try await container.services.userService.
+        } catch {
+            print(error.localizedDescription)
+        }
+    }
+    
     
     // 주소 변환
     private func fetchAddress(for userMarker: UserMarker) {
@@ -48,9 +81,18 @@ final class MapViewModel: ObservableObject {
                 return
             }
             marker.address = "\(placemark.administrativeArea ?? "") \(placemark.locality ?? "") \(placemark.subLocality ?? "")"
+            
             DispatchQueue.main.async {
                 self.userMarkerList.append(marker)
             }
         }
+    }
+}
+
+extension CLLocationCoordinate2D {
+    func distance(from: CLLocationCoordinate2D) -> CLLocationDistance {
+        let from = CLLocation(latitude: from.latitude, longitude: from.longitude)
+        let to = CLLocation(latitude: self.latitude, longitude: self.longitude)
+        return from.distance(from: to)
     }
 }

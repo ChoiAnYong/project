@@ -40,7 +40,19 @@ class UserMarkerView: UIView {
     }
     
     func configure(_ data: UserMarker, completion: @escaping (UIImage?) -> Void) {
-        container.services.imageCacheService.image(for: data.imgUrl)
+        guard let imageUrl = data.imgUrl else {
+            self.imageView.layer.borderColor = UIColor(.appOrange).cgColor
+            self.decorateView.backgroundColor = UIColor(.appOrange)
+            
+            self.imageView.image = UIImage(named: "ic_placeholder")
+            
+            let img = self.toImage()
+            
+            completion(img)
+            return
+        }
+        
+        container.services.imageCacheService.image(for: imageUrl)
             .subscribe(on: DispatchQueue.global())
             .receive(on: DispatchQueue.main)
             .sink { result in
@@ -49,7 +61,7 @@ class UserMarkerView: UIView {
                 self?.imageView.layer.borderColor = UIColor(.appOrange).cgColor
                 self?.decorateView.backgroundColor = UIColor(.appOrange)
                 
-                self?.imageView.image = image ?? UIImage()
+                self?.imageView.image = image ?? UIImage(named: "ic_placeholder")
                 
                 let img = self?.toImage()
                 

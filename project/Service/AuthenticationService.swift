@@ -10,6 +10,7 @@
 import Foundation
 import Combine
 import AuthenticationServices
+import Alamofire
 
 enum AuthenticationError: Error {
     case clientIDError
@@ -22,21 +23,16 @@ protocol AuthenticationServiceType {
     func handleSignInWithAppleRequest(_ request: ASAuthorizationAppleIDRequest) -> Void
     func handleSignInWithAppleCompletion(
         _ authorization: ASAuthorization
-    ) -> AnyPublisher<ServerAuthResponse, ServiceError>
+    ) -> AnyPublisher<LoginResponse, ServiceError>
 }
 
 final class AuthenticationService: AuthenticationServiceType {
-    private let networkManager: Provider
-    private let keychainManager = KeychainManager.shared
-    
-    init(networkManager: Provider) {
-        self.networkManager = networkManager
-    }
-    
+
     func checkAuthentication() -> Bool {
-        guard keychainManager.read(account: SaveToken.access.rawValue) != nil else {
+        guard KeychainManager.shared.read(account: SaveToken.access.rawValue) != nil else {
             return false
         }
+
         return true
     }
     
@@ -48,7 +44,7 @@ final class AuthenticationService: AuthenticationServiceType {
     
     func handleSignInWithAppleCompletion(
         _ authorization: ASAuthorization
-    ) -> AnyPublisher<ServerAuthResponse, ServiceError> {
+    ) -> AnyPublisher<LoginResponse, ServiceError> {
         Future { [weak self] promise in
             self?.handleSignInWithAppleCompletion(authorization) { result in
                 switch result {
@@ -65,7 +61,7 @@ final class AuthenticationService: AuthenticationServiceType {
 extension AuthenticationService {
     private func handleSignInWithAppleCompletion(
         _ authorization: ASAuthorization,
-        completion: @escaping (Result<ServerAuthResponse, Error>) -> Void
+        completion: @escaping (Result<LoginResponse, Error>) -> Void
     ) {
         guard let appleIDCredential = authorization.credential as? ASAuthorizationAppleIDCredential,
               let appleIDToken = appleIDCredential.identityToken else {
@@ -77,7 +73,9 @@ extension AuthenticationService {
             completion(.failure(AuthenticationError.tokenError))
             return
         }
-
+        
+        print(idTokenString)
+        
         let name = [appleIDCredential.fullName?.familyName, appleIDCredential.fullName?.givenName]
             .compactMap { $0 }
             .joined(separator: "")
@@ -87,28 +85,23 @@ extension AuthenticationService {
             return
         }
     
-        let token = AppleLoginDTO(idToken: idTokenString,
+        let request = LoginRequest(idToken: idTokenString,
                                     name: name,
                                     deviceToken: deviceToken)
         
-        let endpoint = APIEndpoints.authenticateUser(with: token)
-        networkManager.request(with: endpoint) { [weak self] result in
-            guard let self = self else { return }
-            switch result {
-            case let .success(response):
-                if self.keychainManager.creat(account: SaveToken.access.rawValue,
-                                              value: response.accessToken) &&
-                   self.keychainManager.creat(account: SaveToken.refresh.rawValue, 
-                                              value: response.refreshToken){
+        ApiClient.shared.session
+            .request(AuthRouter.login(request), interceptor: BaseInterceptor.shared)
+            .responseDecodable { (response: AFDataResponse<LoginResponse>) in
+
+                switch response.result {
+                case .success(let response):
+                    _ = KeychainManager.shared.creat(account: SaveToken.access.rawValue, value: response.accessToken)
+                    _ = KeychainManager.shared.creat(account: SaveToken.refresh.rawValue, value: response.refreshToken)
                     completion(.success(response))
-                } else {
-                    completion(.failure(AuthenticationError.tokenError))
+                case .failure(let error):
+                    completion(.failure(error))
                 }
-            case let .failure(error):
-                print(error)
-                completion(.failure(error))
             }
-        }
     }
 }
 
@@ -123,7 +116,7 @@ final class StubAuthenticationService: AuthenticationServiceType {
     }
     
     func handleSignInWithAppleCompletion( _ authorization: ASAuthorization)
-    -> AnyPublisher<ServerAuthResponse, ServiceError> {
+    -> AnyPublisher<LoginResponse, ServiceError> {
         Empty().eraseToAnyPublisher()
     }
 }

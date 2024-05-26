@@ -10,7 +10,6 @@ import NMapsMap
 import UIKit
 
 struct MapView: View {
-    @State var scrollToIndex = 0
     @EnvironmentObject private var container: DIContainer
     
     @ObservedObject var mainViewModel: MainViewModel
@@ -28,20 +27,23 @@ struct MapView: View {
             
             userInfoView
                 .shadow(radius: 5)
-            
         }
         .onAppear {
             coordinator.checkIfLocationServiceIsEnabled()
-            mapViewModel.send(action: .loadUserMarker(mainViewModel.users))
-            
+            mapViewModel.send(action: .loadUserMarker(mainViewModel.myUser ?? .init(name: "이름", email: ""),
+                                                      mainViewModel.users))
         }
+        .onChange(of: mapViewModel.userMarkerList) { oldValue, newValue in
+            coordinator.setMarker(markers: newValue)
+        }
+        
     }
     
     var locationBtnView: some View {
         HStack {
             Spacer()
             Button {
-                coordinator.moveMapToUserLocation()
+                coordinator.setPositionMode(mode: .direction)
             } label: {
                 CustomIcon(iconName: "ic_locationBtn")
             }
@@ -55,17 +57,23 @@ struct MapView: View {
             ScrollView(.horizontal, showsIndicators: false) {
                 ScrollViewReader {proxy in
                     LazyHStack(spacing: 20) {
+                        MyInfoCellView(mapViewModel.myMarker ?? .stubMarker1,
+                                       centerVisibleUser: $coordinator.centerVisibleUser,
+                                       mapViewModel: mapViewModel)
+                            .containerRelativeFrame(.horizontal, count: 1, spacing: 10)
+                            .id(mapViewModel.myMarker?.id)
+                        
                         ForEach(mapViewModel.userMarkerList, id: \.self) { user in
-                            UserInfoCellView(user)
+                            OtherInfoCellView(user: user,
+                                             centerVisibleUser: $coordinator.centerVisibleUser,
+                                             mapViewModel: mapViewModel)
                                 .containerRelativeFrame(.horizontal, count: 1, spacing: 10)
                                 .id(user.id)
-                                .onTapGesture {
-                                    mapViewModel.selectedUser = user
-                                }
                         }
+                        PlusCellView(mapViewModel: mapViewModel)
                     }
                     .scrollTargetLayout()
-                    .onChange(of: mapViewModel.selectedUser) { oldValue, newValue in
+                    .onChange(of: coordinator.selectedUser) { oldValue, newValue in
                         withAnimation {
                             proxy.scrollTo(newValue?.id, anchor: .center)
                         }
@@ -74,74 +82,10 @@ struct MapView: View {
                 }
             }
             .safeAreaPadding(.horizontal, 40)
-            .frame(height: 160)
+            .frame(height: UIScreen.main.bounds.height/5)
             .scrollTargetBehavior(.viewAligned)
             .scrollBounceBehavior(.always)
         }
-    }
-}
-
-private struct UserInfoCellView: View {
-    var user: UserMarker
-    
-    fileprivate init(_ user: UserMarker) {
-        self.user = user
-    }
-    
-    
-    fileprivate var body: some View {
-        VStack {
-            HStack(spacing: 10) {
-                URLImageView(urlString: user.imgUrl)
-                    .frame(width: 60, height: 60)
-                    .clipShape(RoundedRectangle(cornerRadius: 8))
-                
-                
-                VStack(alignment: .leading, spacing: 5) {
-                    Text("\(user.name)")
-                        .font(.system(size: 17, weight: .bold))
-                        .foregroundColor(.bkFix)
-                    
-                    Text("\(user.address ?? "")")
-                        .font(.system(size: 15))
-                        .foregroundStyle(.grayText)
-                    
-                    HStack(spacing: 5) {
-                        Image(.icLocationText)
-                            .renderingMode(.template)
-                            .resizable()
-                            .frame(width: 13, height: 13)
-                            .foregroundColor(.gray)
-                        
-                        Text("500m")
-                            .font(.system(size: 13, weight: .bold))
-                            .foregroundColor(.grayText)
-                    }
-                }
-                Spacer()
-            }
-            
-            Spacer()
-                .frame(height: 10)
-            
-            Button(action: {
-                
-            }, label: {
-                ZStack{
-                    RoundedRectangle(cornerRadius: 10)
-                        .fill(Color.appOrange)
-                    Text("알림 보기")
-                        .font(.system(size: 15, weight: .bold))
-                        .foregroundColor(.whFix)
-                }
-                .frame(height: 55)
-            })
-            
-        }
-        .padding(.horizontal, 20)
-        .padding(.vertical, 15)
-        .background(Color.grayCool)
-        .cornerRadius(22)
     }
 }
 
@@ -154,7 +98,6 @@ struct NaverMap: UIViewRepresentable {
     init(coordinator: Coordinator, mapViewModel: MapViewModel) {
         self.coordinator = coordinator
         self.mapViewModel = mapViewModel
-        coordinator.setMarker(markers: mapViewModel.userMarkerList)
     }
     
     func makeCoordinator() -> Coordinator {
@@ -173,6 +116,6 @@ struct NaverMap: UIViewRepresentable {
 
 
 #Preview {
-    MapView(mainViewModel: MainViewModel(container: .init(services: StubService())), mapViewModel: MapViewModel(), coordinator: Coordinator(container: DIContainer(services: StubService())))
+    MapView(mainViewModel: MainViewModel(container: .init(services: StubService())), mapViewModel: MapViewModel(container: .init(services: StubService())), coordinator: Coordinator(container: DIContainer(services: StubService())))
         .environmentObject(MainViewModel(container: .init(services: StubService())))
 }

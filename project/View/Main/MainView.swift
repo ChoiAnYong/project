@@ -23,6 +23,7 @@ struct MainView: View {
                         UserAlarmView(viewModel: .init(userEmail: userEmail, container: container))
                     }
                 }
+                
                 .navigationDestination(for: PathType.self) { pathType in
                     switch pathType {
                     case .setting:
@@ -51,9 +52,7 @@ struct MainView: View {
     
     var loadedView: some View {
         ZStack {
-            MapView(mainViewModel: viewModel, 
-                    mapViewModel: MapViewModel(),
-                    coordinator: Coordinator(container: container))
+            MapView(mainViewModel: viewModel, mapViewModel: MapViewModel(container: container), coordinator: Coordinator(container: container))
 
             toolbarView
 
@@ -73,7 +72,7 @@ struct MainView: View {
                 Spacer()
 
                 Button(action: {
-
+                    viewModel.send(action: .call)
                 }, label: {
                     CustomIcon(iconName: "ic_phone")
                 })

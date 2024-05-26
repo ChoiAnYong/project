@@ -43,7 +43,7 @@ final class KeychainManager {
             kSecAttrAccount: account,
             kSecReturnData: kCFBooleanTrue as Any,
             kSecMatchLimit: kSecMatchLimitOne
-        ] as CFDictionary
+        ] as CFDictionary   
         
         var dataTypeRef: AnyObject?
         _ = SecItemCopyMatching(keyChainQuery, &dataTypeRef)

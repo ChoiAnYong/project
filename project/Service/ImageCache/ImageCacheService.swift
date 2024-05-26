@@ -7,6 +7,7 @@
 
 import Combine
 import UIKit
+import Alamofire
 
 protocol ImageCacheServiceType {
     func image(for key: String) -> AnyPublisher<UIImage?, Never>
@@ -16,12 +17,9 @@ final class ImageCacheService: ImageCacheServiceType {
     let memoryStorage: MemoryStorageType
     let diskStorage: DiskStorageType
     
-    private let networkManager: Provider
-    
-    init(memoryStorage: MemoryStorageType, diskStorage: DiskStorageType, networkManager: Provider) {
+    init(memoryStorage: MemoryStorageType, diskStorage: DiskStorageType) {
         self.memoryStorage = memoryStorage
         self.diskStorage = diskStorage
-        self.networkManager = networkManager
     }
     
     func image(for key: String) -> AnyPublisher<UIImage?, Never> {
@@ -79,15 +77,19 @@ final class ImageCacheService: ImageCacheServiceType {
         }
         
         return Future<UIImage?, Never> { promise in
-            self.networkManager.request(url) { result in
-                switch result {
-                case let .success(data):
-                    guard let image = UIImage(data: data) else { return }
-                    promise(.success(image))
-                case .failure:
-                    promise(.success(nil))
+            AF.request(url)
+                .validate(statusCode: 200..<300)
+                .responseDecodable { (response: AFDataResponse<Data>) in
+                    
+                    switch response.result {
+                    case let .success(data):
+                        guard let image = UIImage(data: data) else { return }
+                        promise(.success(image))
+                    case .failure:
+                        promise(.success(nil))
+                    }
+                    
                 }
-            }
         }
         .handleEvents(receiveOutput: { [weak self] image in
             guard let image = image else { return }

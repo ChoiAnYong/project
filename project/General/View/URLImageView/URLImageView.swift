@@ -11,6 +11,7 @@ struct URLImageView: View {
     @EnvironmentObject var container: DIContainer
     
     let urlString: String?
+    let placeholderName = "ic_placeholder"
     
     init(urlString: String?) {
         self.urlString = urlString
@@ -18,10 +19,11 @@ struct URLImageView: View {
     
     var body: some View {
         if let urlString, !urlString.isEmpty {
-            URLInnerView(viewModel: .init(urlString: urlString, container: container))
+            URLInnerView(viewModel: .init(urlString: urlString, container: container),
+                         placeholderName: placeholderName)
                 .id(urlString)
         } else {
-            Image("ic_placeholder")
+            Image(placeholderName)
                 .resizable()
                 .background(Color.grayLight)
         }
@@ -31,8 +33,10 @@ struct URLImageView: View {
 fileprivate struct URLInnerView: View {
     @StateObject var viewModel: URLImageViewModel
     
+    let placeholderName: String
+    
     var placeholderImage: UIImage {
-        UIImage(named: "ic_placeholder") ?? UIImage()
+        UIImage(named: placeholderName) ?? UIImage()
     }
     
     var body: some View {
@@ -47,6 +51,8 @@ fileprivate struct URLInnerView: View {
             }
     }
 }
+
+
 
 #Preview {
     URLImageView(urlString: nil)

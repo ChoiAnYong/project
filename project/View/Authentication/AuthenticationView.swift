@@ -25,14 +25,10 @@ struct AuthenticationView: View {
             }
         }
         .onAppear {
-//            viewModel.send(action: .checkAuthenticationState)
+            viewModel.send(action: .checkAuthenticationState)
         }
-        .alert("로그인 중 오류가 발생했습니다.", isPresented: $viewModel.isDisplayAlert) {
-            Button(action: {
-                
-            }, label: {
-                Text("확인")
-            })
+        .alert("로그인 시간이 만료되어 로그아웃 되었습니다.", isPresented: $viewModel.isDisplayAlert) {
+            Button("확인", action: {})
         }
     }
 }

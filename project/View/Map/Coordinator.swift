@@ -4,20 +4,43 @@
 //
 //  Created by 최안용 on 4/11/24.
 //
-
-
 import CoreLocation
 import Foundation
 import Combine
 import NMapsMap
 
 final class Coordinator: NSObject, ObservableObject {
-    @Published var userLocation: (Double, Double) = (0.0, 0.0)
+    @Published var userLocation: (Double, Double) = (0.0, 0.0) {
+        didSet {
+            if userLocation.0 != 0.0 && userLocation.1 != 0.0 {
+                let location: LocationDTO = .init(latitude: userLocation.0, longitude: userLocation.1)
+                
+                container.services.userService.updateLocation(location: location)
+                    .sink { result in
+                        print(result)
+                    } receiveValue: { _ in
+                    }.store(in: &subscriptions)
+            }
+        }
+    }
+    
+    // 클릭된 마커
+    @Published var selectedUser: UserMarker?
+    
+    // 현재 스크롤뷰 셀에 해당되는 마커
+    @Published var centerVisibleUser: UserMarker? {
+        didSet {
+            if let user = centerVisibleUser, centerVisibleUser != oldValue {
+                moveCellUserLocation(user)
+            }
+        }
+    }
+    // 연동된 계정 마커
     var humanMarkerList: [NMFMarker] = []
+    
     private var subscriptions = Set<AnyCancellable>()
     private var locationManager: CLLocationManager?
     private var container: DIContainer
-    
     private var humanMarkerView: UserMarkerView
     
     private let locationOverlayIcon = NMFOverlayImage(name: "ic_location")
@@ -28,8 +51,8 @@ final class Coordinator: NSObject, ObservableObject {
         let data = userInfo["data"] as! UserMarker
         let cameraUpdate = NMFCameraUpdate(scrollTo: NMGLatLng(lat: data.lat, lng: data.lng), zoomTo: 15)
         cameraUpdate.animation = .fly
-        cameraUpdate.animationDuration = 0.8
-        
+        cameraUpdate.animationDuration = 0.5
+        self.selectedUser = data
         self.view.mapView.moveCamera(cameraUpdate)
         return true
     }
@@ -37,12 +60,11 @@ final class Coordinator: NSObject, ObservableObject {
     let view = NMFNaverMapView(frame: .zero)
     
     init(container: DIContainer) {
+        print("Coordinator init")
         self.container = container
         self.humanMarkerView = UserMarkerView(container: container)
         
         super.init()
-        view.mapView.positionMode = .direction
-        
         view.mapView.zoomLevel = 15
         view.mapView.minZoomLevel = 5
         view.mapView.maxZoomLevel = 17
@@ -56,7 +78,7 @@ final class Coordinator: NSObject, ObservableObject {
         
         // 네이버 로고 위치 조정
         view.mapView.logoAlign = .leftBottom
-        view.mapView.logoMargin = .init(top: 0, left: 0, bottom: 200, right: 0)
+        view.mapView.logoMargin = .init(top: 0, left: 0, bottom: 180, right: 0)
         
         // 틸트 제스처 비활성화
         view.mapView.isTiltGestureEnabled = false
@@ -64,7 +86,10 @@ final class Coordinator: NSObject, ObservableObject {
         //delegate 설정
         view.mapView.addCameraDelegate(delegate: self)
         view.mapView.touchDelegate = self
-        setLocationOverlay()
+        
+        
+        checkIfLocationServiceIsEnabled()
+        observePositionModeChanges()
     }
     
     private func checkLocationAuthorization() {
@@ -79,16 +104,55 @@ final class Coordinator: NSObject, ObservableObject {
             print("위치 정보 접근을 거절했습니다. 설정에서 변경하세요.")
         case .authorizedAlways, .authorizedWhenInUse:
             print("Success")
-            fetchUserLocation()
+            setPositionMode(mode: .direction)
             
         @unknown default:
             break
         }
     }
     
-    private func setLocationOverlay() {
+    // 카메라가 direction 모드일 경우
+    private func setDirectionLocationOverlay() {
+        let locationOverlay = view.mapView.locationOverlay
+        locationOverlay.icon = locationOverlayIcon
+    }
+    
+    // 카메라가 normal 모드일 경우
+    private func setNormalLocationOverlay() {
         let locationOverlay = view.mapView.locationOverlay
         locationOverlay.icon = locationOverlayNoArrowIcon
+    }
+    
+    
+    
+    // MARK: - positionMode에 따른 오버레이 관련
+    private func observePositionModeChanges() {
+        view.mapView.addObserver(self, forKeyPath: "positionMode", options: [.new, .old], context: nil)
+        
+    }
+    
+    //positionMode가 변경될 때 호출
+    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
+        if keyPath == "positionMode", object is NMFMapView {
+            DispatchQueue.main.async { [weak self] in
+                self?.updateStateName()
+            }
+        }
+    }
+    
+    private func updateStateName() {
+        let stateStr: String
+        switch view.mapView.positionMode {
+        case .normal:
+            stateStr = "NoFollow"
+            setNormalLocationOverlay()
+        case .direction:
+            stateStr = "Follow"
+            setDirectionLocationOverlay()
+        default:
+            stateStr = "otherAction"
+        }
+        print("Position Mode: \(stateStr)")
     }
     
     func checkIfLocationServiceIsEnabled() {
@@ -117,34 +181,16 @@ final class Coordinator: NSObject, ObservableObject {
 
 // 위치 관련
 extension Coordinator: CLLocationManagerDelegate {
-    func fetchUserLocation() {
-        if let locationManager = locationManager {
-            userLocation.0 = locationManager.location?.coordinate.latitude ?? 0.0
-            userLocation.1 = locationManager.location?.coordinate.longitude ?? 0.0
-            let cameraUpdate = NMFCameraUpdate(scrollTo: NMGLatLng(lat: userLocation.0, lng: userLocation.1), zoomTo: 15)
-            cameraUpdate.animation = .fly
-            cameraUpdate.animationDuration = 0.8
-            
-            let locationOverlay = view.mapView.locationOverlay
-            locationOverlay.location = NMGLatLng(lat: userLocation.0, lng: userLocation.1)
-            locationOverlay.hidden = false
-            
-            view.mapView.moveCamera(cameraUpdate)
-        }
+    func fetchUserLocation() -> NMGLatLng {
+        let userLocation = locationManager?.location?.coordinate
+        let userLatLng = userLocation.toNMGLatLng()
+        return userLatLng
     }
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        if let coordinate = locations.last?.coordinate {
-            let location = LocationDTO(latitude: coordinate.latitude, longitude: coordinate.longitude)
-           
-            container.services.userService.updateLocation(location: location)
-                .sink { completion in
-                    if case .failure = completion {
-                        print("실패")
-                    }
-                } receiveValue: { _ in
-                }.store(in: &subscriptions)
-        }
+        guard let newLocation = locations.last else { return }
+        
+        self.userLocation = (newLocation.coordinate.latitude, newLocation.coordinate.longitude)
     }
 }
 
@@ -152,10 +198,7 @@ extension Coordinator: CLLocationManagerDelegate {
 extension Coordinator: NMFMapViewCameraDelegate {
     // 카메라 움직임이 끝나고 호출되는 콜백 메서드
     func mapView(_ mapView: NMFMapView, cameraDidChangeByReason reason: Int, animated: Bool) {
-        let locationOverlay = view.mapView.locationOverlay
-        if locationOverlay.icon != locationOverlayNoArrowIcon {
-            setLocationOverlay()
-        }
+        
     }
     
     func mapView(_ mapView: NMFMapView, cameraWillChangeByReason reason: Int, animated: Bool) {
@@ -168,19 +211,28 @@ extension Coordinator: NMFMapViewCameraDelegate {
     }
     
     func moveMapToUserLocation() {
-        if let locationManager = locationManager,
-           let coordinate = locationManager.location?.coordinate {
-            let cameraUpdate = NMFCameraUpdate(scrollTo: NMGLatLng(lat: coordinate.latitude,
-                                                                   lng: coordinate.longitude))
-            
-            DispatchQueue.main.async { [weak self] in
-                cameraUpdate.animation = .easeIn
-                cameraUpdate.animationDuration = 0.2
-                self?.view.mapView.positionMode = .direction
-                let locationOverlay = self?.view.mapView.locationOverlay
-                locationOverlay?.icon = self!.locationOverlayNoArrowIcon
-//                self?.view.mapView.moveCamera(cameraUpdate)
-            }
+        let userLatLng = fetchUserLocation()
+        let cameraUpdate = NMFCameraUpdate(scrollTo: userLatLng)
+        
+        DispatchQueue.main.async { [weak self] in
+            cameraUpdate.animation = .fly
+            cameraUpdate.animationDuration = 0.5
+            self?.view.mapView.moveCamera(cameraUpdate)
+        }
+    }
+    
+    func moveCellUserLocation(_ user: UserMarker) {
+        var cameraUpdate: NMFCameraUpdate
+        if let check = user.myMarker, check == true {
+            cameraUpdate = NMFCameraUpdate(scrollTo: NMGLatLng(lat: userLocation.0, lng: userLocation.1))
+        } else {
+            cameraUpdate = NMFCameraUpdate(scrollTo: NMGLatLng(lat: user.lat, lng: user.lng))
+        }
+        cameraUpdate.animation = .fly
+        cameraUpdate.animationDuration = 0.5
+        self.selectedUser = user
+        DispatchQueue.main.async { [weak self] in
+            self?.view.mapView.moveCamera(cameraUpdate)
         }
     }
 }
@@ -214,6 +266,17 @@ extension Coordinator {
             marker.mapView = view.mapView
         }
     }
-}
     
+    
+    func setPositionMode(mode: NMFMyPositionMode) {
+        view.mapView.positionMode = mode
+        switch mode {
+        case .direction:
+            setDirectionLocationOverlay()
+        default:
+            setNormalLocationOverlay()
+        }
+    }
+}
+
 

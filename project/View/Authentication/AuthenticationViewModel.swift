@@ -19,11 +19,12 @@ final class AuthenticationViewModel: ObservableObject {
         case checkAuthenticationState
         case appleLogin(ASAuthorizationAppleIDRequest)
         case appleLoginCompletion(Result<ASAuthorization, Error>)
+        case invalidate
         case logout
     }
     
     @Published var isLoading: Bool = false
-    @Published var authenticationState: AuthenticationState = .authenticated
+    @Published var authenticationState: AuthenticationState = .unAuthenticated
     @Published var isDisplayAlert: Bool = false
     
 
@@ -32,6 +33,7 @@ final class AuthenticationViewModel: ObservableObject {
     
     init(container: DIContainer) {
         self.container = container
+        setupInvalidateHandling()
     }
     
     func send(action: Action) {
@@ -70,7 +72,28 @@ final class AuthenticationViewModel: ObservableObject {
             }
             
         case .logout:
-            return
+            logout()
+        case .invalidate:
+            invalidate()
         }
+    }
+    
+    private func logout() {
+        if KeychainManager.shared.delete(account: SaveToken.access.rawValue),
+           KeychainManager.shared.delete(account: SaveToken.refresh.rawValue) {
+            authenticationState = .unAuthenticated
+        }
+    }
+    
+    private func invalidate() {
+        logout()
+    }
+    
+    private func setupInvalidateHandling() {
+        NotificationCenter.default.publisher(for: .init("401Error"))
+            .sink { [weak self] _ in
+                self?.send(action: .invalidate)
+            }
+            .store(in: &subscription)
     }
 }

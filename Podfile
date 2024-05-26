@@ -7,6 +7,7 @@ target 'project' do
 
   # Pods for project
   pod 'NMapsMap'
+  pod 'Alamofire'
   target 'projectTests' do
     inherit! :search_paths
     # Pods for testing

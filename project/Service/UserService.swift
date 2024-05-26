@@ -7,6 +7,7 @@
 
 import Foundation
 import Combine
+import Alamofire
 
 
 enum UserServiceError: Error {
@@ -16,46 +17,42 @@ enum UserServiceError: Error {
 
 protocol UserServiceType {
     func getUser() -> AnyPublisher<(User, [ConnectedUser]), ServiceError>
-    func updateLocation(location: LocationDTO) -> AnyPublisher<Void, ServiceError>
+    func updateLocation(location: LocationDTO) -> AnyPublisher<String, ServiceError>
 }
 
 final class UserService: UserServiceType {
-    private let networkManager: Provider
-    
-    init(networkManager: Provider) {
-        self.networkManager = networkManager
-    }
-    
     func getUser() -> AnyPublisher<(User, [ConnectedUser]), ServiceError> {
-        Future { [weak self] promise in
-            guard let self = self else { return }
-            let endpoint = APIEndpoints.getUser()
-            networkManager.request(with: endpoint) { result in
-                switch result {
-                case let .success(response):
-                    promise(.success(response.toModel()))
-                case let .failure(error):
-                    promise(.failure(.error(error)))
-                }
+        
+        return ApiClient.shared.session
+            .request(UserRouter.getUser, 
+                     interceptor: Interceptor(interceptors: [BaseInterceptor.shared,
+                                                             AuthInterceptor.shared]))
+            .publishDecodable(type: GetUserResponse.self)
+            .value()
+            .map { receivedValue in
+                return receivedValue.toModel()
             }
-        }
-        .eraseToAnyPublisher()
+            .mapError({ error in
+                return ServiceError.error(error)
+            })
+            .eraseToAnyPublisher()
     }
     
-    func updateLocation(location: LocationDTO) -> AnyPublisher<Void, ServiceError> {
-        Future<Void, ServiceError> { [weak self] promise in
-            guard let self = self else { return }
-            let endpoint = APIEndpoints.updateInfo(with: location, path: "/member/gps")
-            networkManager.request(with: endpoint) { result in
-                switch result {
-                case .success(_):
-                    promise(.success(()))
-                case let .failure(error):
-                    promise(.failure(.error(error)))
-                }
+    func updateLocation(location: LocationDTO) -> AnyPublisher<String, ServiceError> {
+        
+        return ApiClient.shared.session
+            .request(UserRouter.updateLocation(location), 
+                     interceptor: Interceptor(interceptors: [BaseInterceptor.shared,
+                                                             AuthInterceptor.shared]))
+            .publishString()
+            .value()
+            .map { receivedValue in
+                return receivedValue
             }
-        }
-        .eraseToAnyPublisher()
+            .mapError({ error in
+                return ServiceError.error(error)
+            })
+            .eraseToAnyPublisher()
     }
 }
 
@@ -64,7 +61,7 @@ final class StubUserService: UserServiceType {
         return Just((.stubUser, [.stubConnected1, .stubConnected2])).setFailureType(to: ServiceError.self).eraseToAnyPublisher()
     }
     
-    func updateLocation(location: LocationDTO) -> AnyPublisher<Void, ServiceError> {
+    func updateLocation(location: LocationDTO) -> AnyPublisher<String, ServiceError> {
         Empty().eraseToAnyPublisher()
     }
 }
