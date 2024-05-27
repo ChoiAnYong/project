@@ -32,24 +32,31 @@ final class MapViewModel: ObservableObject {
         case loadUserMarker(User, [ConnectedUser])
     }
     
-    func send(action: Action) {
+    func send(action: Action) async {
         switch action {
         case let .loadUserMarker(user, connectedUser):
-            myMarker = .init(id: UUID().hashValue,
-                             lat: user.latitude ?? 0,
-                             lng: user.longitude ?? 0,
-                             imgUrl: user.profileUrl,
-                             name: user.name,
-                             myMarker: true)
-            
-            userMarkerList.removeAll()
-            connectedUser.forEach { user in
-                let userMarker: UserMarker = .init(id: UUID().hashValue,
-                                                   lat: user.latitude!,
-                                                   lng: user.longitude!,
-                                                   imgUrl: user.profileUrl ?? "",
-                                                   name: user.name)
-                fetchAddress(for: userMarker)
+            Task { [weak self] in
+                do {
+                    self?.myMarker = .init(id: UUID().hashValue,
+                                           lat: user.latitude ?? 0,
+                                           lng: user.longitude ?? 0,
+                                           imgUrl: user.profileUrl,
+                                           name: user.name,
+                                           myMarker: true)
+                    
+                    self?.userMarkerList.removeAll()
+                    try await connectedUser.asyncForEach { user in
+                        var userMarker: UserMarker = .init(id: UUID().hashValue,
+                                                           lat: user.latitude ?? 0,
+                                                           lng: user.longitude ?? 0,
+                                                           imgUrl: user.profileUrl ?? "",
+                                                           name: user.name)
+                        userMarker.address = try await self?.fetchAddress(lat: userMarker.lat, lng: userMarker.lng)
+                        self?.userMarkerList.append(userMarker)
+                    }
+                } catch {
+                    return
+                }
             }
         }
     }
@@ -68,24 +75,30 @@ final class MapViewModel: ObservableObject {
     
     
     // 주소 변환
-    private func fetchAddress(for userMarker: UserMarker) {
-        var marker = userMarker
-        let location = CLLocation(latitude: userMarker.lat, longitude: userMarker.lng)
-        CLGeocoder().reverseGeocodeLocation(location) { placemarks, error in
-            if let error = error {
-                print("주소 변환 실패: \(error)")
-                return
-            }
-            guard let placemark = placemarks?.first else {
-                print("주소를 찾을 수 없음")
-                return
-            }
-            marker.address = "\(placemark.administrativeArea ?? "") \(placemark.locality ?? "") \(placemark.subLocality ?? "")"
-            
-            DispatchQueue.main.async {
-                self.userMarkerList.append(marker)
-            }
-        }
+    private func fetchAddress(lat: Double, lng: Double) async throws -> String {
+        var resultString: String
+        let location = CLLocation(latitude: lat, longitude: lng)
+        let placemarker = try await CLGeocoder().reverseGeocodeLocation(location).first
+        
+        resultString = "\(placemarker?.administrativeArea ?? "") \(placemarker?.locality ?? "") \(placemarker?.subLocality ?? "")"
+        return resultString
+        
+        
+//        { placemarks, error in
+//            if let error = error {
+//                print("주소 변환 실패: \(error)")
+//                return
+//            }
+//            guard let placemark = placemarks?.first else {
+//                print("주소를 찾을 수 없음")
+//                return
+//            }
+//            marker.address = "\(placemark.administrativeArea ?? "") \(placemark.locality ?? "") \(placemark.subLocality ?? "")"
+//            
+//            DispatchQueue.main.async {
+//                self.userMarkerList.append(marker)
+//            }
+//        }
     }
 }
 

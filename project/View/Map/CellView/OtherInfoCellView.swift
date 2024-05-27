@@ -11,6 +11,7 @@ struct OtherInfoCellView: View {
     var user: UserMarker
     @Binding var centerVisibleUser: UserMarker?
     @ObservedObject private var mapViewModel: MapViewModel
+    @EnvironmentObject private var mainViewModel: MainViewModel
     
     let screenWidth = UIScreen.main.bounds.width
     let screenHeight = UIScreen.main.bounds.height
@@ -57,7 +58,7 @@ struct OtherInfoCellView: View {
                 .frame(height: 10)
             
             Button(action: {
-                
+                mainViewModel.send(action: .presentView(.userAlarm(user.name)))
             }, label: {
                 ZStack{
                     RoundedRectangle(cornerRadius: 10)

@@ -13,7 +13,7 @@ struct UserAlarmView: View {
     
     var body: some View {
         NavigationStack {
-            Text("Hello, World!")
+            Text("\(viewModel.userEmail)")
                 .toolbar {
                     ToolbarItem(placement: .navigationBarLeading) {
                         Button(action: {

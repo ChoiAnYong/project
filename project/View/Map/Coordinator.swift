@@ -67,7 +67,6 @@ final class Coordinator: NSObject, ObservableObject {
         super.init()
         view.mapView.zoomLevel = 15
         view.mapView.minZoomLevel = 5
-        view.mapView.maxZoomLevel = 17
         view.mapView.isNightModeEnabled = false
         
         // 사용자 인터페이스 설정
@@ -163,9 +162,14 @@ final class Coordinator: NSObject, ObservableObject {
                 DispatchQueue.main.async {
                     self.locationManager = CLLocationManager()
                     self.locationManager?.delegate = self
-                    self.locationManager?.startUpdatingLocation()
+                    
+                    if self.locationManager?.delegate == nil {
+                        self.locationManager?.startUpdatingLocation()
+                    }
+                    
                     self.locationManager?.desiredAccuracy = kCLLocationAccuracyBest
                     self.locationManager?.distanceFilter = 15
+                    self.userLocation = self.fetchUserLocation()
                     self.checkLocationAuthorization()
                 }
             } else {
@@ -181,10 +185,9 @@ final class Coordinator: NSObject, ObservableObject {
 
 // 위치 관련
 extension Coordinator: CLLocationManagerDelegate {
-    func fetchUserLocation() -> NMGLatLng {
+    func fetchUserLocation() -> (Double, Double) {
         let userLocation = locationManager?.location?.coordinate
-        let userLatLng = userLocation.toNMGLatLng()
-        return userLatLng
+        return (userLocation?.latitude ?? 0, userLocation?.longitude ?? 0)
     }
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
@@ -209,30 +212,26 @@ extension Coordinator: NMFMapViewCameraDelegate {
     func mapView(_ mapView: NMFMapView, didTapMap latlng: NMGLatLng, point: CGPoint) {
         
     }
-    
-    func moveMapToUserLocation() {
-        let userLatLng = fetchUserLocation()
-        let cameraUpdate = NMFCameraUpdate(scrollTo: userLatLng)
-        
-        DispatchQueue.main.async { [weak self] in
-            cameraUpdate.animation = .fly
-            cameraUpdate.animationDuration = 0.5
-            self?.view.mapView.moveCamera(cameraUpdate)
-        }
-    }
-    
+
     func moveCellUserLocation(_ user: UserMarker) {
         var cameraUpdate: NMFCameraUpdate
         if let check = user.myMarker, check == true {
-            cameraUpdate = NMFCameraUpdate(scrollTo: NMGLatLng(lat: userLocation.0, lng: userLocation.1))
+            cameraUpdate = NMFCameraUpdate(scrollTo: NMGLatLng(lat: userLocation.0, lng: userLocation.1), zoomTo: 14)
         } else {
-            cameraUpdate = NMFCameraUpdate(scrollTo: NMGLatLng(lat: user.lat, lng: user.lng))
+            cameraUpdate = NMFCameraUpdate(scrollTo: NMGLatLng(lat: user.lat, lng: user.lng), zoomTo: 14)
         }
         cameraUpdate.animation = .fly
         cameraUpdate.animationDuration = 0.5
-        self.selectedUser = user
+        
         DispatchQueue.main.async { [weak self] in
-            self?.view.mapView.moveCamera(cameraUpdate)
+            guard let selected = self?.selectedUser else {
+                self?.view.mapView.moveCamera(cameraUpdate)
+                return
+            }
+            if selected.id == user.id {
+                self?.view.mapView.moveCamera(cameraUpdate)
+                self?.selectedUser = nil
+            }
         }
     }
 }

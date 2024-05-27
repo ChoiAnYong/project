@@ -79,13 +79,13 @@ final class ImageCacheService: ImageCacheServiceType {
         return Future<UIImage?, Never> { promise in
             AF.request(url)
                 .validate(statusCode: 200..<300)
-                .responseDecodable { (response: AFDataResponse<Data>) in
-                    
+                .responseData { (response: AFDataResponse<Data>) in
                     switch response.result {
                     case let .success(data):
                         guard let image = UIImage(data: data) else { return }
                         promise(.success(image))
-                    case .failure:
+                    case .failure(let error):
+                        print(error.localizedDescription)
                         promise(.success(nil))
                     }
                     

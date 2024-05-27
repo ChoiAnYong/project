@@ -9,7 +9,7 @@ import Foundation
 
 final class UserAlarmViewModel: ObservableObject {
     
-    private let userEmail: String
+    let userEmail: String
     private let container: DIContainer
     
     init(userEmail: String, container: DIContainer) {

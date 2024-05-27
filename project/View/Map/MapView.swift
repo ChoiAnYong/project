@@ -11,8 +11,7 @@ import UIKit
 
 struct MapView: View {
     @EnvironmentObject private var container: DIContainer
-    
-    @ObservedObject var mainViewModel: MainViewModel
+    @EnvironmentObject var mainViewModel: MainViewModel
     
     @StateObject var mapViewModel: MapViewModel
     @StateObject var coordinator: Coordinator
@@ -28,13 +27,19 @@ struct MapView: View {
             userInfoView
                 .shadow(radius: 5)
         }
+        .sheet(isPresented: /*@START_MENU_TOKEN@*//*@PLACEHOLDER=Is Presented@*/.constant(false)/*@END_MENU_TOKEN@*/, content: {
+            /*@START_MENU_TOKEN@*//*@PLACEHOLDER=Content@*/Text("Sheet Content")/*@END_MENU_TOKEN@*/
+        })
         .onAppear {
             coordinator.checkIfLocationServiceIsEnabled()
-            mapViewModel.send(action: .loadUserMarker(mainViewModel.myUser ?? .init(name: "이름", email: ""),
-                                                      mainViewModel.users))
+           
         }
         .onChange(of: mapViewModel.userMarkerList) { oldValue, newValue in
             coordinator.setMarker(markers: newValue)
+        }
+        .task {
+            await mapViewModel.send(action: .loadUserMarker(mainViewModel.myUser ?? .init(name: "이름", email: ""),
+                                                      mainViewModel.users))
         }
         
     }
@@ -70,11 +75,11 @@ struct MapView: View {
                                 .containerRelativeFrame(.horizontal, count: 1, spacing: 10)
                                 .id(user.id)
                         }
-                        PlusCellView(mapViewModel: mapViewModel)
+                        PlusCellView()
                     }
                     .scrollTargetLayout()
                     .onChange(of: coordinator.selectedUser) { oldValue, newValue in
-                        withAnimation {
+                        withAnimation {                
                             proxy.scrollTo(newValue?.id, anchor: .center)
                         }
                     }
@@ -116,6 +121,6 @@ struct NaverMap: UIViewRepresentable {
 
 
 #Preview {
-    MapView(mainViewModel: MainViewModel(container: .init(services: StubService())), mapViewModel: MapViewModel(container: .init(services: StubService())), coordinator: Coordinator(container: DIContainer(services: StubService())))
+    MapView(mapViewModel: MapViewModel(container: .init(services: StubService())), coordinator: Coordinator(container: DIContainer(services: StubService())))
         .environmentObject(MainViewModel(container: .init(services: StubService())))
 }

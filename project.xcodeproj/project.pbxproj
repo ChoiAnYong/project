@@ -11,6 +11,8 @@
 		AD03A46A2BBE39FF00F2DB47 /* UserService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD03A4692BBE39FF00F2DB47 /* UserService.swift */; };
 		AD03A46C2BBE937200F2DB47 /* MainViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD03A46B2BBE937200F2DB47 /* MainViewModel.swift */; };
 		AD06422D2BC7DE4D00141FD6 /* Coordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD06422C2BC7DE4D00141FD6 /* Coordinator.swift */; };
+		AD0A049D2C04885400B17FCA /* Sequence+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD0A049C2C04885400B17FCA /* Sequence+Extension.swift */; };
+		AD0A04A02C04D3FC00B17FCA /* PlusUserViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD0A049F2C04D3FC00B17FCA /* PlusUserViewModel.swift */; };
 		AD0D1DF12BEA2CE200EEBF1F /* MapViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD0D1DF02BEA2CE200EEBF1F /* MapViewModel.swift */; };
 		AD0D1DF32BEA2D5000EEBF1F /* UserMarker.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD0D1DF22BEA2D5000EEBF1F /* UserMarker.swift */; };
 		AD0F52552BB41CAD00A9723A /* MapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD0F52542BB41CAD00A9723A /* MapView.swift */; };
@@ -75,6 +77,7 @@
 		ADC5B4ED2BE7D04C00D26CCA /* DiskStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADC5B4EC2BE7D04C00D26CCA /* DiskStorage.swift */; };
 		ADD15E872C03165F0083F776 /* PlusCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADD15E862C03165F0083F776 /* PlusCellView.swift */; };
 		ADD15E892C03175E0083F776 /* OtherInfoCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADD15E882C03175E0083F776 /* OtherInfoCellView.swift */; };
+		ADD15E8B2C039C630083F776 /* PlusUserView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADD15E8A2C039C630083F776 /* PlusUserView.swift */; };
 		ADDDF3A62BB2C81800923127 /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADDDF3A52BB2C81800923127 /* LoadingView.swift */; };
 		ADDDF3C92BB2EC9400923127 /* Color.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = ADDDF3C82BB2EC9400923127 /* Color.xcassets */; };
 		ADDF95C62BFF72C600DFD813 /* ImageRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADDF95C52BFF72C600DFD813 /* ImageRouter.swift */; };
@@ -120,6 +123,8 @@
 		AD03A4692BBE39FF00F2DB47 /* UserService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserService.swift; sourceTree = "<group>"; };
 		AD03A46B2BBE937200F2DB47 /* MainViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewModel.swift; sourceTree = "<group>"; };
 		AD06422C2BC7DE4D00141FD6 /* Coordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coordinator.swift; sourceTree = "<group>"; };
+		AD0A049C2C04885400B17FCA /* Sequence+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Sequence+Extension.swift"; sourceTree = "<group>"; };
+		AD0A049F2C04D3FC00B17FCA /* PlusUserViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlusUserViewModel.swift; sourceTree = "<group>"; };
 		AD0D1DF02BEA2CE200EEBF1F /* MapViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewModel.swift; sourceTree = "<group>"; };
 		AD0D1DF22BEA2D5000EEBF1F /* UserMarker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserMarker.swift; sourceTree = "<group>"; };
 		AD0F52542BB41CAD00A9723A /* MapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapView.swift; sourceTree = "<group>"; };
@@ -188,6 +193,7 @@
 		ADC5B4EC2BE7D04C00D26CCA /* DiskStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiskStorage.swift; sourceTree = "<group>"; };
 		ADD15E862C03165F0083F776 /* PlusCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlusCellView.swift; sourceTree = "<group>"; };
 		ADD15E882C03175E0083F776 /* OtherInfoCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OtherInfoCellView.swift; sourceTree = "<group>"; };
+		ADD15E8A2C039C630083F776 /* PlusUserView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlusUserView.swift; sourceTree = "<group>"; };
 		ADDDF3A52BB2C81800923127 /* LoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingView.swift; sourceTree = "<group>"; };
 		ADDDF3C82BB2EC9400923127 /* Color.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Color.xcassets; sourceTree = "<group>"; };
 		ADDF95C52BFF72C600DFD813 /* ImageRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageRouter.swift; sourceTree = "<group>"; };
@@ -258,6 +264,15 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		AD0A049E2C04D10100B17FCA /* Plus */ = {
+			isa = PBXGroup;
+			children = (
+				ADD15E8A2C039C630083F776 /* PlusUserView.swift */,
+				AD0A049F2C04D3FC00B17FCA /* PlusUserViewModel.swift */,
+			);
+			path = Plus;
+			sourceTree = "<group>";
+		};
 		AD0F52532BB41CA000A9723A /* Map */ = {
 			isa = PBXGroup;
 			children = (
@@ -286,6 +301,7 @@
 				AD6572242BB9747700557ED6 /* Main */,
 				AD0F52532BB41CA000A9723A /* Map */,
 				AD1EBA7A2BF240A5006D55CD /* Modal */,
+				AD0A049E2C04D10100B17FCA /* Plus */,
 				AD6572212BB96C9300557ED6 /* Setting */,
 			);
 			path = View;
@@ -394,6 +410,7 @@
 				AD8A76932BD645CE00B5F31D /* Encodable+Extension.swift */,
 				AD8A76952BD6462C00B5F31D /* UserDefaults+Extension.swift */,
 				ADF6BDD92C021C1F00153BFA /* convertLocationObject.swift */,
+				AD0A049C2C04885400B17FCA /* Sequence+Extension.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -907,6 +924,7 @@
 				AD82E80C2BFC7C4900663F30 /* LoginRequest.swift in Sources */,
 				ADBEEC5C2BCC252100648CD1 /* PushNotificationService.swift in Sources */,
 				AD03A46A2BBE39FF00F2DB47 /* UserService.swift in Sources */,
+				ADD15E8B2C039C630083F776 /* PlusUserView.swift in Sources */,
 				AD82E80B2BFC7C4900663F30 /* UserDTO.swift in Sources */,
 				ADA705C22BF35B1B00943B30 /* URLImageView.swift in Sources */,
 				ADA705C42BF35B2500943B30 /* URLImageViewModel.swift in Sources */,
@@ -923,6 +941,7 @@
 				ADA4A2BF2BF70F570007B58A /* MyInfoCellView.swift in Sources */,
 				AD1EBA802BF24120006D55CD /* UserAlarmView.swift in Sources */,
 				ADE859DA2BFBB32A004C7E85 /* ApiClient.swift in Sources */,
+				AD0A04A02C04D3FC00B17FCA /* PlusUserViewModel.swift in Sources */,
 				ADD15E892C03175E0083F776 /* OtherInfoCellView.swift in Sources */,
 				AD918E3D2BD53E1B00C522DF /* PlaceholderView.swift in Sources */,
 				AD82E8092BFC7C4900663F30 /* RefreshRequest.swift in Sources */,
@@ -939,6 +958,7 @@
 				AD2C017E2BD695BB00D6D23E /* ConnectedUser.swift in Sources */,
 				ADC04B572BA8642800AD8A14 /* AuthenticationViewModel.swift in Sources */,
 				ADE859DE2BFBB46D004C7E85 /* ApiLogger.swift in Sources */,
+				AD0A049D2C04885400B17FCA /* Sequence+Extension.swift in Sources */,
 				AD918E3B2BD5306B00C522DF /* Phase.swift in Sources */,
 				ADC04B4F2BA862C700AD8A14 /* DIContainer.swift in Sources */,
 				ADE859DC2BFBB383004C7E85 /* BaseInterceptor.swift in Sources */,

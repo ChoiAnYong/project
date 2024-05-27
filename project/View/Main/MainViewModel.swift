@@ -15,8 +15,10 @@ final class MainViewModel: ObservableObject {
         case load
         case presentView(MainModalDestination)
         case call
+        case didTapPlusBtn
     }
 
+    @Published var isTapPlusBtn: Bool = false
     @Published var myUser: User?
     @Published var users: [ConnectedUser] = []
     @Published var phase: Phase = .notRequested
@@ -53,7 +55,8 @@ final class MainViewModel: ObservableObject {
                UIApplication.shared.canOpenURL(numberURL as URL) {
                 UIApplication.shared.open(numberURL as URL, options: [:], completionHandler: nil)
             }
-            
+        case .didTapPlusBtn:
+            isTapPlusBtn.toggle()
         }
     }
 }

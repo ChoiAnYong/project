@@ -95,8 +95,10 @@ extension AuthenticationService {
 
                 switch response.result {
                 case .success(let response):
-                    _ = KeychainManager.shared.creat(account: SaveToken.access.rawValue, value: response.accessToken)
-                    _ = KeychainManager.shared.creat(account: SaveToken.refresh.rawValue, value: response.refreshToken)
+                    _ = KeychainManager.shared.creat(account: SaveToken.access.rawValue,
+                                                     value: response.accessToken)
+                    _ = KeychainManager.shared.creat(account: SaveToken.refresh.rawValue,
+                                                     value: response.refreshToken)
                     completion(.success(response))
                 case .failure(let error):
                     completion(.failure(error))
