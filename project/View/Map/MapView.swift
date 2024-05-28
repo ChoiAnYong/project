@@ -27,9 +27,6 @@ struct MapView: View {
             userInfoView
                 .shadow(radius: 5)
         }
-        .sheet(isPresented: /*@START_MENU_TOKEN@*//*@PLACEHOLDER=Is Presented@*/.constant(false)/*@END_MENU_TOKEN@*/, content: {
-            /*@START_MENU_TOKEN@*//*@PLACEHOLDER=Content@*/Text("Sheet Content")/*@END_MENU_TOKEN@*/
-        })
         .onAppear {
             coordinator.checkIfLocationServiceIsEnabled()
            
@@ -121,6 +118,6 @@ struct NaverMap: UIViewRepresentable {
 
 
 #Preview {
-    MapView(mapViewModel: MapViewModel(container: .init(services: StubService())), coordinator: Coordinator(container: DIContainer(services: StubService())))
+    MapView(mapViewModel: MapViewModel(container: .init(services: StubService()), user: .constant(.stubUser)), coordinator: Coordinator(container: DIContainer(services: StubService())))
         .environmentObject(MainViewModel(container: .init(services: StubService())))
 }

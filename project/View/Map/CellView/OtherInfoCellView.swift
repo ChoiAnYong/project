@@ -100,6 +100,6 @@ struct OtherInfoCellView: View {
 
 #Preview {
     OtherInfoCellView(user: .stubMarker2, centerVisibleUser: .constant(.stubMarker1),
-                      mapViewModel: MapViewModel(container: .init(services: StubService())))
+                      mapViewModel: MapViewModel(container: .init(services: StubService()), user: .constant(.stubUser)))
     .environmentObject(DIContainer(services: StubService()))
 }

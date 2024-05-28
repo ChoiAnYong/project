@@ -21,11 +21,10 @@ struct MainView: View {
                         MyProfileView()
                     case let .userAlarm(userEmail):
                         UserAlarmView(viewModel: .init(userEmail: userEmail, container: container))
+                    case .plusUser:
+                        PlusUserView(viewModel: PlusUserViewModel())
                     }
                 }
-                .sheet(isPresented: $viewModel.isTapPlusBtn, content: {
-                    PlusUserView(viewModel: PlusUserViewModel())
-                })
                 .navigationDestination(for: PathType.self) { pathType in
                     switch pathType {
                     case .setting:
@@ -55,7 +54,7 @@ struct MainView: View {
     
     var loadedView: some View {
         ZStack {
-            MapView(mapViewModel: MapViewModel(container: container), coordinator: Coordinator(container: container))
+            MapView(mapViewModel: MapViewModel(container: container, user: $viewModel.myUser), coordinator: Coordinator(container: container))
 
             toolbarView
 

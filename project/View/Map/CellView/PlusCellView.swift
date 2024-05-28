@@ -15,7 +15,7 @@ struct PlusCellView: View {
     
     var body: some View {
         Button(action: {
-            mainViewModel.send(action: .didTapPlusBtn)
+            mainViewModel.send(action: .presentView(.plusUser))
         }, label: {
             VStack {
                 Image(systemName: "plus")

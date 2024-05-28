@@ -19,7 +19,9 @@ struct UserAlarmView: View {
                         Button(action: {
                             dismiss()
                         }, label: {
-                            Text("Button")
+                            Image(.icClose)
+                                .renderingMode(.template)
+                                .foregroundColor(.bkFix)
                         })
                     }
                 }

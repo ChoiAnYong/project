@@ -10,6 +10,7 @@ import Foundation
 enum MainModalDestination: Hashable, Identifiable {
     case myProfile
     case userAlarm(String)
+    case plusUser
     
     var id: Int {
         hashValue

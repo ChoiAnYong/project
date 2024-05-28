@@ -33,11 +33,13 @@ struct MyInfoCellView: View {
                 }
                 
                 VStack(alignment: .leading, spacing: 5) {
-                    Text("\(myUser.name)")
+//                    Text("\(myUser.name)")
+                    Text("최안용")
                         .font(.system(size: 17, weight: .bold))
                         .foregroundColor(.bkFix)
                     
-                    Text("\(myUser.address ?? "")")
+//                    Text("\(myUser.address ?? "")")
+                    Text("충청남도 아산시 신창면")
                         .font(.system(size: 15))
                         .foregroundStyle(.grayText)
                     
@@ -102,6 +104,6 @@ struct MyInfoCellView: View {
 
 #Preview {
     MyInfoCellView(.stubMarker1, centerVisibleUser: .constant(.stubMarker2),
-                   mapViewModel: MapViewModel(container: .init(services: StubService())))
+                   mapViewModel: MapViewModel(container: .init(services: StubService()), user: .constant(.stubUser)))
     .environmentObject(DIContainer(services: StubService()))
 }

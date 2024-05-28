@@ -12,6 +12,7 @@ import SwiftUI
 
 @MainActor
 final class MapViewModel: ObservableObject {
+    @Binding var user: User?
     @Published var userMarkerList: [UserMarker] = []
     @Published var myMarker: UserMarker?
     @Published var imageSelection: PhotosPickerItem? {
@@ -24,8 +25,9 @@ final class MapViewModel: ObservableObject {
     
     private var container: DIContainer
     
-    init(container: DIContainer) {
+    init(container: DIContainer, user: Binding<User?>) {
         self.container = container
+        self._user = user
     }
     
     enum Action {
@@ -67,7 +69,8 @@ final class MapViewModel: ObservableObject {
         do {
             let data = try await container.services.photoPickerService.loadTransferable(from: pickerItem)
             let url = try await container.services.uploadService.uploadImage(data: data)
-//            try await container.services.userService.
+            user?.profileUrl = url?.absoluteString
+            myMarker?.imgUrl = url?.absoluteString
         } catch {
             print(error.localizedDescription)
         }

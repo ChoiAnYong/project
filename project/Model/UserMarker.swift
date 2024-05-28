@@ -11,7 +11,7 @@ struct UserMarker: Hashable {
     var id: Int
     var lat: Double
     var lng: Double
-    let imgUrl : String?
+    var imgUrl : String?
     let name : String
     var address: String?
     var distance: Double?

@@ -86,8 +86,6 @@ final class Coordinator: NSObject, ObservableObject {
         view.mapView.addCameraDelegate(delegate: self)
         view.mapView.touchDelegate = self
         
-        
-        checkIfLocationServiceIsEnabled()
         observePositionModeChanges()
     }
     
@@ -97,6 +95,7 @@ final class Coordinator: NSObject, ObservableObject {
         switch locationManager.authorizationStatus {
         case .notDetermined:
             locationManager.requestWhenInUseAuthorization()
+            checkIfLocationServiceIsEnabled()
         case .restricted:
             print("위치 정보 접근이 제한되었습니다.")
         case .denied:
@@ -169,8 +168,8 @@ final class Coordinator: NSObject, ObservableObject {
                     
                     self.locationManager?.desiredAccuracy = kCLLocationAccuracyBest
                     self.locationManager?.distanceFilter = 15
-                    self.userLocation = self.fetchUserLocation()
                     self.checkLocationAuthorization()
+                    self.userLocation = self.fetchUserLocation()
                 }
             } else {
                 print("Show an alert letting them know this is off and to go turn i on")
