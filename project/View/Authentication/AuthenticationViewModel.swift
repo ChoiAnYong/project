@@ -59,7 +59,6 @@ final class AuthenticationViewModel: ObservableObject {
                         if case .failure = completion {
                             self?.isLoading = false
                             self?.authenticationState = .unAuthenticated
-                            self?.isDisplayAlert = true
                         }
                     } receiveValue: { [weak self] _ in
                         self?.isLoading = false
@@ -67,7 +66,6 @@ final class AuthenticationViewModel: ObservableObject {
                     }.store(in: &subscription)
             } else if case let .failure(error) = result {
                 isLoading = false
-                isDisplayAlert = true
                 print(error.localizedDescription)
             }
             

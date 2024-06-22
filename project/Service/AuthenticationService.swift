@@ -73,9 +73,7 @@ extension AuthenticationService {
             completion(.failure(AuthenticationError.tokenError))
             return
         }
-        
         print(idTokenString)
-        
         let name = [appleIDCredential.fullName?.familyName, appleIDCredential.fullName?.givenName]
             .compactMap { $0 }
             .joined(separator: "")
@@ -84,7 +82,7 @@ extension AuthenticationService {
             completion(.failure(AuthenticationError.tokenError))
             return
         }
-    
+        
         let request = LoginRequest(idToken: idTokenString,
                                     name: name,
                                     deviceToken: deviceToken)
@@ -92,7 +90,6 @@ extension AuthenticationService {
         ApiClient.shared.session
             .request(AuthRouter.login(request), interceptor: BaseInterceptor.shared)
             .responseDecodable { (response: AFDataResponse<LoginResponse>) in
-
                 switch response.result {
                 case .success(let response):
                     _ = KeychainManager.shared.creat(account: SaveToken.access.rawValue,
@@ -101,6 +98,8 @@ extension AuthenticationService {
                                                      value: response.refreshToken)
                     completion(.success(response))
                 case .failure(let error):
+                    guard let statusCode = response.response?.statusCode else {return}
+                    print(statusCode)
                     completion(.failure(error))
                 }
             }

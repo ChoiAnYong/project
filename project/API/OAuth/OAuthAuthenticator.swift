@@ -42,7 +42,8 @@ class OAuthAuthenticator: Authenticator {
             switch result.result {
                 
             case .success(let value):
-                
+                guard let statusCode = result.response?.statusCode else {return}
+                print(statusCode)
                 // 재발행 받은 토큰 저장
                 _ = KeychainManager.shared.update(account: SaveToken.access.rawValue, value: value.accessToken)
                 _ = KeychainManager.shared.update(account: SaveToken.refresh.rawValue, value: value.refreshToken)
@@ -58,6 +59,8 @@ class OAuthAuthenticator: Authenticator {
                 self.completePendingRequests(with: .success(newCredential))
                 
             case .failure(let error):
+                guard let statusCode = result.response?.statusCode else {return}
+                print(statusCode)
                 NotificationCenter.default.post(name: .init("401Error"), object: nil)
                 completion(.failure(error))
                 self.completePendingRequests(with: .failure(error))
@@ -108,13 +111,8 @@ class OAuthAuthenticator: Authenticator {
     }
     
     func isRequest(_ urlRequest: URLRequest, authenticatedWith credential: OAuthCredential) -> Bool {
-        // If authentication server CANNOT invalidate credentials, return `true`
-        return true
-        
-        // If authentication server CAN invalidate credentials, then compare the "Authorization" header value in the
-        // `URLRequest` against the Bearer token generated with the access token of the `Credential`.
-        // let bearerToken = HTTPHeader.authorization(bearerToken: credential.accessToken).value
-        // return urlRequest.headers["Authorization"] == bearerToken
+        let bearerToken = HTTPHeader.authorization(bearerToken: credential.accessToken).value
+        return urlRequest.headers["Authorization"] == bearerToken
     }
     
 }

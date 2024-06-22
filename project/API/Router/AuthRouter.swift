@@ -19,9 +19,9 @@ enum AuthRouter: URLRequestConvertible {
     var endPoint: String {
         switch self {
         case .login:
-            return "/login/apple"
+            return "/oauth/apple/login"
         case .refresh:
-            return "/login/reissue"
+            return "/oauth/reissue"
         }
     }
     
