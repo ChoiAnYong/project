@@ -9,9 +9,21 @@ import SwiftUI
 
 struct SettingView: View {
     var body: some View {
-        NavigationStack {
-            VStack {
-                Text("dk")
+        VStack {
+            Text("dk")
+        }
+        .navigationBarBackButtonHidden()
+        .toolbar(.hidden, for: .navigationBar)
+        .toolbar {
+            ToolbarItemGroup(placement: .navigationBarLeading) {
+                Button(action: {
+                    
+                }, label: {
+                    Image("ic_back")
+                        .resizable()
+                        .frame(width: 30, height: 30)
+                        
+                })
             }
         }
     }
