@@ -32,6 +32,7 @@ struct MainView: View {
                     }
                 }
         }
+        .environmentObject(pathModel)
         .environmentObject(viewModel)
     }
     

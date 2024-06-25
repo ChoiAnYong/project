@@ -8,24 +8,27 @@
 import SwiftUI
 
 struct SettingView: View {
+    @EnvironmentObject var pathModel: PathModel
+    
     var body: some View {
         VStack {
             Text("dk")
         }
         .navigationBarBackButtonHidden()
-        .toolbar(.hidden, for: .navigationBar)
         .toolbar {
             ToolbarItemGroup(placement: .navigationBarLeading) {
                 Button(action: {
-                    
+                    pathModel.paths.removeLast()
                 }, label: {
                     Image("ic_back")
                         .resizable()
-                        .frame(width: 30, height: 30)
-                        
+                        .frame(width: 20, height: 20)
                 })
             }
+            
+            
         }
+        .navigationTitle("설정")
     }
 }
 
