@@ -55,7 +55,6 @@ struct PlusUserView: View {
                 }
             }
         }
-
         .background(Color.grayCool)
         .onTapGesture {
             isFocused = false

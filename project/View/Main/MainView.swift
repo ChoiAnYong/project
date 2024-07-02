@@ -9,11 +9,10 @@ import SwiftUI
 
 struct MainView: View {
     @EnvironmentObject var container: DIContainer
-    @StateObject var pathModel: PathModel
     @StateObject var viewModel: MainViewModel
 
     var body: some View {
-        NavigationStack(path: $pathModel.paths) {
+        NavigationStack(path: $container.navigationRouter.destinations) {
             contentView
                 .fullScreenCover(item: $viewModel.modalDestination) {
                     switch $0 {
@@ -21,18 +20,14 @@ struct MainView: View {
                         MyProfileView()
                     case let .userAlarm(userEmail):
                         UserAlarmView(viewModel: .init(userEmail: userEmail, container: container))
-                    case .plusUser:
+                    case .plusUser: 
                         PlusUserView(viewModel: PlusUserViewModel())
                     }
                 }
-                .navigationDestination(for: PathType.self) { pathType in
-                    switch pathType {
-                    case .setting:
-                        SettingView()
-                    }
+                .navigationDestination(for: NavigationDestination.self) {
+                    NavigationRoutingView(destination: $0)
                 }
         }
-        .environmentObject(pathModel)
         .environmentObject(viewModel)
     }
     
@@ -66,8 +61,7 @@ struct MainView: View {
         VStack {
             HStack {
                 Button(action: {
-                    pathModel.paths.append(.setting)
-
+                    viewModel.send(action: .push)
                 }, label: {
                     CustomIcon(iconName: "ic_setting")
                 })
@@ -86,7 +80,12 @@ struct MainView: View {
     }
 }
 
-#Preview {
-    MainView(pathModel: PathModel(), viewModel: MainViewModel(container: .init(services: StubService())))
-        .environmentObject(DIContainer(services: StubService()))
+struct MainView_Previews: PreviewProvider {
+    static let container: DIContainer = .init(services: StubService())
+    static let navigationRouter: NavigationRouter = .init()
+    
+    static var previews: some View {
+        MainView(viewModel: .init(container: Self.container))
+            .environmentObject(Self.container)
+    }
 }

@@ -8,31 +8,36 @@
 import SwiftUI
 
 struct SettingView: View {
-    @EnvironmentObject var pathModel: PathModel
+    @StateObject var viewModel: SettingViewModel
     
     var body: some View {
-        VStack {
-            Text("dk")
-        }
-        .navigationBarBackButtonHidden()
-        .toolbar {
-            ToolbarItemGroup(placement: .navigationBarLeading) {
-                Button(action: {
-                    pathModel.paths.removeLast()
-                }, label: {
-                    Image("ic_back")
-                        .resizable()
-                        .frame(width: 20, height: 20)
-                })
+        ScrollView {
+            VStack {
+                Text("dk")
             }
-            
-            
+            .navigationBarBackButtonHidden()
+            .toolbar {
+                ToolbarItem(placement: .topBarLeading) {
+                    Button(action: {
+                        viewModel.send(action: .pop)
+                    }, label: {
+                        Image("ic_back")
+                            .resizable()
+                            .frame(width: 20, height: 20)
+                    })
+                }
+                
+                ToolbarItem(placement: .principal) {
+                    Text("설정")
+                        .font(.system(size: 19, weight: .bold))
+                        .foregroundColor(.bkFix)
+                }
+            }
         }
-        .navigationTitle("설정")
     }
 }
 
 #Preview {
-    SettingView()
+    SettingView(viewModel: .init(container: .stub))
 }
 

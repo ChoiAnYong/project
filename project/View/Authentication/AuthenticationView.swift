@@ -21,11 +21,11 @@ struct AuthenticationView: View {
                     .environmentObject(viewModel)
                 
             case .authenticated:
-                MainView(pathModel: PathModel(), viewModel: MainViewModel(container: container))
+                MainView(viewModel: MainViewModel(container: container))
             }
         }
         .onAppear {
-//            viewModel.send(action: .checkAuthenticationState)
+            viewModel.send(action: .checkAuthenticationState)
         }
         .alert("로그인 시간이 만료되어 로그아웃 되었습니다.", isPresented: $viewModel.isDisplayAlert) {
             Button("확인", action: {})

@@ -15,6 +15,7 @@ final class MainViewModel: ObservableObject {
         case load
         case presentView(MainModalDestination)
         case call
+        case push
     }
 
     @Published var isTapPlusBtn: Bool = false
@@ -54,6 +55,8 @@ final class MainViewModel: ObservableObject {
                UIApplication.shared.canOpenURL(numberURL as URL) {
                 UIApplication.shared.open(numberURL as URL, options: [:], completionHandler: nil)
             }
+        case .push:
+            container.navigationRouter.push(to: .setting)
         }
     }
 }
